@@ -1,0 +1,265 @@
+---
+title: 'M2.951 - Tipologia i cicle de vida de les dades'
+subtitle: 'Pràctica 2 - Neteja i anàlisi de les dades'
+author: "Autor: Roger Perís Serrano i Albert Cámara Viñals"
+date: '`r format(Sys.Date(), "Desembre, %Y")`'
+output:
+  html_document:
+    highlight: default
+    number_sections: yes
+    theme: cosmo
+    toc: yes
+    toc_depth: 3
+    includes:
+      in_header: header.html
+  word_document: default
+  pdf_document:
+    latex_engine: xelatex
+    highlight: zenburn
+    toc: yes
+bibliography: bibliography_tcvd_pra_2.bib    
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Detalls de l'activitat
+
+## Presentació
+
+En aquesta pràctica s’elabora un cas pràctic orientat a aprendre a identificar les dades rellevants per un projecte analític i usar les eines d’integració, neteja, validació i anàlisi de les mateixes. Per fer aquesta pràctica haureu de treballar en grups de 2 persones. Haureu de lliurar un sol fitxer amb l’enllaç Github (https://github.com) on es trobin les solucions incloent els noms dels components de l’equip. Podeu utilitzar la Wiki de Github per descriure el vostre equip i els diferents arxius que corresponen a la vostra entrega. Cada membre de l’equip haurà de contribuir amb el seu usuari Github. Malgrat que no es tracta del mateix enunciat, els següents exemples d’edicions anteriors us poden servir com a guia:
+
+* Exemple: https://github.com/Bengis/nba-gap-cleaning
+* Exemple complex (fitxer adjunt).
+
+## Competències
+
+En aquesta pràctica es desenvolupen les següents competències del Màster de Data Science:
+
+* Capacitat d'analitzar un problema en el nivell d'abstracció adequat a cada situació i aplicar les habilitats i coneixements adquirits per abordar-lo i resoldre'l.
+* Capacitat per aplicar les tècniques específiques de tractament de dades (integració, transformació, neteja i validació) per al seu posterior anàlisi.
+
+## Objectius
+
+Els objectius concrets d’aquesta pràctica són:
+
+* Aprendre a aplicar els coneixements adquirits i la seva capacitat de resolució de problemes en entorns nous o poc coneguts dintre de contextos més amplis o multidisciplinaris.
+* Saber identificar les dades rellevants i els tractaments necessaris (integració, neteja i validació) per dur a terme un projecte analític.
+* Aprendre a analitzar les dades adequadament per abordar la informació continguda en les dades.
+* Identificar la millor representació dels resultats per tal d’aportar conclusions sobre el problema plantejat en el procés analític.
+* Actuar amb els principis ètics i legals relacionats amb la manipulació de dades en funció de l'àmbit d'aplicació.
+* Desenvolupar les habilitats d'aprenentatge que els permetin continuar estudiant d'una manera que haurà de ser en gran manera autodirigida o autònoma.
+* Desenvolupar la capacitat de cerca, gestió i ús d'informació i recursos en l'àmbit de la ciència de dades.
+
+
+## Descripció de la Pràctica a realitzar
+
+L’objectiu d’aquesta activitat serà el tractament d’un dataset, que pot ser el creat a la pràctica 1 o bé qualsevol dataset lliure disponible a Kaggle (https://www.kaggle.com). Alguns exemples de dataset amb els que podeu treballar són:
+
+* Red Wine Quality (https://www.kaggle.com/uciml/red-wine-quality-cortez-et-al-2009 ).
+* Titanic: Machine Learning from Disaster (https://www.kaggle.com/c/titanic ).
+
+L’últim exemple correspon a una competició activa a Kaggle de manera que, opcionalment, podeu aprofitar el treball realitzat durant la pràctica per entrar en aquesta competició.
+
+Seguint les principals etapes d’un projecte analític, les diferents tasques a realitzar (i justificar) són les següents:
+
+1. Descripció del dataset. Perquè és important i quina pregunta/problema pretén respondre?
+2. Integració i selecció de les dades d’interès a analitzar.
+3. Neteja de les dades.
+  + Les dades contenen zeros o elements buits? Com gestionaries aquests casos?
+  + Identificació i tractament de valors extrems.
+4. Anàlisi de les dades.
+  + Selecció dels grups de dades que es volen analitzar/comparar (planificació delsanàlisis a aplicar).
+  + Comprovació de la normalitat i homogeneïtat de la variància.
+  + Aplicació de proves estadístiques per comparar els grups de dades. En funció de les dades i de l’objectiu de l’estudi,     aplicar proves de contrast d’hipòtesis, correlacions, regressions, etc. Aplicar almenys tres mètodes d’anàlisi             diferents.
+5. Representació dels resultats a partir de taules i gràfiques.
+6. Resolució del problema. A partir dels resultats obtinguts, quines són les conclusions? Els resultats permeten respondre al problema?
+7. Codi: Cal adjuntar el codi, preferiblement en R, amb el que s’ha realitzat la neteja, anàlisi i representació de les dades. Si ho preferiu, també podeu treballar en Python.
+
+## Recursos
+
+Els següents recursos són d’utilitat per la realització de la pràctica:
+
+* Calvo M., Subirats L., Pérez D. (2019). Introducción a la limpieza y análisis de los datos. Editorial UOC.
+* Megan Squire (2015). Clean Data. Packt Publishing Ltd.
+* Jiawei Han, Micheine Kamber, Jian Pei (2012). Data mining: concepts and techniques. Morgan Kaufmann.
+* Jason W. Osborne (2010). Data Cleaning Basics: Best Practices in Dealing with Extreme Scores. Newborn and Infant Nursing Reviews; 10 (1): pp. 1527-3369.
+* Peter Dalgaard (2008). Introductory statistics with R. Springer Science & Business Media.
+* Wes McKinney (2012). Python for Data Analysis. O’Reilley Media, Inc.
+* Tutorial de Github https://guides.github.com/activities/hello-world.
+
+## Criteris de valoració
+
+Tots els apartat són obligatoris. La ponderació dels exercicis és la següent:
+
+* Els apartats 1, 2 i 6 valen 0,5 punts.
+* Els apartats 3, 5 i 7 valen 2 punts.
+* L’apartat 4 val 2,5 punts.
+
+Es valorarà la idoneïtat de les respostes, que han de ser clares i completes. Les diferents etapes han d’estar ben justificades i acompanyades del codi corresponent. També es valorarà la síntesi i claredat, a través de l’ús de comentaris, del codi resultant, així com la qualitat de les dades finals analitzades.
+
+## Format i data de lliurament
+
+Durant la setmana del 21 al 25 de desembre el grup podrà lliurar al professor una entrega parcial opcional. Aquesta entrega parcial és molt recomanable per tal de rebre assessorament sobre la pràctica i verificar que la direcció presa és la correcta. Es lliuraran comentaris als estudiants que hagin efectuat l’entrega parcial però no comptarà per la nota de la pràctica. En l’entrega parcial els estudiants hauran de lliurar per correu electrònic, al profesor encarregat de l’aula, l’enllaç al repositori Github amb el que hagin avançat.
+
+Pel que fa a l’entrega final, cal lliurar un únic fitxer que contingui l’enllaç a Github, el qual no es podrà modificar posteriorment a la data d’entrega, on hi hagi:
+
+1. Una Wiki on hi hagi els noms dels components del grup i una descripció dels fitxers.
+2. Un document Word, Open Office o PDF amb les respostes a les preguntes i els noms
+dels components del grup. A més, al final de document, haurà d’aparèixer la següent taula
+de contribucions al treball, la qual ha de signar cada integrant del grup amb les seves
+inicials. Les inicials representen la confirmació de que l’integrant ha participat en aquell apartat. Tots els integrants han de participar en cadascun dels apartats, de manera que,
+idealment, els apartats hauran d’estar signats per tots els integrants.
+3. Una carpeta amb el codi generat per analitzar les dades.
+4. El fitxer CSV amb les dades originals.
+5. El fitxer CSV amb les dades finals analitzades.
+
+Aquest document de l’entrega final de la Pràctica 2 s’ha de lliurar a l’espai de Lliurament i Registre d’AC de l’aula abans de les 23:59 del dia 5 de gener. No s’acceptaran lliuraments fora de termini.
+
+# Resolució
+
+Contribucions               | Firma
+-------------               | -------------
+Investigació prèvia         | RPS, ACV
+Redacció de les respostes   | RPS, ACV
+Desenvolupament codi        | RPS, ACV
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Carreguem les llibreries que farem servir
+library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(GGally)
+library(regclass)
+library(car)
+library(gridExtra)
+library(ResourceSelection)
+```
+
+
+
+
+
+## Descripció del dataset
+
+El conjunt de dades que analitzarem s'ha obtingut del repositori de dades Kaggle (https://www.kaggle.com/kushleshkumar/cornell-car-rental-dataset?select=CarRentalData.csv) està format per 15 característiques (columnes) que presentan 5851 cotxes (files o observacions).
+
+I les seves variables (es manté el nom original en anglès) són:
+
+* *price:* 
+
+
+
+
+## Importància i objectius de l'anàlisi
+
+
+
+
+## Neteja de dades
+
+### Lectura de dades
+
+Obrim el fitxer de dades i examinem el tipus de dades amb els que R ha interpretat cada variable. Examinem també els valors resum de cada tipus de variable.
+
+Comencem carregant el joc de dades.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Carreguem el joc de dades
+ds <- read.csv('../data/CarRentalData.csv', stringsAsFactors = FALSE, header = TRUE, sep=",", strip.white = TRUE)
+```
+
+Tot seguit examinem l'estructura del joc de dades, per validar que s'han interpetat correctament.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Verifiquem les dimensions del joc de dades
+dim(ds)
+
+# Verifiquem l'estructura del joc de dades
+str(ds)
+
+# Estadístiques de valors buits, validem si hi ha valors buits
+colSums(is.na(ds))
+```
+
+A partir dels detalls anteriors podem veure que disposem d'un joc de dades amb 5851 observacions, amb 15 atributs o variables per observació i que el tipus de dades s'ha interpretat correctament.
+
+### Selecció de les dades d'interès
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+
+```
+
+### Zeros i atributs buits
+
+Ara farem el tractament dels valors buits i convertirem les variables discretes a factors i 
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+
+```
+
+### Valors extrems (Outliers)
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+
+```
+
+### Exportació de les dades preprocesades
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+
+```
+
+
+
+
+## Anàlisi de les dades
+
+### Selecció dels grups de dades a analitzar
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+
+```
+
+### Comprobació de la normalitat i homogeneitat de la varianza
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+
+```
+
+
+
+
+## Test estadístics
+
+### ¿Quines variables quantitatives influeixen més a les valoracions?
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+
+```
+
+### ¿Quines variables qualitatives influeixen més a les valoracions?
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+
+```
+
+### ¿Els cotxes elèctric es lloguen menys hores?
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+
+```
+
+
+
+
+## Model de regressió lineal múltiple
+
+
+## Conclusions
+
+
+
+
+# Bibliografia
