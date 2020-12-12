@@ -3,7 +3,7 @@
 
 ## Descripció
 Tractament de dades de l'estudi del dataset de Cronell Car Rental
-Aquesta pràctica forma part de l'assignatura _Tipología i cicle de vida de les dates_, dal *Màster en Ciència de Dades* de la *[Universitat Oberta de Catalunya](https://www.uoc.edu/)*. S'apliquen tècniques de _web scraping_ mitjançant el llenguatge de programació Python per extreure dades de la web [_EscapadaRural_](https://www.escapadarural.com/) i generar un _dataset_.
+Aquesta pràctica forma part de l'assignatura _Tipología i cicle de vida de les dates_, dal *Màster en Ciència de Dades* de la *[Universitat Oberta de Catalunya](https://www.uoc.edu/)*.
 
 ## Membres de l'equip
 
@@ -20,7 +20,7 @@ Aquesta pràctica forma part de l'assignatura _Tipología i cicle de vida de les
 
 ### Prerequisits
 
-Per executar l'script *"webscraping.py"* són necesàries les següents dependències:
+Per executar ............... són necesàries les següents dependències:
 
 
 Aquestes dependències es poden instal·lar amb les següents comandes
