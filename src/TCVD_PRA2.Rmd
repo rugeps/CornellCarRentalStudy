@@ -1,7 +1,7 @@
 ---
 title: 'M2.951 - Tipologia i cicle de vida de les dades'
 subtitle: 'Pràctica 2 - Neteja i anàlisi de les dades'
-author: "Autor: Roger Perís Serrano i Albert Cámara Viñals"
+author: 'Autor: Roger Perís Serrano i Albert Cámara Viñals'
 date: '`r format(Sys.Date(), "Desembre, %Y")`'
 output:
   html_document:
@@ -131,6 +131,7 @@ library(tidyverse)
 library(ggplot2)
 library(dplyr)
 library(GGally)
+library(arules)
 library(regclass)
 library(car)
 library(gridExtra)
@@ -143,12 +144,26 @@ library(ResourceSelection)
 
 ## Descripció del dataset
 
-El conjunt de dades que analitzarem s'ha obtingut del repositori de dades Kaggle (https://www.kaggle.com/kushleshkumar/cornell-car-rental-dataset?select=CarRentalData.csv) està format per 15 característiques (columnes) que presentan 5851 cotxes (files o observacions).
+El conjunt de dades que analitzarem s'ha obtingut del repositori de dades Kaggle (https://www.kaggle.com/kushleshkumar/cornell-car-rental-dataset?select=CarRentalData.csv) està format per 16 característiques (columnes) que presentan 5851 cotxes (files o observacions).
 
 I les seves variables (es manté el nom original en anglès) són:
 
-* *price:* 
-
+* *fuelType:* Tipus de combustible utilitzat pel vehicle. 
+* *rating:* Qualificació acumulativa del cotxe per part dels clients
+* *renterTripsTaken:* Nombre de viatges realitzats per aquest vehicle (durada desconeguda)
+* *reviewCount:* Nombre de valoracions
+* *location.city:* Ciutat en què es troba el vehicle
+* *location.country:* País en què es troba el vehicle
+* *location.latitude:* Coordenada geogràfica (latitud) en què es troba el vehicle
+* *location.longitude:* Coordenada geogràfica (longitud) en què es troba el vehicle
+* *location.state:* Estat en què es troba el vehicle
+* *owner.id:* Identificador (ID) del propietàri del vehicle
+* *rate.daily:* Tarifa diària en dòlars
+* *vehicle.make:* Marca del vehicle 
+* *vehicle.model:* Model del vehicle
+* *vehicle.type:* Tipus de vehicle
+* *vehicle.year:* Any del vehicle (matriculació)
+* *airportcity:* Ciutat de l'aeroport més proper a la localització en què es troba el vehicle (normalment es des d'on es realitza el lloguer del vehicle).
 
 
 
@@ -167,7 +182,7 @@ Comencem carregant el joc de dades.
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 # Carreguem el joc de dades
-ds <- read.csv('../data/CarRentalData.csv', stringsAsFactors = FALSE, header = TRUE, sep=",", strip.white = TRUE)
+ds <- read.csv('../data/CarRentalDataV1.csv', stringsAsFactors = FALSE, header = TRUE, sep=',', strip.white = TRUE)
 ```
 
 Tot seguit examinem l'estructura del joc de dades, per validar que s'han interpetat correctament.
@@ -178,16 +193,75 @@ dim(ds)
 
 # Verifiquem l'estructura del joc de dades
 str(ds)
-
-# Estadístiques de valors buits, validem si hi ha valors buits
-colSums(is.na(ds))
 ```
 
-A partir dels detalls anteriors podem veure que disposem d'un joc de dades amb 5851 observacions, amb 15 atributs o variables per observació i que el tipus de dades s'ha interpretat correctament.
+A partir dels detalls anteriors podem veure que disposem d'un joc de dades amb 5851 observacions, amb 16 atributs o variables per observació i que el tipus de dades s'ha interpretat correctament.
 
-### Selecció de les dades d'interès
+### Previsualització de les dades d'interès
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
+categorical_features_names = c('fuelType', 'location.city', 'location.country', 'location.state', 'owner.id', 'vehicle.make', 'vehicle.model', 'vehicle.type', 'airportcity') 
+numeric_features_names = c('rating', 'renterTripsTaken', 'reviewCount', 'location.latitude', 'location.longitude', 'rate.daily', 'vehicle.year')
+```
+
+**Anàlisi univariant** 
+
+Comencem visualitzant els principals descriptors estadístics de cadascuna de les variables numèriques.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Mostrem un resum dels principals estadístics de cada variable
+summary(ds[, numeric_features_names])
+```
+
+**Visualització gràfica de les dades**
+
+Tot seguit visualitzem les distribucions dels valors de les variables numèriques.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Calculem histogrames de les variables numèriques
+hist01 <- ggplot(data=ds, aes(x=rating)) + geom_histogram(bins = 20) + xlab('Rating') + ylab('Freqüència')
+hist02 <- ggplot(data=ds, aes(x=renterTripsTaken)) + geom_histogram(bins=30) + xlab('Renter Trips Taken') + ylab('Freqüència')
+hist03 <- ggplot(data=ds, aes(x=reviewCount)) + geom_histogram(bins=30) + xlab('Review Count') + ylab('Freqüència')
+hist04 <- ggplot(data=ds, aes(x=location.latitude)) + geom_histogram(bins=10) + xlab('Latitut') + ylab('Freqüència')
+hist05 <- ggplot(data=ds, aes(x=location.longitude)) + geom_histogram(bins=10) + xlab('Longitut') + ylab('Freqüència')
+hist06 <- ggplot(data=ds, aes(x=rate.daily)) + geom_histogram(bins=30) + xlab('Daily rate') + ylab('Freqüència')
+hist07 <- ggplot(data=ds, aes(x=vehicle.year)) + geom_histogram(bins=13) + xlab('Vehicle Year') + ylab('Freqüència')
+
+grid.arrange(hist01, hist02, hist03, hist04, nrow = 2, ncol = 2)
+grid.arrange(hist05, hist06, hist07, nrow = 2, ncol = 2)
+```
+
+Un altre de les visualitzacions que sol ser de força utilitat per analitzar els jocs de dades són els diagrames de caixes, amb aquests podem observar la dispersió de les dades. A continuació visualitzarem els diagrames de caixes dels atributs numèrics.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Calculem diagrames de caixa de les variables numèriques
+box01 <-ggplot(ds, aes(y=rating)) + geom_boxplot()
+box02 <-ggplot(ds, aes(y=renterTripsTaken)) + geom_boxplot()
+box03 <-ggplot(ds, aes(y=reviewCount)) + geom_boxplot()
+box04 <-ggplot(ds, aes(y=rate.daily)) + geom_boxplot()
+box05 <-ggplot(ds, aes(y=vehicle.year)) + geom_boxplot()
+
+grid.arrange(box01, box02, box03, box04, box05,  nrow = 3, ncol = 2)
+```
+
+A continuació podem veure un detall d'aquests possibles valors extrems.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+boxplot.stats(ds$rating)$n
+
+boxplot.stats(ds$renterTripsTaken)$n
+
+boxplot.stats(ds$reviewCount)$n
+
+boxplot.stats(ds$rate.daily)$n
+
+boxplot.stats(ds$vehicle.year)$n
+```
+
+Continuem visualitzant les distribucions dels valors de les variables categòriques
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Calculem gràfics de barres de les variables categòriques
 
 ```
 
@@ -196,13 +270,76 @@ A partir dels detalls anteriors podem veure que disposem d'un joc de dades amb 5
 Ara farem el tractament dels valors buits i convertirem les variables discretes a factors i 
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
-
+# Estadístiques de valors buits, validem si hi ha valors buits
+colSums(is.na(ds))
 ```
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Estadístiques de valors buits, validem si hi ha valors buits
+colSums(ds=="")
+```
+
+Es pot veure que per 2 variables tenim valors buits (fuelType i rating). Anem a calcular doncs per cada una d’aquestes 2 variables quin és el seu valor més freqüent 
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+most_freq_fuelType <- names(which.max(table(ds$fuelType)))
+most_freq_rating <- names(which.max(table(ds$rating)))
+
+most_freq_fuelType
+most_freq_rating
+```
+
+Assignem el valor més freqüent als valors buits i comprovem que després del tractament no hi hagi valors buits
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Prenem el valor més freqüent per als valors buits
+ds$fuelType[ds$fuelType == ""] = most_freq_fuelType
+ds$rating[is.na(ds$rating)] = as.numeric(most_freq_rating)
+
+# Visualitzem de nou si hi ha valors buits
+colSums(is.na(ds))
+colSums(ds=="")
+```
+
 
 ### Valors extrems (Outliers)
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 
+```
+
+### Discretització de variables
+
+Examinem per quines variables tindria sentit realitzar una discretització
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Per a quines variables tindria sentit un procés de discretizació?
+apply(ds, 2, function(x) length(unique(x)))
+```
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Convertim les variables discretes a factors
+ds[,categorical_features_names] <- lapply(ds[,categorical_features_names] , factor)
+
+str(ds)
+```
+
+### Transformació d'atributs
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Discretització amb intevals d'igual amplitud
+table(discretize(ds$rating, method = "fixed", breaks = c(-Inf, 1, 2, 3, 4, 5, Inf), labels = c(0,1,2,3,4,5)))
+
+hist(ds$rating, breaks = 20, main = "Discretització amb intervals prefixats", xlab = "Valoració")
+cuts_rating <- discretize(ds$rating, method = "fixed", breaks = c(-Inf, 1, 2, 3, 4, 5, Inf), onlycuts = TRUE)
+abline(v = cuts_rating, col = "red")
+```
+
+### Creació de nous indicadors
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Antiguitat del vehicle
+ds['age']= as.integer(format(Sys.Date(), "%Y")) - ds$vehicle.year
 ```
 
 ### Exportació de les dades preprocesades
