@@ -571,18 +571,84 @@ for (i in 1:(ncol(ds) - 1)) {
 print(corr_matrix)
 ```
 
-A partjir del resultat obtingut podem identificar quines són les variables més correlacionades amb el preu diari de lloguer en funció de la seva proximitat amb els valors -1 i +1. Tenint en compte això, queda palès com la variable més rellevant en la fixació del preu és l'antigitat del vehicle (age) seguida de les valoracions.
+A partir del resultat obtingut podem identificar quines són les variables més correlacionades amb el preu diari de lloguer en funció de la seva proximitat amb els valors -1 i +1. Tenint en compte això, queda palès com la variable més rellevant en la fixació del preu és l'antigitat del vehicle (age) seguida de les valoracions.
 
 Nota. Per a cada coeficient de correlació es mostra també el seu *p-valor* associat, ja que aquest pot donar informació sobre el pes estadístic de la correlació obtinguda.
 
 
 ### ¿Els cotxes elèctric tenen un preu més elevat que els cotxes de benzina?
 
-```{r echo=TRUE, message=FALSE, warning=FALSE}
+Per a avaluar si els cotxes elèctics tenen un preu de lloguer diari més elevat que els cotxes de benzina, podem aplicar un test d’hipòtesis de dues mostres. Tal i com veurem a continuació.
 
+**Hipòtesi nul·la i alternativa**
+
+Comencem amb la definició de la hipòtesi nul·la i de la hipòtesi alternativa.
+
+* Hipòtesi nul·la: $$H_{0}: \mu_{1} = \mu_{2} $$ 
+
+* Hipòtesi alternativa: $$H_{1}: \mu_{1} > \mu_{2} $$ 
+
+A continuació revisem si es compleix l’assumpció de normalitat per a la variable 'rate.daily' i a partir d’això, podrem explicar quin test podem aplicar per al test d’hipòtesis de dues mostres. 
+
+**Test de normalitat**
+
+En primer lloc avaluem l'assumpció de normalitat per a la variable 'rate.daily'
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+par(mfrow=c(1,3))
+x <- ds$rate.daily
+qq1 <- qqnorm(x, main = "Normal Q-Q Plot 'Daily rate'")
+qqline(x)
+
+x <- ds$rate.daily[ds$fuelType == 'ELECTRIC']
+qq2 <- qqnorm(x, main = "Normal Q-Q Plot 'DR - ELECTRIC'")
+qqline(x)
+
+x <- ds$rate.daily[ds$fuelType == 'GASOLINE']
+qq3 <- qqnorm(x, main = "Normal Q-Q Plot 'DR - GASOLINE'")
+qqline(x)
 ```
 
-### Un altre constrast
+En aquest cas, els punts estan pràcticament sobre la línia, i, per tant, es pot assumir normalitat,
+
+Per tant podem dir que totes dues poblacions es distribueixen normalment, però ens faltaria saber, donat que la variància poblacional és desconeguda, si aquestes poblacions presenten variàncies iguals  o variàncies differents.
+
+**Test d'igualtat de variàncies**
+
+Per a aplicar l’estadístic adequat, cal comprovar si les variàncies de les dues poblacions són iguals. Per això, apliquem primer el test d’igualtat de variàncies.
+
+Per això podem realitzar un altre test, tal que:
+
+* Hipòtesi nul·la: $$H_{0}: \sigma^{2}_{1} = \sigma^{2}_{2} $$ 
+
+* Hipòtesi alternativa: $$H_{1}: \sigma^{2}_{1} \neq \sigma^{2}_{2} $$ 
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Obtenim les dades
+ELECTRIC <- ds$rate.daily[ds$fuelType == 'ELECTRIC']
+GASOLINE <- ds$rate.daily[ds$fuelType == 'GASOLINE']
+
+# Calculem el test d’igualtat de variàncies, amb la funció var.test d'R
+var.test(ELECTRIC, GASOLINE)
+```
+
+Donat que el valor *p-value* obtingut és menor que el nivell de significació (0.05) podem rebutjar la hipòtesi nul·la i per tant podem dir que la variància de ambdues poblacions és diferent amb un nivell de confiança del 95%.
+
+A partir dels resultats anteriors podem dir que el test a aplicar serà un test d’hipòtesis de dues mostres de poblacions independents amb distribucions normals i variàncies desconegudes i diferents.
+
+**Test de la mitjana de dues mostres independents amb variància desconeguda i diferents**
+
+Arribats aquest punt, amb la funció *t.test* d’R que ens permet realitzar el contrast d’hipòtesis directament, realitzem el test de mitjanes.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# variàncies diferents
+t.test( ds$rate.daily[ds$fuelType == 'ELECTRIC'],  ds$rate.daily[ds$fuelType == 'GASOLINE'], alternative="greater", var.equal=FALSE)
+```
+
+El valor *p-value* obtingut és menor que el nivell de significació (0.05) i, per tant, podem rebutjar la hipòtesi nul·la d’igualtat de mitjanes de preu de lloguer diari entre els cotxes elèctris i els cotxes de benzina. Per tant podem dir que els cotxes électrics tenen un lloguer més elevat que els de benzina, amb un nivell de confiança del 95%.
+
+
+### ¿La proporció de furgonetes és més gran que la d'utilitaris?
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 
