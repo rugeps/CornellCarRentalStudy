@@ -132,10 +132,14 @@ library(ggplot2)
 library(dplyr)
 library(GGally)
 library(arules)
+library(reshape2)
 library(regclass)
 library(car)
+library(nortest)
 library(gridExtra)
 library(ResourceSelection)
+
+old <- theme_set(theme_minimal())
 ```
 
 
@@ -144,9 +148,9 @@ library(ResourceSelection)
 
 ## Descripció del dataset
 
-El conjunt de dades que analitzarem s'ha obtingut del repositori de dades Kaggle (https://www.kaggle.com/kushleshkumar/cornell-car-rental-dataset?select=CarRentalData.csv) està format per 16 característiques (columnes) que presentan 5851 cotxes (files o observacions).
+El conjunt de dades que analitzarem serà: Cornell Car Rental Dataset, s'ha obtingut del repositori de dades Kaggle (https://www.kaggle.com/kushleshkumar/cornell-car-rental-dataset?select=CarRentalData.csv). Aquest joc de dades és un recull de registres de diferents portals de lloguer de vehicles a les principals ciutats d'Estats Units, i s'ha generat mitjançant *webscraping*, amb una extracció relitzada al Julol del 2020. Està format per 16 característiques (columnes o atributs) que presentan 5851 registres (files o observacions). Cada una de les obseravacions es correspon a les característiques d'un vehicle de lloguer.
 
-I les seves variables (es manté el nom original en anglès) són:
+Les característiques, atributs o variables per cada observació (es manté el nom original en anglès) són:
 
 * *fuelType:* Tipus de combustible utilitzat pel vehicle. 
 * *rating:* Qualificació acumulativa del cotxe per part dels clients
@@ -169,16 +173,18 @@ I les seves variables (es manté el nom original en anglès) són:
 
 ## Importància i objectius de l'anàlisi
 
+Amb l'entrada en vigor de les zones de zero emissions a les grans ciutats, la classificació de vehicles segons el seu gran de contaminació i de l'objectiu de zero emissions al 2050, promogut per la Comisió Euopea han generat un gran debat envers la compra o lloguer de vehicles. De fet hi ha diversos estudis que mostren que en els últims anys hi ha hagut un increment en el mercat de lloguer de vehicles o *renting*. A partir del joc de dades escollit "Cornell Car Rental Dataset" ens proposem determinar quines variables influeixen més sobre el preu d’un automòbil de lloguer, en el nombre de vegades que es lloga i la seva valoració. A més, es generarà un model de regressió lineal múltple que permeti predir el preu d’un vehicle de lloguer en funció de les seves característiques. A més es duran a terme diferents constrastos d'hipótesis que permetin identificar propietats interessants subyacents en les mostres que puguin ser inferidas respecte a la población.
 
+Aquests anàlisis són de gran rellevància en gairebé qualsevol sector relacionat amb el lloguer de vehicles. Per una banda pot resultar interessant per les agències de lloguer, ja que aquestes podran conèixer amb més detall els seus clients, i per tant generar ofertes personalitzades o decidir quin és el preu més adient o quin model de vehicle és més adequat per renovar la flota. D'altre banda també pot resultar interessant per a l'usuari final, ja que a partir de les seves necesitats podrà determinar si li convé llogar un vehicle o no o si el seu preu és correspont amb el del mercat actual.
 
 
 ## Neteja de dades
 
 ### Lectura de dades
 
-Obrim el fitxer de dades i examinem el tipus de dades amb els que R ha interpretat cada variable. Examinem també els valors resum de cada tipus de variable.
+En primer lloc, obrim el fitxer de dades i examinem el tipus de dades amb els que R ha interpretat cada variable. A més examinem també els valors resum de cada tipus de variable.
 
-Comencem carregant el joc de dades.
+Comencem carregant el joc de dades en un dataframe d'*R*.
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 # Carreguem el joc de dades
@@ -199,8 +205,13 @@ A partir dels detalls anteriors podem veure que disposem d'un joc de dades amb 5
 
 ### Previsualització de les dades d'interès
 
+A continuació realitzem una previsualització, anàlisi visual de les dades, per intentar identificar les possibles anomalies, distribucions i característiques de les diferents variables.
+
+Per això el primer que farem serà distingir les variables categòriques de les variables numèriques. la qual cosa ens facilitarà el tractament futur. 
+
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 categorical_features_names = c('fuelType', 'location.city', 'location.country', 'location.state', 'owner.id', 'vehicle.make', 'vehicle.model', 'vehicle.type', 'airportcity') 
+
 numeric_features_names = c('rating', 'renterTripsTaken', 'reviewCount', 'location.latitude', 'location.longitude', 'rate.daily', 'vehicle.year')
 ```
 
@@ -238,24 +249,34 @@ Un altre de les visualitzacions que sol ser de força utilitat per analitzar els
 box01 <-ggplot(ds, aes(y=rating)) + geom_boxplot()
 box02 <-ggplot(ds, aes(y=renterTripsTaken)) + geom_boxplot()
 box03 <-ggplot(ds, aes(y=reviewCount)) + geom_boxplot()
-box04 <-ggplot(ds, aes(y=rate.daily)) + geom_boxplot()
-box05 <-ggplot(ds, aes(y=vehicle.year)) + geom_boxplot()
+box04 <-ggplot(ds, aes(y=location.latitude)) + geom_boxplot()
+box05 <-ggplot(ds, aes(y=location.longitude)) + geom_boxplot()
+box06 <-ggplot(ds, aes(y=rate.daily)) + geom_boxplot()
+box07 <-ggplot(ds, aes(y=vehicle.year)) + geom_boxplot()
 
-grid.arrange(box01, box02, box03, box04, box05,  nrow = 3, ncol = 2)
+grid.arrange(box01, box02, box03, box04,  nrow = 2, ncol = 2)
+
+grid.arrange(box05, box06, box07, nrow = 2, ncol = 2)
 ```
 
 A continuació podem veure un detall d'aquests possibles valors extrems.
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
-boxplot.stats(ds$rating)$n
+n <- length(ds$rating)
 
-boxplot.stats(ds$renterTripsTaken)$n
+n - boxplot.stats(ds$rating)$n
 
-boxplot.stats(ds$reviewCount)$n
+n - boxplot.stats(ds$renterTripsTaken)$n
 
-boxplot.stats(ds$rate.daily)$n
+n - boxplot.stats(ds$reviewCount)$n
 
-boxplot.stats(ds$vehicle.year)$n
+n - boxplot.stats(ds$location.latitude)$n
+
+n - boxplot.stats(ds$location.longitude)$n
+
+n - boxplot.stats(ds$rate.daily)$n
+
+n- boxplot.stats(ds$vehicle.year)$n
 ```
 
 Continuem visualitzant les distribucions dels valors de les variables categòriques
@@ -267,7 +288,7 @@ Continuem visualitzant les distribucions dels valors de les variables categòriq
 
 ### Zeros i atributs buits
 
-Ara farem el tractament dels valors buits i convertirem les variables discretes a factors i 
+Ara farem el tractament dels valors buits i convertirem les variables discretes a factors.
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 # Estadístiques de valors buits, validem si hi ha valors buits
@@ -304,48 +325,91 @@ colSums(ds=="")
 
 ### Valors extrems (Outliers)
 
-```{r echo=TRUE, message=FALSE, warning=FALSE}
+Després del tractament dels valors buits examinem de nou els possibles valors extrems.
 
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+n <- length(ds$rating)
+
+n - boxplot.stats(ds$rating)$n
 ```
+
+ veure com el joc de dades ja no presenta valors extrems. I que els valors extrems es corresponien amb dades buides.
 
 ### Discretització de variables
 
-Examinem per quines variables tindria sentit realitzar una discretització
+Ara examinarem per quines variables tindria sentit realitzar una discretització.
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 # Per a quines variables tindria sentit un procés de discretizació?
 apply(ds, 2, function(x) length(unique(x)))
 ```
 
+Per aquelles variables amb pocs valors possibles podem realitzar una discretització. Per això convertim les variables discretes a factors d'*R*.
+
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 # Convertim les variables discretes a factors
 ds[,categorical_features_names] <- lapply(ds[,categorical_features_names] , factor)
 
+# Mostrem el resultat
 str(ds)
 ```
 
 ### Transformació d'atributs
 
+A continuació realitzarem algunes transformacions sobre alguns atributs, amb la finalitat de generar diferents punts de vista de les dades.
+
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
-# Discretització amb intevals d'igual amplitud
-table(discretize(ds$rating, method = "fixed", breaks = c(-Inf, 1, 2, 3, 4, 5, Inf), labels = c(0,1,2,3,4,5)))
+# Discretització amb intevals prefixats, de les valoracions
+table(discretize(ds$rating, method = "fixed", c(0, 4.5, Inf), labels = c('Bad', 'Good')))
 
 hist(ds$rating, breaks = 20, main = "Discretització amb intervals prefixats", xlab = "Valoració")
-cuts_rating <- discretize(ds$rating, method = "fixed", breaks = c(-Inf, 1, 2, 3, 4, 5, Inf), onlycuts = TRUE)
+cuts_rating <- discretize(ds$rating, method = "fixed",c(0, 4.5, Inf), onlycuts = TRUE)
 abline(v = cuts_rating, col = "red")
+```
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Discretització amb intevals prefixats, de les valoracions
+ds['rating.discret'] <- discretize(ds$rating, method = "fixed", breaks = c(0, 4.5, Inf), labels = c('Bad', 'Good'))
+
+ds$rating.discret = as.factor(ds$rating.discret)
+
+# Calculem gràfic de barres
+ggplot(data=ds, aes(x = rating.discret)) + geom_bar(aes(y = (..count..)/sum(..count..))) + geom_text(aes(y = ((..count..)/sum(..count..)), label = scales::percent((..count..)/sum(..count..))), stat = "count", vjust = -0.5) + scale_y_continuous(labels = scales::percent, limits = c(0,1)) + xlab('Rent') + ylab("Percentatge")
 ```
 
 ### Creació de nous indicadors
 
+Un altre dels passos interessant en l'anàlisi d'un joc de dades és la generació de nous atributs a partir dels existents. 
+
+Creem un nou indicador o atribut on emmagatzemem l'antiguitat del vehicle.
+
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 # Antiguitat del vehicle
-ds['age']= as.integer(format(Sys.Date(), "%Y")) - ds$vehicle.year
+ds['age'] <- as.integer(format(Sys.Date(), "%Y")) - ds$vehicle.year
+
+# Calculem gràfic de barres de la nova variable
+ggplot(data=ds, aes(x = age)) + geom_bar(aes(y = (..count..)/sum(..count..))) + scale_x_continuous(breaks = round(seq(min(ds$age), max(ds$age), by = 5), 1)) + xlab('Age') + ylab("Percentatge")
+```
+
+Creem un altre indicador o atribut nou on emmagatzemem si el vehicle va ser llogat o no.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Vehicle llogat/no llogat
+ds['rent'] <- ifelse(ds['renterTripsTaken'] > 0, 1, 0)
+ds$rent <- as.factor(ds$rent)
+levels(ds$rent) <- c("Not","Yes")
+
+# Calculem gràfic de barres de la variable objectiu
+ggplot(data=ds, aes(x = rent)) + geom_bar(aes(y = (..count..)/sum(..count..))) + geom_text(aes(y = ((..count..)/sum(..count..)), label = scales::percent((..count..)/sum(..count..))), stat = "count", vjust = -0.5) + scale_y_continuous(labels = scales::percent, limits = c(0,1)) + xlab('Rent') + ylab("Percentatge")
 ```
 
 ### Exportació de les dades preprocesades
 
-```{r echo=TRUE, message=FALSE, warning=FALSE}
+Una vegada que hem realitzat sobre el conjunt de dades inicial els procediments de preprocessament integració, validació i neteja, procedim a guardar aquest nou joc de dades en un fitxer anomenat CarRentalDataV1_Clean.csv.
 
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Exportació de les dades preprocessades a un fitxer .CSV
+write.csv(ds, '../data/CarRentalDataV1_Clean.csv')
 ```
 
 
@@ -353,43 +417,182 @@ ds['age']= as.integer(format(Sys.Date(), "%Y")) - ds$vehicle.year
 
 ## Anàlisi de les dades
 
+La gran majoria dels atributs presents en el conjunt de dades es corresponen amb característiques dels diversos vehicles de lloguer o de la seva ubicació, per tant serà convenient tenir-los en consideració durant la realització de les anàlisis. No obstant això, podem prescindir de dos atributs, les coordenades geogràfiques (location.latitude i location.longitude) ja que la informació que ens aporten aquestes variables ja es troba implicita en la resta d'atributs de localització  i, per tant, són menys rellevants a l' hora de resoldre el nostre problema.
+
+
 ### Selecció dels grups de dades a analitzar
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Eliminem les coordenades geogràfiques
+ds <- ds[, -(7:8)]
 
+categorical_features_names = c('fuelType', 'location.city', 'location.country', 'location.state', 'owner.id', 'vehicle.make', 'vehicle.model', 'vehicle.type', 'airportcity') 
+
+numeric_features_names = c('rating', 'renterTripsTaken', 'reviewCount', 'rate.daily', 'age')
 ```
 
 ### Comprobació de la normalitat i homogeneitat de la varianza
 
-```{r echo=TRUE, message=FALSE, warning=FALSE}
+Per a la comprovació que els valors que prenen les nostres variables quantitatives provenen d'una població distribuïda normalment, utilitzarem la prova de normalitat d'Anderson-Darling. Per això, es comprova que perquè cada prova s'obté un *p-valor* superior el nivell de significació prefixat = 0. 05 (Nivell de confiança del 95%). Si això es compleix, llavors es considera que la variable en qüestió segueix una distribució normal.
 
+**Test de normalitat**
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+alpha = 0.05
+col.names = colnames(ds)
+
+for (i in 1:ncol(ds)) {
+  if (i == 1) cat("Variables que no presenten una distribució normal:\n")
+    if (is.integer(ds[,i]) | is.numeric(ds[,i])) {
+      p_val = ad.test(ds[,i])$p.value
+      if (p_val < alpha) {
+        cat(col.names[i])
+        # Format output
+        if (i < ncol(ds) - 1) cat(", ")
+        if (i %% 3 == 0) cat("\n")
+      }
+    }
+}
 ```
 
+A pqartir del resultat anterior podem veure com que cap dels atributs quantitaius presenta una distribució normal. Tot i així ens centrarem ara un moment el la variable depenent o variable objectiu en el nostre estudi, el preu diari del vehicle.
 
+Si observem els valors mínim, mitjà i màxim veiem clarament que no és una variable amb distribució normal. Però en la majoria de models numèrics d'aprenentatge automàtic, necessitarem que les variables segueixin la distribució normal. Per això podem emprar visualitzacions de les dades per analitzar la normalitat. Concretament, el gràfic Q-Q, on la Q denota quantil, és un tipus de visualització que s'utilitza per a diagnosticar la desviació de les dades de la mostra en relació amb una població normal.
 
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+qqnorm(ds$rate.daily, ylab="Daily Rate", xlab="Theorical Quantiles", main="Normal Q-Q Plot") 
+qqline(ds$rate.daily)
+```
+
+Quan tenim una variable que no és normal, una de les transformacions clàssiques que pot funcionar és aplicar el logaritme a la variable.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+ds$rate.daily <- log(ds$rate.daily)
+
+ggplot(ds, aes(x = rate.daily)) +  geom_histogram() +  ylab("Nombre d'habitatges") + xlab("Preu de venda")
+```
+
+Veiem com ara sí que té forma normal. Ho comprovem amb el Q-Q plot per confirmar-ho.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+qqnorm(log(ds$rate.daily), ylab="Daily Rate", xlab="Theorical Quantiles", main="Normal Q-Q Plot") 
+qqline(log(ds$rate.daily))
+```
+
+**Anàlisi multivariant** 
+
+Per analitzar un conjunt de dades necessitem tenir en compte més d'una variable alhora. L'anàlisi bivariant permet identificar les relacions entre dues variables, i fins quina manera una pot predir l'altra.
+
+En aquest cas podem veure quina és la relació entre el preu diari del lloguer i el nombre de vegades que s'ha llogat el vehicle amb un scatter plot o diagrama de punts.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Relació entre el preu diari del lloguer i el nombre de vegades que s'ha llogat el vehicle
+ggplot(ds, aes(x=renterTripsTaken, y=rate.daily)) + geom_point()
+```
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Relació entre el preu diari del lloguer i el nombre de vegades que s'ha llogat el vehicle
+ggplot(ds, aes(x=age, y=rate.daily)) + geom_point()
+```
+
+En el cas d'una variable categòrica com el tipus de combustible o la marca del vehicle, podem visualitzar la relació amb un boxplot o diagrama de caixes.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Relació entre el preu diari del lloguer i el tipus de combustible
+ggplot(ds, aes(x=fuelType, y=rate.daily, fill=fuelType)) + geom_boxplot(alpha=0.1) + stat_summary(fun.y=mean)
+```
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Relació entre el preu diari del lloguer i l'estat on es localitza el vehicle
+ggplot(ds, aes(x=location.state, y=rate.daily, fill=vehicle.type)) + geom_boxplot(alpha=0.1) + stat_summary(fun.y=mean)
+```
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Relació entre el preu diari del lloguer i la marca del vehicle
+ggplot(ds, aes(x=vehicle.make, y=rate.daily, fill=vehicle.make)) + geom_boxplot(alpha=0.1) + stat_summary(fun.y=mean)
+```
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Relació entre el preu diari del lloguer i el tipus de vehicle
+ggplot(ds, aes(x=vehicle.type, y=rate.daily, fill=vehicle.type)) + geom_boxplot(alpha=0.1) + stat_summary(fun.y=mean)
+```
+
+Si volem visualitzar alhora les relacions creuades entre diverses variables, podem fer un pairplot.
+
+Examinem els atributs numèrics envers si el vehicle va se llogat o no.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+ggpairs(ds, columns=numeric_features_names, mapping=aes(color=rent))
+```
+
+Examinem els atributs numèrics envers la qualificació que va obtenir el vehicle.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+ggpairs(ds, columns=numeric_features_names, mapping=aes(color=rating.discret))
+```
+
+Finalment, ens interessarà veure quins conjunts de variables estan relacionats entre si. Per això, farem servir tècniques estadístiques d'anàlisi multivariant.
+
+Una de les eines més útils és calcular la matriu de correlació entre les variables. Amb la funció qplot i la correlació de variables, calculada amb la funció cor, podem visualitzar de manera fàcil aquelles variables més correlacionades, que corresponen a una intensitat major de color.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+heat <- ds[,numeric_features_names]
+qplot(x=Var1, y=Var2, data=melt(cor(heat, use="p")), fill=value, geom="tile") + theme(axis.text.x = element_text(angle = 90)) + coord_fixed()
+```
 
 ## Test estadístics
 
 ### ¿Quines variables quantitatives influeixen més a les valoracions?
 
+En primer lloc, procedim a realitzar una anàlisi de correlació entre les diferents variables per determinar quines d'elles exerceixen una major influència sobre el preu diari del lloguer del vehicle. Per a això, s'utilitzarà el coeficient de correlació de Spearman, ja que hem vist que
+tenim dades que no segueixen una distribució normal.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+corr_matrix <- matrix(nc = 2, nr = 0)
+colnames(corr_matrix) <- c("estimate", "p-value")
+
+# Calcular el coeficiente de correlación para cada variable cuantitativa
+# con respecto al campo "precio"
+for (i in 1:(ncol(ds) - 1)) {
+  if (is.integer(ds[,i]) | is.numeric(ds[,i])) {
+    spearman_test = cor.test(ds[,i], ds[,'rate.daily'], method = "spearman")
+    corr_coef = spearman_test$estimate
+    p_val = spearman_test$p.value
+    
+    # Add row to matrix
+    pair = matrix(ncol = 2, nrow = 1)
+    pair[1][1] = corr_coef
+    pair[2][1] = p_val
+    corr_matrix <- rbind(corr_matrix, pair)
+    rownames(corr_matrix)[nrow(corr_matrix)] <- colnames(ds)[i]
+  }
+}
+
+print(corr_matrix)
+```
+
+A partjir del resultat obtingut podem identificar quines són les variables més correlacionades amb el preu diari de lloguer en funció de la seva proximitat amb els valors -1 i +1. Tenint en compte això, queda palès com la variable més rellevant en la fixació del preu és l'antigitat del vehicle (age) seguida de les valoracions.
+
+Nota. Per a cada coeficient de correlació es mostra també el seu *p-valor* associat, ja que aquest pot donar informació sobre el pes estadístic de la correlació obtinguda.
+
+
+### ¿Els cotxes elèctric tenen un preu més elevat que els cotxes de benzina?
+
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 
 ```
 
-### ¿Quines variables qualitatives influeixen més a les valoracions?
+### Un altre constrast
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 
 ```
 
-### ¿Els cotxes elèctric es lloguen menys hores?
+### Un altre constrast
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 
 ```
-
-
-
 
 ## Model de regressió lineal múltiple
 
