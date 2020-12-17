@@ -694,6 +694,46 @@ D'altra banda el *p-valor* és inferior al nivell de significació (*p-value < &
 
 ## Model de regressió lineal múltiple
 
+A continuació ens proposem estimar per mínims quadrats ordinaris un model lineal que expliqui la variable *rate.daily* en funció de *age i renterTripsTaken*. En aquest cas farem servir només atributs categòrics. 
+
+**Model de regressió lineal mùltiple 1 (Preu ~ age + renterTripsTaken)**
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+model.lm1 <- lm(formula=rate.daily ~ age + renterTripsTaken, data = ds)
+
+summary(model.lm1)
+```
+
+Així doncs l'equació de regressió és:
+
+$$\hat{y} = -0.0260*age - 0.0014 * renterTripsTaken + 4.46$$ 
+
+Es pot observar que tant la variable *age i renterTripsTaken* són significatives perquè Pr(>|t|)< 0,05. 
+
+Finalment el coeficient de determinació ajustat per aquest model és: R<sup>2</sup> = 0.03936. Això ens diu que el model de regressió múltiple obtingut explica el 3.936% de la variabilitat del preu del lloguer diari de vehicles. Com que és molt proper al 0%, en principi és un model bastant dolent, i per tant tindrà poc poder predictiu, gairebè nul.
+
+Anem a veure ara si amb la introducció de noves variables al model, aconseguim un altre model que presenti una millor capacitat predictora. En aquest cas utilitzarem només atributs categòrics.
+
+**Model de regressió lineal mùltiple 2 (Preu ~ age + renterTripsTaken + fuelType + vehicle.make + vehicle.type)**
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+model.lm2 <- lm(formula=rate.daily ~ fuelType + vehicle.make + vehicle.type, data = ds)
+
+summary(model.lm2)
+```
+
+Si examinem ara el coeficient de determinació ajustat per aquest nou model és: R<sup>2</sup> = 0.5216. Això ens diu que el model de regressió múltiple obtingut explica el 52.16% de la variabilitat del preu del lloguer diari de vehicles. Com que és molt proper al 50%, en principi no és un model gaire bo, i per tant tindrà poc poder predictiu. Tot i així podem veure com hi ha un increment considerable sobre la variabilitat explicada respecte al primer model.
+
+**Model de regressió lineal mùltiple 3 (Preu ~ age + renterTripsTaken + fuelType + vehicle.make + vehicle.type)**
+
+Ara probarem a generar un nou model, però aquest cop combinarem atributs categòrics i atributs numèrics com a variables predictores.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+model.lm3 <- lm(formula=rate.daily ~ age + renterTripsTaken + fuelType + vehicle.make + vehicle.type, data = ds)
+
+summary(model.lm3)
+```
+Si examinem ara el coeficient de determinació ajustat per aquest nou model és: R<sup>2</sup> = 0.5351. Això ens diu que el model de regressió múltiple obtingut explica el 53.51% de la variabilitat del preu del lloguer diari de vehicles. Com que és molt proper al 50%, en principi no és un model gaire bo, i per tant tindrà poc poder predictiu. Tot i així podem veure com hi ha un increment considerable sobre la variabilitat explicada respecte al primer model, i un increment poc significatiu respecte el segon model. La qual cosa ens indica que a priori els atributs que millor expliquen el preu són les característiques del vehicle: el combustible, la marca i el tipus de vehicle.
 
 ## Conclusions
 

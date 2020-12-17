@@ -1169,6 +1169,200 @@ prop.test(x=sum(ds$vehicle.type == &quot;van&quot;  | ds$vehicle.type == &quot;m
 </div>
 <div id="model-de-regressió-lineal-múltiple" class="section level2" number="2.6">
 <h2 number="2.6"><span class="header-section-number">2.6</span> Model de regressió lineal múltiple</h2>
+<p>A continuació ens proposem estimar per mínims quadrats ordinaris un model lineal que expliqui la variable <em>rate.daily</em> en funció de <em>age i renterTripsTaken</em>. En aquest cas farem servir només atributs categòrics.</p>
+<p><strong>Model de regressió lineal mùltiple 1 (Preu ~ age + renterTripsTaken)</strong></p>
+<pre class="r"><code>model.lm1 &lt;- lm(formula=rate.daily ~ age + renterTripsTaken, data = ds)
+
+summary(model.lm1)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = rate.daily ~ age + renterTripsTaken, data = ds)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -1.3593 -0.4833 -0.0676  0.3867  3.7207 
+## 
+## Coefficients:
+##                    Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)       4.4620496  0.0137813 323.776  &lt; 2e-16 ***
+## age              -0.0260129  0.0020630 -12.609  &lt; 2e-16 ***
+## renterTripsTaken -0.0014895  0.0001995  -7.468 9.34e-14 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.6343 on 5848 degrees of freedom
+## Multiple R-squared:  0.03969,    Adjusted R-squared:  0.03936 
+## F-statistic: 120.8 on 2 and 5848 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>Així doncs l’equació de regressió és:</p>
+<p><span class="math display">\[\hat{y} = -0.0260*age - 0.0014 * renterTripsTaken + 4.46\]</span></p>
+<p>Es pot observar que tant la variable <em>age i renterTripsTaken</em> són significatives perquè Pr(&gt;|t|)&lt; 0,05.</p>
+<p>Finalment el coeficient de determinació ajustat per aquest model és: R<sup>2</sup> = 0.03936. Això ens diu que el model de regressió múltiple obtingut explica el 3.936% de la variabilitat del preu del lloguer diari de vehicles. Com que és molt proper al 0%, en principi és un model bastant dolent, i per tant tindrà poc poder predictiu, gairebè nul.</p>
+<p>Anem a veure ara si amb la introducció de noves variables al model, aconseguim un altre model que presenti una millor capacitat predictora. En aquest cas utilitzarem només atributs categòrics.</p>
+<p><strong>Model de regressió lineal mùltiple 2 (Preu ~ age + renterTripsTaken + fuelType + vehicle.make + vehicle.type)</strong></p>
+<pre class="r"><code>model.lm2 &lt;- lm(formula=rate.daily ~ fuelType + vehicle.make + vehicle.type, data = ds)
+
+summary(model.lm2)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = rate.daily ~ fuelType + vehicle.make + vehicle.type, 
+##     data = ds)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -1.5043 -0.2905 -0.0468  0.2329  3.2925 
+## 
+## Coefficients:
+##                           Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)                4.07873    0.08562  47.636  &lt; 2e-16 ***
+## fuelTypeELECTRIC           0.12835    0.08961   1.432 0.152081    
+## fuelTypeGASOLINE           0.06054    0.05658   1.070 0.284663    
+## fuelTypeHYBRID             0.14356    0.06380   2.250 0.024485 *  
+## vehicle.makeAlfa Romeo     0.51479    0.10346   4.976 6.69e-07 ***
+## vehicle.makeAston Martin   1.85331    0.21024   8.815  &lt; 2e-16 ***
+## vehicle.makeAudi           0.24861    0.07222   3.442 0.000581 ***
+## vehicle.makeBentley        1.75562    0.16239  10.811  &lt; 2e-16 ***
+## vehicle.makeBMW            0.33870    0.06694   5.059 4.34e-07 ***
+## vehicle.makeBuick         -0.35929    0.12071  -2.976 0.002928 ** 
+## vehicle.makeCadillac       0.37955    0.09259   4.099 4.20e-05 ***
+## vehicle.makeChevrolet      0.07423    0.06718   1.105 0.269205    
+## vehicle.makeChrysler      -0.26112    0.08856  -2.948 0.003206 ** 
+## vehicle.makeDodge         -0.12005    0.07267  -1.652 0.098585 .  
+## vehicle.makeFerrari        2.34658    0.13968  16.799  &lt; 2e-16 ***
+## vehicle.makeFIAT          -0.37660    0.09409  -4.002 6.35e-05 ***
+## vehicle.makeFord          -0.12856    0.06725  -1.912 0.055960 .  
+## vehicle.makeGenesis        0.09891    0.32307   0.306 0.759499    
+## vehicle.makeGMC            0.07147    0.08449   0.846 0.397644    
+## vehicle.makeHonda         -0.34827    0.06968  -4.998 5.95e-07 ***
+## vehicle.makeHUMMER         0.61250    0.26631   2.300 0.021488 *  
+## vehicle.makeHyundai       -0.47105    0.07168  -6.572 5.41e-11 ***
+## vehicle.makeInfiniti      -0.01210    0.09639  -0.126 0.900115    
+## vehicle.makeJaguar         0.76618    0.08667   8.840  &lt; 2e-16 ***
+## vehicle.makeJeep          -0.05525    0.06910  -0.800 0.423979    
+## vehicle.makeKia           -0.47584    0.07322  -6.499 8.78e-11 ***
+## vehicle.makeLamborghini    2.65602    0.13200  20.121  &lt; 2e-16 ***
+## vehicle.makeLand Rover     0.64095    0.07888   8.125 5.41e-16 ***
+## vehicle.makeLexus          0.01458    0.07552   0.193 0.846904    
+## vehicle.makeLincoln        0.01360    0.11650   0.117 0.907081    
+## vehicle.makeLotus          1.44276    0.23287   6.196 6.21e-10 ***
+## vehicle.makeMaserati       0.85095    0.08397  10.133  &lt; 2e-16 ***
+## vehicle.makeMazda         -0.31928    0.08282  -3.855 0.000117 ***
+## vehicle.makeMcLaren        2.54409    0.45241   5.623 1.96e-08 ***
+## vehicle.makeMercedes-Benz  0.40796    0.06744   6.050 1.54e-09 ***
+## vehicle.makeMercury       -0.78004    0.32304  -2.415 0.015779 *  
+## vehicle.makeMINI          -0.30315    0.10272  -2.951 0.003178 ** 
+## vehicle.makeMitsubishi    -0.55362    0.10457  -5.294 1.24e-07 ***
+## vehicle.makeNissan        -0.40410    0.06867  -5.885 4.21e-09 ***
+## vehicle.makePolaris        0.84103    0.09188   9.154  &lt; 2e-16 ***
+## vehicle.makePontiac       -0.63317    0.21024  -3.012 0.002609 ** 
+## vehicle.makePorsche        0.83395    0.07142  11.677  &lt; 2e-16 ***
+## vehicle.makeRam           -0.11565    0.12416  -0.931 0.351655    
+## vehicle.makeRolls Royce    2.61391    0.26635   9.814  &lt; 2e-16 ***
+## vehicle.makeSaab          -0.40161    0.45241  -0.888 0.374733    
+## vehicle.makeSaturn        -0.86231    0.32307  -2.669 0.007627 ** 
+## vehicle.makeScion         -0.57232    0.13968  -4.097 4.24e-05 ***
+## vehicle.makesmart         -0.61891    0.13576  -4.559 5.25e-06 ***
+## vehicle.makeSubaru        -0.32551    0.08023  -4.057 5.03e-05 ***
+## vehicle.makeSuzuki        -0.53812    0.32297  -1.666 0.095735 .  
+## vehicle.makeTesla          0.66799    0.09536   7.005 2.75e-12 ***
+## vehicle.makeToyota        -0.40610    0.06636  -6.120 1.00e-09 ***
+## vehicle.makeVolkswagen    -0.33641    0.07464  -4.507 6.70e-06 ***
+## vehicle.makeVolvo         -0.11213    0.11459  -0.979 0.327845    
+## vehicle.typeminivan        0.18393    0.03393   5.420 6.19e-08 ***
+## vehicle.typesuv            0.16540    0.01500  11.024  &lt; 2e-16 ***
+## vehicle.typetruck          0.34782    0.03633   9.574  &lt; 2e-16 ***
+## vehicle.typevan            0.46720    0.06258   7.465 9.55e-14 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.4479 on 5785 degrees of freedom
+##   (8 observations deleted due to missingness)
+## Multiple R-squared:  0.5263, Adjusted R-squared:  0.5216 
+## F-statistic: 112.8 on 57 and 5785 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>Si examinem ara el coeficient de determinació ajustat per aquest nou model és: R<sup>2</sup> = 0.5216. Això ens diu que el model de regressió múltiple obtingut explica el 52.16% de la variabilitat del preu del lloguer diari de vehicles. Com que és molt proper al 50%, en principi no és un model gaire bo, i per tant tindrà poc poder predictiu. Tot i així podem veure com hi ha un increment considerable sobre la variabilitat explicada respecte al primer model.</p>
+<p><strong>Model de regressió lineal mùltiple 3 (Preu ~ age + renterTripsTaken + fuelType + vehicle.make + vehicle.type)</strong></p>
+<p>Ara probarem a generar un nou model, però aquest cop combinarem atributs categòrics i atributs numèrics com a variables predictores.</p>
+<pre class="r"><code>model.lm3 &lt;- lm(formula=rate.daily ~ age + renterTripsTaken + fuelType + vehicle.make + vehicle.type, data = ds)
+
+summary(model.lm3)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = rate.daily ~ age + renterTripsTaken + fuelType + 
+##     vehicle.make + vehicle.type, data = ds)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -1.4679 -0.2849 -0.0453  0.2220  3.5253 
+## 
+## Coefficients:
+##                             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)                4.2132581  0.0850541  49.536  &lt; 2e-16 ***
+## age                       -0.0180609  0.0015220 -11.866  &lt; 2e-16 ***
+## renterTripsTaken          -0.0005806  0.0001421  -4.087 4.43e-05 ***
+## fuelTypeELECTRIC           0.0668378  0.0884631   0.756 0.449953    
+## fuelTypeGASOLINE           0.0365286  0.0558338   0.654 0.512984    
+## fuelTypeHYBRID             0.1165624  0.0629454   1.852 0.064105 .  
+## vehicle.makeAlfa Romeo     0.4753327  0.1021369   4.654 3.33e-06 ***
+## vehicle.makeAston Martin   1.9064962  0.2073453   9.195  &lt; 2e-16 ***
+## vehicle.makeAudi           0.2443574  0.0712023   3.432 0.000604 ***
+## vehicle.makeBentley        1.8215530  0.1602162  11.369  &lt; 2e-16 ***
+## vehicle.makeBMW            0.3424900  0.0660219   5.188 2.20e-07 ***
+## vehicle.makeBuick         -0.3516717  0.1190038  -2.955 0.003138 ** 
+## vehicle.makeCadillac       0.3618234  0.0912884   3.964 7.47e-05 ***
+## vehicle.makeChevrolet      0.0759530  0.0662803   1.146 0.251869    
+## vehicle.makeChrysler      -0.2578508  0.0873115  -2.953 0.003157 ** 
+## vehicle.makeDodge         -0.1382803  0.0716877  -1.929 0.053789 .  
+## vehicle.makeFerrari        2.3947254  0.1377758  17.381  &lt; 2e-16 ***
+## vehicle.makeFIAT          -0.3428901  0.0928122  -3.694 0.000222 ***
+## vehicle.makeFord          -0.1208409  0.0663198  -1.822 0.068492 .  
+## vehicle.makeGenesis        0.0495189  0.3185245   0.155 0.876461    
+## vehicle.makeGMC            0.0802262  0.0832950   0.963 0.335509    
+## vehicle.makeHonda         -0.3292827  0.0687486  -4.790 1.71e-06 ***
+## vehicle.makeHUMMER         0.7487313  0.2627942   2.849 0.004400 ** 
+## vehicle.makeHyundai       -0.4941976  0.0707179  -6.988 3.10e-12 ***
+## vehicle.makeInfiniti      -0.0080978  0.0950285  -0.085 0.932094    
+## vehicle.makeJaguar         0.7526830  0.0854660   8.807  &lt; 2e-16 ***
+## vehicle.makeJeep          -0.0629853  0.0681908  -0.924 0.355701    
+## vehicle.makeKia           -0.4912867  0.0722167  -6.803 1.13e-11 ***
+## vehicle.makeLamborghini    2.6388239  0.1301427  20.276  &lt; 2e-16 ***
+## vehicle.makeLand Rover     0.6378990  0.0777695   8.202 2.88e-16 ***
+## vehicle.makeLexus          0.0322741  0.0744733   0.433 0.664766    
+## vehicle.makeLincoln        0.0018756  0.1148584   0.016 0.986972    
+## vehicle.makeLotus          1.4908318  0.2296201   6.493 9.14e-11 ***
+## vehicle.makeMaserati       0.8270715  0.0828073   9.988  &lt; 2e-16 ***
+## vehicle.makeMazda         -0.3129833  0.0816770  -3.832 0.000128 ***
+## vehicle.makeMcLaren        2.5081406  0.4460087   5.624 1.96e-08 ***
+## vehicle.makeMercedes-Benz  0.4044086  0.0664873   6.082 1.26e-09 ***
+## vehicle.makeMercury       -0.6447012  0.3186508  -2.023 0.043096 *  
+## vehicle.makeMINI          -0.2902099  0.1012716  -2.866 0.004176 ** 
+## vehicle.makeMitsubishi    -0.5716711  0.1031284  -5.543 3.10e-08 ***
+## vehicle.makeNissan        -0.4107178  0.0677529  -6.062 1.43e-09 ***
+## vehicle.makePolaris        0.7877255  0.0906760   8.687  &lt; 2e-16 ***
+## vehicle.makePontiac       -0.5040853  0.2074980  -2.429 0.015156 *  
+## vehicle.makePorsche        0.8700702  0.0704921  12.343  &lt; 2e-16 ***
+## vehicle.makeRam           -0.1207336  0.1224008  -0.986 0.323988    
+## vehicle.makeRolls Royce    2.8824665  0.2636467  10.933  &lt; 2e-16 ***
+## vehicle.makeSaab          -0.3141495  0.4460532  -0.704 0.481282    
+## vehicle.makeSaturn        -0.7232215  0.3187099  -2.269 0.023292 *  
+## vehicle.makeScion         -0.4897602  0.1379065  -3.551 0.000386 ***
+## vehicle.makesmart         -0.5851952  0.1338659  -4.372 1.26e-05 ***
+## vehicle.makeSubaru        -0.3392104  0.0791345  -4.287 1.84e-05 ***
+## vehicle.makeSuzuki        -0.4025389  0.3187168  -1.263 0.206641    
+## vehicle.makeTesla          0.6538095  0.0941319   6.946 4.18e-12 ***
+## vehicle.makeToyota        -0.3733628  0.0655241  -5.698 1.27e-08 ***
+## vehicle.makeVolkswagen    -0.3321427  0.0735837  -4.514 6.49e-06 ***
+## vehicle.makeVolvo         -0.1356858  0.1129778  -1.201 0.229802    
+## vehicle.typeminivan        0.1907582  0.0334983   5.695 1.30e-08 ***
+## vehicle.typesuv            0.1504989  0.0148517  10.133  &lt; 2e-16 ***
+## vehicle.typetruck          0.3159105  0.0359359   8.791  &lt; 2e-16 ***
+## vehicle.typevan            0.4352190  0.0618509   7.037 2.20e-12 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.4415 on 5783 degrees of freedom
+##   (8 observations deleted due to missingness)
+## Multiple R-squared:  0.5398, Adjusted R-squared:  0.5351 
+## F-statistic:   115 on 59 and 5783 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>Si examinem ara el coeficient de determinació ajustat per aquest nou model és: R<sup>2</sup> = 0.5351. Això ens diu que el model de regressió múltiple obtingut explica el 53.51% de la variabilitat del preu del lloguer diari de vehicles. Com que és molt proper al 50%, en principi no és un model gaire bo, i per tant tindrà poc poder predictiu. Tot i així podem veure com hi ha un increment considerable sobre la variabilitat explicada respecte al primer model, i un increment poc significatiu respecte el segon model. La qual cosa ens indica que a priori els atributs que millor expliquen el preu són les característiques del vehicle: el combustible, la marca i el tipus de vehicle.</p>
 </div>
 <div id="conclusions" class="section level2" number="2.7">
 <h2 number="2.7"><span class="header-section-number">2.7</span> Conclusions</h2>
