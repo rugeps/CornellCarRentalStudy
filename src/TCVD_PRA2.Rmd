@@ -377,6 +377,15 @@ ds$rating.discret = as.factor(ds$rating.discret)
 ggplot(data=ds, aes(x = rating.discret)) + geom_bar(aes(y = (..count..)/sum(..count..))) + geom_text(aes(y = ((..count..)/sum(..count..)), label = scales::percent((..count..)/sum(..count..))), stat = "count", vjust = -0.5) + scale_y_continuous(labels = scales::percent, limits = c(0,1)) + xlab('Rent') + ylab("Percentatge")
 ```
 
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Correcció de les marques de vehicles, diferències tipogràfiques
+ds$vehicle.make[ds$vehicle.make == "Alfa-romeo"] = "Alfa Romeo"
+ds$vehicle.make[ds$vehicle.make == "Mercedes-benz"] = "Mercedes-Benz"
+ds$vehicle.make[ds$vehicle.make == "INFINITI"] = "Infinitti"
+
+ds$vehicle.make <- droplevels.factor(ds$vehicle.make)
+```
+
 ### Creació de nous indicadors
 
 Un altre dels passos interessant en l'anàlisi d'un joc de dades és la generació de nous atributs a partir dels existents. 
@@ -504,7 +513,7 @@ ggplot(ds, aes(x=fuelType, y=rate.daily, fill=fuelType)) + geom_boxplot(alpha=0.
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 # Relació entre el preu diari del lloguer i l'estat on es localitza el vehicle
-ggplot(ds, aes(x=location.state, y=rate.daily, fill=vehicle.type)) + geom_boxplot(alpha=0.1) + stat_summary(fun.y=mean)
+ggplot(ds, aes(x=location.state, y=rate.daily, fill=location.state)) + geom_boxplot(alpha=0.1) + stat_summary(fun.y=mean)
 ```
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
@@ -648,11 +657,34 @@ t.test( ds$rate.daily[ds$fuelType == 'ELECTRIC'],  ds$rate.daily[ds$fuelType == 
 El valor *p-value* obtingut és menor que el nivell de significació (0.05) i, per tant, podem rebutjar la hipòtesi nul·la d’igualtat de mitjanes de preu de lloguer diari entre els cotxes elèctris i els cotxes de benzina. Per tant podem dir que els cotxes électrics tenen un lloguer més elevat que els de benzina, amb un nivell de confiança del 95%.
 
 
-### ¿La proporció de furgonetes és més gran que la d'utilitaris?
+### ¿La proporció de furgonetes és més petit que la d'utilitaris?
+
+Ara ens preguntem si la proporció de furgonetes de lloguer és més petit que la d'utilitaris o vehicles convencionals.
+
+**Hipòtesi nul·la i alternativa**
+
+Per tal de donar resposta a la pregunta formulada, comencem amb la definició de la hipòtesi nul·la i de la hipòtesi alternativa.
+
+* Hipòtesi nul·la: $$H_{0}: p = 0.5 $$ 
+
+* Hipòtesi alternativa: $$H_{1}: p_{1} < 0.5 $$ 
+
+En aquest cas específicament, ens preguntem si la proporció de furgonetes és més petita que la d'utilitaris, o el que és el mateix, si la proporció de furgonetes és igual a 0.5.
+
+
+**Test unilateral d'una mostra sobre la proporció**
+
+A continuació podem realitzar els càlculs pertinents que ens permetin decidir si podem rebutjar la hipòtest nul-la o no.
+
+Podem fer servir, la funció prop.test pròpia d’R que ens permet realitzar directament contrastos d’hipòtesis sobre proporcions.
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
+n <- length(ds$vehicle.type)
 
+prop.test(x=sum(ds$vehicle.type == "van"  | ds$vehicle.type == "minivan"), n=n, p=0.5, alternative="less", correct=FALSE)
 ```
+
+D'altra banda el *p-valor* és inferior al nivell de significació (*p-value < &alpha;*), per tant podem rebutjar la hipòtesi nul·la.  Això ens permet dir que la proporció de furgonetes és més petita que la d'utilitàris, amb un nivell de confiança del 95%.
 
 ### Un altre constrast
 
