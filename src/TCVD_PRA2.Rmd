@@ -138,6 +138,8 @@ library(car)
 library(nortest)
 library(gridExtra)
 library(ResourceSelection)
+library(DescTools)
+library(vcd)
 
 old <- theme_set(theme_minimal())
 ```
@@ -173,7 +175,7 @@ Les característiques, atributs o variables per cada observació (es manté el n
 
 ## Importància i objectius de l'anàlisi
 
-Amb l'entrada en vigor de les zones de zero emissions a les grans ciutats, la classificació de vehicles segons el seu gran de contaminació i de l'objectiu de zero emissions al 2050, promogut per la Comisió Euopea han generat un gran debat envers la compra o lloguer de vehicles. De fet hi ha diversos estudis que mostren que en els últims anys hi ha hagut un increment en el mercat de lloguer de vehicles o *renting*. A partir del joc de dades escollit "Cornell Car Rental Dataset" ens proposem determinar quines variables influeixen més sobre el preu d’un automòbil de lloguer, en el nombre de vegades que es lloga i la seva valoració. A més, es generarà un model de regressió lineal múltple que permeti predir el preu d’un vehicle de lloguer en funció de les seves característiques. A més es duran a terme diferents constrastos d'hipótesis que permetin identificar propietats interessants subyacents en les mostres que puguin ser inferidas respecte a la población.
+Amb l'entrada en vigor de les zones de zero emissions a les grans ciutats, la classificació de vehicles segons el seu gran de contaminació i de l'objectiu de zero emissions al 2050, promogut per la Comisió Euopea han generat un gran debat envers la compra o lloguer de vehicles. De fet hi ha diversos estudis que mostren que en els últims anys hi ha hagut un increment en el mercat de lloguer de vehicles o *renting*. A partir del joc de dades escollit "Cornell Car Rental Dataset" ens proposem determinar quines variables influeixen més sobre el preu d’un automòbil de lloguer, en el nombre de vegades que es lloga i la seva valoració. A més, es generarà un model de regressió lineal múltple que permeti predir el preu d’un vehicle de lloguer en funció de les seves característiques. A més es duran a terme diferents contrastos d'hipótesis que permetin identificar propietats interessants subjacents en les mostres que puguin ser inferides respecte a la població.
 
 Aquests anàlisis són de gran rellevància en gairebé qualsevol sector relacionat amb el lloguer de vehicles. Per una banda pot resultar interessant per les agències de lloguer, ja que aquestes podran conèixer amb més detall els seus clients, i per tant generar ofertes personalitzades o decidir quin és el preu més adient o quin model de vehicle és més adequat per renovar la flota. D'altre banda també pot resultar interessant per a l'usuari final, ja que a partir de les seves necesitats podrà determinar si li convé llogar un vehicle o no o si el seu preu és correspont amb el del mercat actual.
 
@@ -281,10 +283,92 @@ n- boxplot.stats(ds$vehicle.year)$n
 
 Continuem visualitzant les distribucions dels valors de les variables categòriques
 
+**Revisem la variable fuelType**
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
-# Calculem gràfics de barres de les variables categòriques
-
+ggplot(data=ds,aes(x=fuelType))+geom_bar() + ylab("nombre de vehicles")
 ```
+Podem observar que la majoria de vehicles son **GASOLINE**, seguits de lluny pels **ELECTRIC** i després pels **HYBRID**. Finalment els **DIESEL** son residuals i queda un subgrup sense etiquetar que serà tractat més endavant.
+
+**Revisem la variable location.city**
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+ggplot(data=ds,aes(x=location.city))+geom_bar() + ylab("nombre de vehicles")
+```
+Veiem que hi ha tantes categories que és impossible revisar acuradament la gràfica.
+Llavors optem per graficar només les 30 categories més comuns.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Seleccionem les dades
+location.city_ordered <- sort(table(ds$location.city),decreasing = TRUE)
+# Creem la visualització
+par(las=2, cex=0.5, mar=c(8,4,4,2))
+barplot(location.city_ordered[0:30], main="Nombre de vehicles segons location.city", ylab="Nombre de vehicles") 
+```
+**Revisem la variable location.state**
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+ggplot(data=ds,aes(x=location.state))+geom_bar()+theme(axis.text.x = element_text(angle = 90,vjust = 0.1,hjust = 0.1)) + ylab("nombre de vehicles")
+```
+Veiem que entre les categories destaquen **CA**, **FL** i **TX**.
+
+**Revisem la variable airportcity**
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+ggplot(data=ds,aes(x=airportcity))+geom_bar() + theme(axis.text.x = element_text(angle = 90,vjust = 0.1,hjust = 0.1)) + ylab("nombre de vehicles")
+```
+Tornem a trobar-nos que hi ha massa categories per a fer una visualització cómode.
+Llavors optem per graficar només les 30 categories més comuns.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Seleccionem les dades
+airportcity_ordered <- sort(table(ds$airportcity),decreasing = TRUE)
+# Creem la visualització
+par(las=2, cex=0.5, mar=c(8,4,4,2))
+barplot(airportcity_ordered[0:30], main="Nombre de vehicles segons l'aeroport més proper", ylab="Nombre de vehicles") 
+```
+**Revisem la variable vehicle.make**
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+ggplot(data=ds,aes(x=vehicle.make))+geom_bar() + theme(axis.text.x = element_text(angle = 90,vjust = 0.1,hjust = 0.1)) + ylab("nombre de vehicles")
+```
+Aquí ens trobem al límit del que sería una visualització raonable, i veiem que hi ha categories repetides ja que es troben en algún cas mal escrites (per falta de lletres majúscules principalment).
+Llavors tot i que suposa un petit avançament d'apartat, realitzem una primera correcció de les categories per a continuació reproduir de nou la visualització.
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+ds$vehicle.make[ds$vehicle.make == "Alfa-romeo"] = "Alfa Romeo"
+ds$vehicle.make[ds$vehicle.make == "Infiniti"] = "INFINITI"
+ds$vehicle.make[ds$vehicle.make == "Mercedes-benz"] = "Mercedes-Benz"
+ggplot(data=ds,aes(x=vehicle.make))+geom_bar() + theme(axis.text.x = element_text(angle = 90,vjust = 0.1,hjust = 0.1)) + ylab("nombre de vehicles")
+```
+A la vista de les dades es pot observar que **TESLA** i **TOYOTA** son les marques més freqüents, seguides de **BMW**, **CHEVROLET**, **FORD** i **Mercedes-Benz**.
+
+**Revisem la variable vehicle.model**
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+ggplot(data=ds,aes(x=vehicle.model))+geom_bar() + theme(axis.text.x = element_text(angle = 90,vjust = 0.1,hjust = 0.1)) + ylab("nombre de vehicles")
+```
+
+Tornem a trobar-nos que hi ha massa categories per a fer una visualització cómode.
+Llavors optem per graficar només les 30 categories més comuns.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Seleccionem les dades
+vehicle.model_ordered <- sort(table(ds$vehicle.model),decreasing = TRUE)
+# Creem la visualització
+par(las=2, cex=0.5, mar=c(8,4,4,2))
+barplot(vehicle.model_ordered[0:30], main="Nombre de vehicles segons el model", ylab="Nombre de vehicles") 
+```
+
+**Revisem la variable vehicle.type**
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+ggplot(data=ds,aes(x=vehicle.type))+geom_bar() + theme(axis.text.x = element_text(angle = 90,vjust = 0.1,hjust = 0.1)) + ylab("nombre de vehicles")
+```
+S'observa que la categoria **car** seguida de lluny per **SUV** són les més comuns, sent la resta (**minivan**, **truck** i **van**) gairebé residuals.
+
+**Visualització multivariativa de les dades categòriques**
+
+Usem el gràfic de mosaic per visualitzar la convinació entre **fuelType** i **vehicle.type**
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+mosaic(ds$fuelType ~ ds$vehicle.type, gp_labels = gpar(fontsize = 8), las = 2, cex.axis = 2, rot_labels=c(90,90,0,0), shade=TRUE)
+```
+Gràcies al gràfic de mosaic es pot observar que només hi ha la categoria **HYBRID** en vehicles tipu **car** (en la resta és residual). Per altre banda DESTACA no hi ha **ELECTRIC** en **van** ni **minivan** les quals son gairebé totalment **GASOLINE**.
+
 
 ### Zeros i atributs buits
 
@@ -411,6 +495,35 @@ levels(ds$rent) <- c("Not","Yes")
 # Calculem gràfic de barres de la variable objectiu
 ggplot(data=ds, aes(x = rent)) + geom_bar(aes(y = (..count..)/sum(..count..))) + geom_text(aes(y = ((..count..)/sum(..count..)), label = scales::percent((..count..)/sum(..count..))), stat = "count", vjust = -0.5) + scale_y_continuous(labels = scales::percent, limits = c(0,1)) + xlab('Rent') + ylab("Percentatge")
 ```
+Creem un altre indicador o atribut nou on emmagatzemem els ingressos anuals que va aportar el vehicle.
+Per crear aquesta variable **income** (ingressos anuals mitjans):
+
+- s'assumeix que **renterTripsTaken** és equivalent al nombre de dies que el cotxe ha estat llogat i que per tant es poden aproximar els ingressos totals aportats pel vehicle com a resultat del producte entre **renterTripsTaken** i **rate.daily**.
+- s'assumeix que **age** representa tots els anys de vida del cotxe, per tant si es vol calcular els ingressos anuals cal repartir-los entre age
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Ingressos anuals vehicle
+
+ds['income'] <- ds$rate.daily * ds$renterTripsTaken / ds$age
+
+
+# Calculem gràfic de barres de la nova variable
+ggplot(data=ds, aes(x=ds$income)) + 
+  geom_histogram(breaks=seq(0, 1000, by=10), 
+                 alpha = 1) + 
+  labs(title="Histogram for Income", x="Income", y="Count") + 
+  xlim(c(0,1000)) + 
+  ylim(c(0,500))
+
+ggplot(data=ds, aes(x=ds$income)) + 
+  geom_histogram(breaks=seq(0, 10000, by=100), 
+                 alpha = 1) + 
+  labs(title="Histogram for Income", x="Income", y="Count") + 
+  xlim(c(0,10000)) + 
+  ylim(c(0,2000))
+
+```
+
 
 ### Exportació de les dades preprocesades
 
@@ -426,45 +539,47 @@ write.csv(ds, '../data/CarRentalDataV1_Clean.csv')
 
 ## Anàlisi de les dades
 
-La gran majoria dels atributs presents en el conjunt de dades es corresponen amb característiques dels diversos vehicles de lloguer o de la seva ubicació, per tant serà convenient tenir-los en consideració durant la realització de les anàlisis. No obstant això, podem prescindir de dos atributs, les coordenades geogràfiques (location.latitude i location.longitude) ja que la informació que ens aporten aquestes variables ja es troba implicita en la resta d'atributs de localització  i, per tant, són menys rellevants a l' hora de resoldre el nostre problema.
+La gran majoria dels atributs presents en el conjunt de dades es corresponen amb característiques dels diversos vehicles de lloguer o de la seva ubicació, per tant serà convenient tenir-los en consideració durant la realització de les anàlisis. No obstant això, podem prescindir de tres atributs, l'estat (location.country; que sempre és *US*) i les dues coordenades geogràfiques (location.latitude i location.longitude) ja que la informació que ens aporten aquestes variables ja es troba implicita en la resta d'atributs de localització  i, per tant, són menys rellevants a l' hora de resoldre el nostre problema.
 
 
 ### Selecció dels grups de dades a analitzar
 
+
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
-# Eliminem les coordenades geogràfiques
-ds <- ds[, -(7:8)]
+# Eliminem location.country i les coordenades geogràfiques
+ds <- subset(ds, select=-c(location.latitude,location.longitude,	
+location.country))
 
-categorical_features_names = c('fuelType', 'location.city', 'location.country', 'location.state', 'owner.id', 'vehicle.make', 'vehicle.model', 'vehicle.type', 'airportcity') 
+categorical_features_names = c('fuelType', 'location.city', 'location.state', 'owner.id', 'vehicle.make', 'vehicle.model', 'vehicle.type', 'airportcity') 
 
-numeric_features_names = c('rating', 'renterTripsTaken', 'reviewCount', 'rate.daily', 'age')
+numeric_features_names = c('rating', 'renterTripsTaken', 'reviewCount', 'rate.daily', 'age', 'income')
 ```
 
-### Comprobació de la normalitat i homogeneitat de la varianza
+
+### Comprobació de la normalitat i homogeneitat de la variança
 
 Per a la comprovació que els valors que prenen les nostres variables quantitatives provenen d'una població distribuïda normalment, utilitzarem la prova de normalitat d'Anderson-Darling. Per això, es comprova que perquè cada prova s'obté un *p-valor* superior el nivell de significació prefixat = 0. 05 (Nivell de confiança del 95%). Si això es compleix, llavors es considera que la variable en qüestió segueix una distribució normal.
 
 **Test de normalitat**
-
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
-alpha = 0.05
-col.names = colnames(ds)
-
-for (i in 1:ncol(ds)) {
-  if (i == 1) cat("Variables que no presenten una distribució normal:\n")
-    if (is.integer(ds[,i]) | is.numeric(ds[,i])) {
-      p_val = ad.test(ds[,i])$p.value
-      if (p_val < alpha) {
-        cat(col.names[i])
-        # Format output
-        if (i < ncol(ds) - 1) cat(", ")
-        if (i %% 3 == 0) cat("\n")
-      }
-    }
-}
+# alpha = 0.05
+# col.names = colnames(ds)
+# 
+# for (i in 1:ncol(ds)) {
+#   if (i == 1) cat("Variables que no presenten una distribució normal:\n")
+#     if (is.integer(ds[,i]) | is.numeric(ds[,i])) {
+#       p_val = ad.test(ds[,i])$p.value
+#       if (p_val < alpha) {
+#         cat(col.names[i])
+#         # Format output
+#         if (i < ncol(ds) - 1) cat(", ")
+#         if (i %% 3 == 0) cat("\n")
+#       }
+#     }
+# }
 ```
 
-A pqartir del resultat anterior podem veure com que cap dels atributs quantitaius presenta una distribució normal. Tot i així ens centrarem ara un moment el la variable depenent o variable objectiu en el nostre estudi, el preu diari del vehicle.
+A partir del resultat anterior podem veure com que cap dels atributs quantitaius presenta una distribució normal. Tot i així ens centrarem ara un moment el la variable depenent o variable objectiu en el nostre estudi, el preu diari del vehicle.
 
 Si observem els valors mínim, mitjà i màxim veiem clarament que no és una variable amb distribució normal. Però en la majoria de models numèrics d'aprenentatge automàtic, necessitarem que les variables segueixin la distribució normal. Per això podem emprar visualitzacions de les dades per analitzar la normalitat. Concretament, el gràfic Q-Q, on la Q denota quantil, és un tipus de visualització que s'utilitza per a diagnosticar la desviació de les dades de la mostra en relació amb una població normal.
 
@@ -473,19 +588,99 @@ qqnorm(ds$rate.daily, ylab="Daily Rate", xlab="Theorical Quantiles", main="Norma
 qqline(ds$rate.daily)
 ```
 
-Quan tenim una variable que no és normal, una de les transformacions clàssiques que pot funcionar és aplicar el logaritme a la variable.
+Quan tenim una variable que no és normal, una de les transformacions clàssiques que pot funcionar és aplicar el logaritme a la variable. Alternativament podem usar la funció BoxCox la qual ens ajuda a seleccionar la transformació óptima de la variable per a que s'acabi distribuint de forma "normal".
+
+**Normalització de Daily Rate (Preu)**
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
-ds$rate.daily <- log(ds$rate.daily)
+lambda_optima <- BoxCoxLambda(ds$rate.daily)
+ds$rate.daily_norm <- BoxCox(ds$rate.daily, lambda = lambda_optima)
 
-ggplot(ds, aes(x = rate.daily)) +  geom_histogram() +  ylab("Nombre d'habitatges") + xlab("Preu de venda")
+ggplot(ds, aes(x = rate.daily)) +  geom_histogram() +  ylab("Nombre de cotxes") + xlab("Preu de lloguer diari")
+ggplot(ds, aes(x = rate.daily_norm)) +  geom_histogram() +  ylab("Nombre de cotxes") + xlab("Preu de lloguer diari normalitzat")
 ```
-
 Veiem com ara sí que té forma normal. Ho comprovem amb el Q-Q plot per confirmar-ho.
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
-qqnorm(log(ds$rate.daily), ylab="Daily Rate", xlab="Theorical Quantiles", main="Normal Q-Q Plot") 
-qqline(log(ds$rate.daily))
+qqnorm(ds$rate.daily_norm, ylab="Daily Rate normalized", xlab="Theorical Quantiles", main="Normal Q-Q Plot") 
+qqline(ds$rate.daily_norm)
+```
+
+**Normalització de Rating (Puntuació)**
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+lambda_optima <- BoxCoxLambda(ds$rating)
+ds$rating_norm <- BoxCox(ds$rating, lambda = lambda_optima)
+
+ggplot(ds, aes(x = rating)) +  geom_histogram() +  ylab("Nombre de cotxes") + xlab("Puntuació")
+ggplot(ds, aes(x = rating_norm)) +  geom_histogram() +  ylab("Nombre de cotxes") + xlab("Puntuació normalitzada")
+```
+Veiem de forma evident que, tot i amb la conversió, no s'obté forma de distribució normal. 
+
+**Normalització de Renter Trips Taken (Nombre de lloguers realitzats)**
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+lambda_optima <- BoxCoxLambda(ds$renterTripsTaken)
+ds$renterTripsTaken_norm <- BoxCox(ds$renterTripsTaken, lambda = lambda_optima)
+
+ggplot(ds, aes(x = renterTripsTaken)) +  geom_histogram() +  ylab("Nombre de cotxes") + xlab("Nombre de lloguers realitzats")
+ggplot(ds, aes(x = renterTripsTaken_norm)) +  geom_histogram() +  ylab("Nombre de cotxes") + xlab("Nombre normalitzat de lloguers realitzats")
+```
+Veiem que, tot i amb la conversió, no s'obté forma de distribució normal. 
+
+
+**Normalització de reviewCount (Nombre de comentaris)**
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+lambda_optima <- BoxCoxLambda(ds$reviewCount)
+ds$reviewCount_norm <- BoxCox(ds$reviewCount, lambda = lambda_optima)
+
+ggplot(ds, aes(x = reviewCount)) +  geom_histogram() +  ylab("Nombre de cotxes") + xlab("Nombre de comentaris")
+ggplot(ds, aes(x = reviewCount_norm)) +  geom_histogram() +  ylab("Nombre de cotxes") + xlab("Nombre normalitzat de comentaris ")
+```
+Veiem que, tot i amb la conversió, no s'obté forma de distribució normal. 
+
+
+**Normalització de vehicle.year (Any del cotxe)**
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+lambda_optima <- BoxCoxLambda(ds$vehicle.year)
+ds$vehicle.year_norm <- BoxCox(ds$vehicle.year, lambda = lambda_optima)
+
+ggplot(ds, aes(x = vehicle.year)) +  geom_histogram() +  ylab("Nombre de cotxes") + xlab("Any del cotxe")
+ggplot(ds, aes(x = vehicle.year_norm)) +  geom_histogram() +  ylab("Nombre de cotxes") + xlab("Any del cotxe normalitzat")
+```
+Veiem que, tot i amb la conversió, no s'obté forma de distribució normal. 
+
+**Normalització de age (antiguetat del cotxe)**
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+lambda_optima <- BoxCoxLambda(ds$age)
+ds$age_norm <- BoxCox(ds$age, lambda = lambda_optima)
+
+ggplot(ds, aes(x = age)) +  geom_histogram() +  ylab("Nombre de cotxes") + xlab("Antiguetat del cotxe")
+ggplot(ds, aes(x = age_norm)) +  geom_histogram() +  ylab("Nombre de cotxes") + xlab("Antiguetat normalitzada dels cotxes")
+```
+
+**Normalització de Income (Ingressos anuals del cotxe)**
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+lambda_optima <- BoxCoxLambda(ds$income)
+ds$income_norm <- BoxCox(ds$income, lambda = lambda_optima)
+
+ggplot(ds, aes(x = income)) +  geom_histogram() +  ylab("Nombre de cotxes") + xlab("Ingressos anuals del cotxe")
+ggplot(ds, aes(x = income_norm)) +  geom_histogram() +  ylab("Nombre de cotxes") + xlab("Ingressos anuals normalitzats del cotxe")
+```
+Veiem que, tot i amb la conversió, no s'obté forma de distribució normal. 
+
+**Neteja de noves variables creades que no han tingut èxit en la normalització**
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Eliminem location.country i les coordenades geogràfiques
+ds <- subset(ds, select=-c(rating_norm,renterTripsTaken_norm,	
+reviewCount_norm,vehicle.year_norm,age_norm,income_norm))
+
+numeric_features_names = c('rating', 'renterTripsTaken', 'reviewCount', 'rate.daily', 'age', 'income', 'rate.daily_norm')
 ```
 
 **Anàlisi multivariant** 
@@ -513,12 +708,12 @@ ggplot(ds, aes(x=fuelType, y=rate.daily, fill=fuelType)) + geom_boxplot(alpha=0.
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 # Relació entre el preu diari del lloguer i l'estat on es localitza el vehicle
-ggplot(ds, aes(x=location.state, y=rate.daily, fill=location.state)) + geom_boxplot(alpha=0.1) + stat_summary(fun.y=mean)
+ggplot(ds, aes(x=location.state, y=rate.daily, fill=location.state)) + geom_boxplot(alpha=0.1) + stat_summary(fun.y=mean) + theme(axis.text.x = element_text(angle = 90,vjust = 0.1,hjust = 0.1)) + theme(legend.position = "none")
 ```
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 # Relació entre el preu diari del lloguer i la marca del vehicle
-ggplot(ds, aes(x=vehicle.make, y=rate.daily, fill=vehicle.make)) + geom_boxplot(alpha=0.1) + stat_summary(fun.y=mean)
+ggplot(ds, aes(x=vehicle.make, y=rate.daily, fill=vehicle.make)) + geom_boxplot(alpha=0.1) + stat_summary(fun.y=mean) + theme(axis.text.x = element_text(angle = 90,vjust = 0.1,hjust = 0.1)) + theme(legend.position = "none")
 ```
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
@@ -531,13 +726,13 @@ Si volem visualitzar alhora les relacions creuades entre diverses variables, pod
 Examinem els atributs numèrics envers si el vehicle va se llogat o no.
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
-ggpairs(ds, columns=numeric_features_names, mapping=aes(color=rent))
+ggpairs(ds, columns=numeric_features_names, mapping=aes(color=rent), upper = list(continuous = wrap('cor', size = 2)))
 ```
 
 Examinem els atributs numèrics envers la qualificació que va obtenir el vehicle.
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
-ggpairs(ds, columns=numeric_features_names, mapping=aes(color=rating.discret))
+ggpairs(ds, columns=numeric_features_names, mapping=aes(color=rating.discret), upper = list(continuous = wrap('cor', size = 2)))
 ```
 
 Finalment, ens interessarà veure quins conjunts de variables estan relacionats entre si. Per això, farem servir tècniques estadístiques d'anàlisi multivariant.
@@ -686,7 +881,7 @@ prop.test(x=sum(ds$vehicle.type == "van"  | ds$vehicle.type == "minivan"), n=n, 
 
 D'altra banda el *p-valor* és inferior al nivell de significació (*p-value < &alpha;*), per tant podem rebutjar la hipòtesi nul·la.  Això ens permet dir que la proporció de furgonetes és més petita que la d'utilitàris, amb un nivell de confiança del 95%.
 
-### Un altre constrast
+### Un altre contrast
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 
@@ -696,7 +891,7 @@ D'altra banda el *p-valor* és inferior al nivell de significació (*p-value < &
 
 A continuació ens proposem estimar per mínims quadrats ordinaris un model lineal que expliqui la variable *rate.daily* en funció de *age i renterTripsTaken*. En aquest cas farem servir només atributs categòrics. 
 
-**Model de regressió lineal mùltiple 1 (Preu ~ age + renterTripsTaken)**
+**Model de regressió lineal múltiple 1 (Preu ~ age + renterTripsTaken)**
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 model.lm1 <- lm(formula=rate.daily ~ age + renterTripsTaken, data = ds)
