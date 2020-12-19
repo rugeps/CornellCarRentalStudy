@@ -1,7 +1,7 @@
 ---
 title: 'M2.951 - Tipologia i cicle de vida de les dades'
 subtitle: 'Pràctica 2 - Neteja i anàlisi de les dades'
-author: 'Autor: Roger Perís Serrano i Albert Cámara Viñals'
+author: 'Autors: Roger Perís Serrano i Albert Cámara Viñals'
 date: '`r format(Sys.Date(), "Desembre, %Y")`'
 output:
   html_document:
@@ -140,6 +140,8 @@ library(gridExtra)
 library(ResourceSelection)
 library(DescTools)
 library(vcd)
+library(ggpubr)
+library(missForest)
 
 old <- theme_set(theme_minimal())
 ```
@@ -175,9 +177,30 @@ Les característiques, atributs o variables per cada observació (es manté el n
 
 ## Importància i objectius de l'anàlisi
 
-Amb l'entrada en vigor de les zones de zero emissions a les grans ciutats, la classificació de vehicles segons el seu gran de contaminació i de l'objectiu de zero emissions al 2050, promogut per la Comisió Euopea han generat un gran debat envers la compra o lloguer de vehicles. De fet hi ha diversos estudis que mostren que en els últims anys hi ha hagut un increment en el mercat de lloguer de vehicles o *renting*. A partir del joc de dades escollit "Cornell Car Rental Dataset" ens proposem determinar quines variables influeixen més sobre el preu d’un automòbil de lloguer, en el nombre de vegades que es lloga i la seva valoració. A més, es generarà un model de regressió lineal múltple que permeti predir el preu d’un vehicle de lloguer en funció de les seves característiques. A més es duran a terme diferents contrastos d'hipótesis que permetin identificar propietats interessants subjacents en les mostres que puguin ser inferides respecte a la població.
+Amb l'entrada en vigor de les zones de zero emissions a les grans ciutats, la classificació de vehicles segons el seu gran de contaminació i de l'objectiu de zero emissions al 2050, promogut per la Comisió Euopea han generat un gran debat envers la compra o lloguer de vehicles. De fet hi ha diversos estudis que mostren que en els últims anys hi ha hagut un increment en el mercat de lloguer de vehicles o *renting*. A partir del joc de dades escollit "Cornell Car Rental Dataset" ens proposem:
+
+- Generar un model de regressió lineal que pugui preveure el preu per dia d’un automòbil de lloguer.
+
+- Determinar en quina mesura la variable **location.city** afecta **rate.daily**
+
+- Determinar en quina mesura la variable **rate.daily** afecta **renderTripsTaken**
+
+- Generar un model que pugui preveure la freqüencia amb que es lloga un automòbil de lloguer (**renterTripsTaken** / edat).
+
+- Generar un model que pugui preveure les valoracions que rebrà un automobil de lloguer **rating**.
+
+- Determinar en quina mesura la variable **renderTripsTaken** (el nombre de vegades que un vehicles s'ha llogat) afecta **reviewCount** (valoracions), partint de la hipotesis que els vehicles amb pocs usos puguin sofrir un biaix en les seves valoracions
+
+- Generar un model que pugui preveure els ingressos anuals que aportarà un automòbil de lloguer com a aproximació als beneficis que aportaria.
+
+- Dur a terme diferents contrastos d'hipótesis que permetin identificar propietats interessants subjacents en les mostres que puguin ser inferides respecte a la població
+
+- Revisar el dataset amb algun mètode d'agrupament no-supervisat per veure si s'extreu alguna informació adicional.
+
 
 Aquests anàlisis són de gran rellevància en gairebé qualsevol sector relacionat amb el lloguer de vehicles. Per una banda pot resultar interessant per les agències de lloguer, ja que aquestes podran conèixer amb més detall els seus clients, i per tant generar ofertes personalitzades o decidir quin és el preu més adient o quin model de vehicle és més adequat per renovar la flota. D'altre banda també pot resultar interessant per a l'usuari final, ja que a partir de les seves necesitats podrà determinar si li convé llogar un vehicle o no o si el seu preu és correspont amb el del mercat actual.
+
+
 
 
 ## Neteja de dades
@@ -288,6 +311,21 @@ Continuem visualitzant les distribucions dels valors de les variables categòriq
 ggplot(data=ds,aes(x=fuelType))+geom_bar() + ylab("nombre de vehicles")
 ```
 Podem observar que la majoria de vehicles son **GASOLINE**, seguits de lluny pels **ELECTRIC** i després pels **HYBRID**. Finalment els **DIESEL** son residuals i queda un subgrup sense etiquetar que serà tractat més endavant.
+Fem un petit tractament de valors Nuls. Aquest el realitzem calculant quin és el valor més freqüent i substituint els valors nuls per aquest.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+most_freq_fuelType <- names(which.max(table(ds$fuelType)))
+
+most_freq_fuelType
+```
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Prenem el valor més freqüent per als valors buits
+ds$fuelType[ds$fuelType == ""] = most_freq_fuelType
+```
+Grafiquem de nou **fuelType**
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+ggplot(data=ds,aes(x=fuelType))+geom_bar() + ylab("nombre de vehicles")
+```
 
 **Revisem la variable location.city**
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
@@ -369,7 +407,17 @@ mosaic(ds$fuelType ~ ds$vehicle.type, gp_labels = gpar(fontsize = 8), las = 2, c
 ```
 Gràcies al gràfic de mosaic es pot observar que només hi ha la categoria **HYBRID** en vehicles tipu **car** (en la resta és residual). Per altre banda DESTACA no hi ha **ELECTRIC** en **van** ni **minivan** les quals son gairebé totalment **GASOLINE**.
 
+Alternativament visualitzem les mateixes dades amb un ballonplot
 
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Pren els ajustos per defecte
+theme_set(theme_pubr())
+# Preparem les dades
+taula = as.data.frame(table(ds$fuelType,ds$vehicle.type))
+# Visualitza el Ballonplot
+ggballoonplot(taula, fill = "value")+
+  scale_fill_viridis_c(option = "C")
+```
 ### Zeros i atributs buits
 
 Ara farem el tractament dels valors buits i convertirem les variables discretes a factors.
@@ -384,13 +432,11 @@ colSums(is.na(ds))
 colSums(ds=="")
 ```
 
-Es pot veure que per 2 variables tenim valors buits (fuelType i rating). Anem a calcular doncs per cada una d’aquestes 2 variables quin és el seu valor més freqüent 
+Es pot veure que queda 1 variable amb valors buits (rating). Anem a calcular doncs quin és el seu valor més freqüent 
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
-most_freq_fuelType <- names(which.max(table(ds$fuelType)))
 most_freq_rating <- names(which.max(table(ds$rating)))
 
-most_freq_fuelType
 most_freq_rating
 ```
 
@@ -398,7 +444,6 @@ Assignem el valor més freqüent als valors buits i comprovem que després del t
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 # Prenem el valor més freqüent per als valors buits
-ds$fuelType[ds$fuelType == ""] = most_freq_fuelType
 ds$rating[is.na(ds$rating)] = as.numeric(most_freq_rating)
 
 # Visualitzem de nou si hi ha valors buits
@@ -474,6 +519,8 @@ ds$vehicle.make <- droplevels.factor(ds$vehicle.make)
 
 Un altre dels passos interessant en l'anàlisi d'un joc de dades és la generació de nous atributs a partir dels existents. 
 
+**age**
+
 Creem un nou indicador o atribut on emmagatzemem l'antiguitat del vehicle.
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
@@ -483,6 +530,8 @@ ds['age'] <- as.integer(format(Sys.Date(), "%Y")) - ds$vehicle.year
 # Calculem gràfic de barres de la nova variable
 ggplot(data=ds, aes(x = age)) + geom_bar(aes(y = (..count..)/sum(..count..))) + scale_x_continuous(breaks = round(seq(min(ds$age), max(ds$age), by = 5), 1)) + xlab('Age') + ylab("Percentatge")
 ```
+
+**rent**
 
 Creem un altre indicador o atribut nou on emmagatzemem si el vehicle va ser llogat o no.
 
@@ -495,17 +544,25 @@ levels(ds$rent) <- c("Not","Yes")
 # Calculem gràfic de barres de la variable objectiu
 ggplot(data=ds, aes(x = rent)) + geom_bar(aes(y = (..count..)/sum(..count..))) + geom_text(aes(y = ((..count..)/sum(..count..)), label = scales::percent((..count..)/sum(..count..))), stat = "count", vjust = -0.5) + scale_y_continuous(labels = scales::percent, limits = c(0,1)) + xlab('Rent') + ylab("Percentatge")
 ```
+
+**income**
+
 Creem un altre indicador o atribut nou on emmagatzemem els ingressos anuals que va aportar el vehicle.
 Per crear aquesta variable **income** (ingressos anuals mitjans):
 
 - s'assumeix que **renterTripsTaken** és equivalent al nombre de dies que el cotxe ha estat llogat i que per tant es poden aproximar els ingressos totals aportats pel vehicle com a resultat del producte entre **renterTripsTaken** i **rate.daily**.
+
 - s'assumeix que **age** representa tots els anys de vida del cotxe, per tant si es vol calcular els ingressos anuals cal repartir-los entre age
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 # Ingressos anuals vehicle
 
-ds['income'] <- ds$rate.daily * ds$renterTripsTaken / ds$age
+# En primer lloc establim que la edat mínima amb la que treballem és d'un any
+# per tal d'evitar divisors de "0"
+edat = ds$age
+edat[edat == 0] = 1
 
+ds['income'] <- ds$rate.daily * ds$renterTripsTaken / edat
 
 # Calculem gràfic de barres de la nova variable
 ggplot(data=ds, aes(x=ds$income)) + 
@@ -521,6 +578,35 @@ ggplot(data=ds, aes(x=ds$income)) +
   labs(title="Histogram for Income", x="Income", y="Count") + 
   xlim(c(0,10000)) + 
   ylim(c(0,2000))
+
+```
+
+**frequency**
+
+Creem un altre indicador o atribut nou on emmagatzemem la freqüència amb la que es va llogar el vehicle (**frequency**).
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Freqüència d'us del vehicle (vegades a l'any)
+
+# En primer lloc establim que la edat mínima amb la que treballem és d'un any
+# per tal d'evitar divisors de "0"
+edat = ds$age
+edat[edat == 0] = 1
+
+ds['frequency'] <- ds$renterTripsTaken / edat
+
+# Calculem gràfic de barres de la nova variable
+ggplot(data=ds, aes(x=ds$frequency)) + 
+  geom_histogram(breaks=seq(0, 1000, by=10), 
+                 alpha = 1) + 
+  labs(title="Histogram for frequency", x="frequency", y="Count")
+
+ggplot(data=ds, aes(x=ds$frequency)) + 
+  geom_histogram(breaks=seq(0, 150, by=1.5), 
+                 alpha = 1) + 
+  labs(title="Histogram for frequency", x="frequency", y="Count") + 
+  xlim(c(0,150)) + 
+  ylim(c(0,200))
 
 ```
 
@@ -552,7 +638,7 @@ location.country))
 
 categorical_features_names = c('fuelType', 'location.city', 'location.state', 'owner.id', 'vehicle.make', 'vehicle.model', 'vehicle.type', 'airportcity') 
 
-numeric_features_names = c('rating', 'renterTripsTaken', 'reviewCount', 'rate.daily', 'age', 'income')
+numeric_features_names = c('rating', 'renterTripsTaken', 'reviewCount', 'rate.daily', 'age', 'income', 'frecuency')
 ```
 
 
@@ -562,21 +648,21 @@ Per a la comprovació que els valors que prenen les nostres variables quantitati
 
 **Test de normalitat**
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
-# alpha = 0.05
-# col.names = colnames(ds)
-# 
-# for (i in 1:ncol(ds)) {
-#   if (i == 1) cat("Variables que no presenten una distribució normal:\n")
-#     if (is.integer(ds[,i]) | is.numeric(ds[,i])) {
-#       p_val = ad.test(ds[,i])$p.value
-#       if (p_val < alpha) {
-#         cat(col.names[i])
-#         # Format output
-#         if (i < ncol(ds) - 1) cat(", ")
-#         if (i %% 3 == 0) cat("\n")
-#       }
-#     }
-# }
+alpha = 0.05
+col.names = colnames(ds)
+
+for (i in 1:ncol(ds)) {
+  if (i == 1) cat("Variables que no presenten una distribució normal:\n")
+    if (is.integer(ds[,i]) | is.numeric(ds[,i])) {
+      p_val = ad.test(ds[,i])$p.value
+      if (p_val < alpha) {
+        cat(col.names[i])
+        # Format output
+        if (i < ncol(ds) - 1) cat(", ")
+        if (i %% 3 == 0) cat("\n")
+      }
+    }
+}
 ```
 
 A partir del resultat anterior podem veure com que cap dels atributs quantitaius presenta una distribució normal. Tot i així ens centrarem ara un moment el la variable depenent o variable objectiu en el nostre estudi, el preu diari del vehicle.
@@ -626,8 +712,7 @@ ds$renterTripsTaken_norm <- BoxCox(ds$renterTripsTaken, lambda = lambda_optima)
 ggplot(ds, aes(x = renterTripsTaken)) +  geom_histogram() +  ylab("Nombre de cotxes") + xlab("Nombre de lloguers realitzats")
 ggplot(ds, aes(x = renterTripsTaken_norm)) +  geom_histogram() +  ylab("Nombre de cotxes") + xlab("Nombre normalitzat de lloguers realitzats")
 ```
-Veiem que, tot i amb la conversió, no s'obté forma de distribució normal. 
-
+Veiem que, tot i amb la conversió, no s'obté forma de distribució normal ja que queden un grup siggnificatiu de valors aïllats. 
 
 **Normalització de reviewCount (Nombre de comentaris)**
 
@@ -638,7 +723,7 @@ ds$reviewCount_norm <- BoxCox(ds$reviewCount, lambda = lambda_optima)
 ggplot(ds, aes(x = reviewCount)) +  geom_histogram() +  ylab("Nombre de cotxes") + xlab("Nombre de comentaris")
 ggplot(ds, aes(x = reviewCount_norm)) +  geom_histogram() +  ylab("Nombre de cotxes") + xlab("Nombre normalitzat de comentaris ")
 ```
-Veiem que, tot i amb la conversió, no s'obté forma de distribució normal. 
+Veiem que, tot i amb la conversió, no s'obté forma de distribució normal ja que queden un grup siggnificatiu de valors aïllats. 
 
 
 **Normalització de vehicle.year (Any del cotxe)**
@@ -671,8 +756,7 @@ ds$income_norm <- BoxCox(ds$income, lambda = lambda_optima)
 ggplot(ds, aes(x = income)) +  geom_histogram() +  ylab("Nombre de cotxes") + xlab("Ingressos anuals del cotxe")
 ggplot(ds, aes(x = income_norm)) +  geom_histogram() +  ylab("Nombre de cotxes") + xlab("Ingressos anuals normalitzats del cotxe")
 ```
-Veiem que, tot i amb la conversió, no s'obté forma de distribució normal. 
-
+Veiem que, tot i amb la conversió, no s'obté forma de distribució normal ja que queden un grup siggnificatiu de valors aïllats. 
 **Neteja de noves variables creades que no han tingut èxit en la normalització**
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
@@ -682,6 +766,17 @@ reviewCount_norm,vehicle.year_norm,age_norm,income_norm))
 
 numeric_features_names = c('rating', 'renterTripsTaken', 'reviewCount', 'rate.daily', 'age', 'income', 'rate.daily_norm')
 ```
+
+**Normalització de Frecuency (freqüència anual d'us del cotxe)**
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+lambda_optima <- BoxCoxLambda(ds$frequency)
+ds$frequency_norm <- BoxCox(ds$frequency, lambda = lambda_optima)
+
+ggplot(ds, aes(x = frequency)) +  geom_histogram() +  ylab("Nombre de cotxes") + xlab("Freqüència anual d'us del cotxe")
+ggplot(ds, aes(x = frequency_norm)) +  geom_histogram() +  ylab("Nombre de cotxes") + xlab("Freqüència anual normalitzada d'us del cotxe")
+```
+Veiem que, tot i amb la conversió, no s'obté forma de distribució normal ja que queden un grup siggnificatiu de valors aïllats. 
 
 **Anàlisi multivariant** 
 
@@ -887,7 +982,7 @@ D'altra banda el *p-valor* és inferior al nivell de significació (*p-value < &
 
 ```
 
-## Model de regressió lineal múltiple
+## Model de regressió lineal múltiple per preveure **rate.daily**
 
 A continuació ens proposem estimar per mínims quadrats ordinaris un model lineal que expliqui la variable *rate.daily* en funció de *age i renterTripsTaken*. En aquest cas farem servir només atributs categòrics. 
 
@@ -929,6 +1024,25 @@ model.lm3 <- lm(formula=rate.daily ~ age + renterTripsTaken + fuelType + vehicle
 summary(model.lm3)
 ```
 Si examinem ara el coeficient de determinació ajustat per aquest nou model és: R<sup>2</sup> = 0.5351. Això ens diu que el model de regressió múltiple obtingut explica el 53.51% de la variabilitat del preu del lloguer diari de vehicles. Com que és molt proper al 50%, en principi no és un model gaire bo, i per tant tindrà poc poder predictiu. Tot i així podem veure com hi ha un increment considerable sobre la variabilitat explicada respecte al primer model, i un increment poc significatiu respecte el segon model. La qual cosa ens indica que a priori els atributs que millor expliquen el preu són les característiques del vehicle: el combustible, la marca i el tipus de vehicle.
+
+
+## Determinar en quina mesura la variable **location.city** afecta **rate.daily**
+
+## Determinar en quina mesura la variable **rate.daily** afecta **renderTripsTaken**
+
+## Generar un model que pugui preveure la freqüencia amb que es lloga un automòbil de lloguer (**frequency**).
+
+## Generar un model que pugui preveure **income**
+
+## Generar un model que pugui preveure les valoracions que rebrà un automobil de lloguer **rating**.
+
+## Determinar en quina mesura la variable **renderTripsTaken** afecta **reviewCount** 
+
+## Dur a terme diferents contrastos d'hipótesis que permetin identificar propietats interessants subjacents en les mostres que puguin ser inferides respecte a la població
+
+## Revisar el dataset amb algun mètode d'agrupament no-supervisat
+
+
 
 ## Conclusions
 
