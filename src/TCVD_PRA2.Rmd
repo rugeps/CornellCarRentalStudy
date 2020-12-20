@@ -141,7 +141,9 @@ library(ResourceSelection)
 library(DescTools)
 library(vcd)
 library(ggpubr)
-library(missForest)
+library(corrplot)
+library(grid)
+library(gridExtra)
 
 old <- theme_set(theme_minimal())
 ```
@@ -757,15 +759,6 @@ ggplot(ds, aes(x = income)) +  geom_histogram() +  ylab("Nombre de cotxes") + xl
 ggplot(ds, aes(x = income_norm)) +  geom_histogram() +  ylab("Nombre de cotxes") + xlab("Ingressos anuals normalitzats del cotxe")
 ```
 Veiem que, tot i amb la conversió, no s'obté forma de distribució normal ja que queden un grup siggnificatiu de valors aïllats. 
-**Neteja de noves variables creades que no han tingut èxit en la normalització**
-
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-# Eliminem location.country i les coordenades geogràfiques
-ds <- subset(ds, select=-c(rating_norm,renterTripsTaken_norm,	
-reviewCount_norm,vehicle.year_norm,age_norm,income_norm))
-
-numeric_features_names = c('rating', 'renterTripsTaken', 'reviewCount', 'rate.daily', 'age', 'income', 'rate.daily_norm')
-```
 
 **Normalització de Frecuency (freqüència anual d'us del cotxe)**
 
@@ -777,6 +770,16 @@ ggplot(ds, aes(x = frequency)) +  geom_histogram() +  ylab("Nombre de cotxes") +
 ggplot(ds, aes(x = frequency_norm)) +  geom_histogram() +  ylab("Nombre de cotxes") + xlab("Freqüència anual normalitzada d'us del cotxe")
 ```
 Veiem que, tot i amb la conversió, no s'obté forma de distribució normal ja que queden un grup siggnificatiu de valors aïllats. 
+
+**Neteja de noves variables creades que no han tingut èxit en la normalització**
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Eliminem location.country i les coordenades geogràfiques
+ds <- subset(ds, select=-c(rating_norm,renterTripsTaken_norm,	
+reviewCount_norm,vehicle.year_norm,age_norm,income_norm,frequency_norm))
+
+numeric_features_names = c('rating', 'renterTripsTaken', 'reviewCount', 'rate.daily', 'age', 'income', 'rate.daily_norm', 'frequency')
+```
 
 **Anàlisi multivariant** 
 
@@ -1031,6 +1034,165 @@ Si examinem ara el coeficient de determinació ajustat per aquest nou model és:
 ## Determinar en quina mesura la variable **rate.daily** afecta **renderTripsTaken**
 
 ## Generar un model que pugui preveure la freqüencia amb que es lloga un automòbil de lloguer (**frequency**).
+
+### En primer lloc fem una visualització de les correlacions entre les variables númeriques.
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+ds.num <- ds[numeric_features_names]
+corr.res<-cor(ds.num)
+corrplot(corr.res, type="lower", number.cex=.7,tl.cex=.8)
+```
+
+S'observa clarament que **frequency** mostra correlació amb **income**, **reviewCount**, **renterTripsTaken** i en menor mesura amb **age**.
+
+Que hi hagi correlació amb **renterTripsTaken** i amb **age** no aporta novetat ja que la mateixa variable frequency ha estat creada en una operació entre aquestes dues. EL mateix passa amb la variable **income**, la qual és el resultat de multiplicar **frequency** per **rate.daily**. Realment l'única relació interessant d'aquest gràfic seria la que pot haver-hi entre **frequency** i **reviewCount**. No obstant es possible que la relació de causalitat lògica sigui que a més **frequency** s'esperi trobar més **reviewCount** com a conseqüencia de que el vehicle és usat per més usuaris, i no al revés.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Relació entre frequency i reviewCount
+ggplot(ds, aes(x=frequency, y=reviewCount)) + geom_point()
+```
+Això ens mostra un gràfic interessantissim, en que es pot distingir grups d'observacions que es comporten diferent (vaja, clusters). On hi ha grups que individualment mostres una correlació quasi perfecte entre **frequency** i **reviewCount** i la diferencia entre els grups ve donada pel pendent de la relació.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+plot(ds$frequency,ds$reviewCount, col=as.factor(ds$age))
+```
+Aclarim ràpidament que la diferencia de pendents ve explicada per la variable **age**, i doncs **frequency** es una variable ja normalitzada amb **age** mentre que **reviewCount** és el valor absolut del recompte de reviews i no depen de la finestrra temporal.
+
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+plot(ds$renterTripsTaken,ds$reviewCount)
+```
+
+Així si mirem l'scaterplot entre **renterTripsTaken** i **reviewCount** trobem una correlació molt bona.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Creem un vector reviewRate que normalitza el reviewCOunt en funció de l'edat del vehicle.
+age_sense_0 <- ds$age
+age_sense_0[age_sense_0 == 0] = 1
+ds$reviewRate = ds$reviewCount/age_sense_0
+numeric_features_names <- c(numeric_features_names,"reviewRate")
+
+# Visualitzem la relació entre le freqüència d'us del vehicle i la freqüència de reviews.
+plot(ds$frequency,ds$reviewRate)
+```
+Si mirem l'scaterplot de les dues variables normalitzades amb l'edat del vehicles (per tant **frequency** i freqüència de reviews) trobem que hi pot haver una correlació encara més bona.
+
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Comprovem la relació entre frequecny i reviewRate (variables normalitzade sper age)
+model.lm4 <- lm(formula=frequency ~ reviewRate, data = ds)
+summary(model.lm4)
+# Comprovem la relació entre renterTripsTaken i reviewCount (variables sense normalitzar per age)
+model.lm5 <- lm(formula=renterTripsTaken ~ reviewCount, data = ds)
+summary(model.lm5)
+```
+Veiem que el nombre de viatges fets i el nombre de reviews normalitzades per **age** (**frequency** i **reviewRate**) ofereixen entre elles una correlació molt bona, amb R-quadrat del 0,9915, mentre que les variables equivalents sense normalitzar amb **age** (**renterTripsTaken** i **reviewCount**) ofereixen una correlació amb un R-quadrat lleugerament inferior, del 0,9884. 
+
+Tot i amb la interessant relació entre **frequency** i **reviewRate** trobada, no hem resolt el model que expliqui **frequency** encara. Llavors exoplorem la seva relació amb les variables categoriques.
+
+
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Relació entre la freqüència d'us del vehicle i el tipus de combustible
+ggplot(ds, aes(x=fuelType, y=frequency, fill=fuelType)) + geom_boxplot(alpha=0.1) + stat_summary(fun.y=mean)
+```
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Relació entre la freqüència d'us del vehicle  i l'estat on es localitza el vehicle
+ggplot(ds, aes(x=location.state, y=frequency, fill=location.state)) + geom_boxplot(alpha=0.1) + stat_summary(fun.y=mean) + theme(axis.text.x = element_text(angle = 90,vjust = 0.1,hjust = 0.1)) + theme(legend.position = "none")
+```
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Relació entre la freqüència d'us del vehicle  i la marca del vehicle
+ggplot(ds, aes(x=vehicle.make, y=frequency, fill=vehicle.make)) + geom_boxplot(alpha=0.1) + stat_summary(fun.y=mean) + theme(axis.text.x = element_text(angle = 90,vjust = 0.1,hjust = 0.1)) + theme(legend.position = "none")
+```
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Relació entre la freqüència d'us del vehicle i el tipus de vehicle
+ggplot(ds, aes(x=vehicle.type, y=frequency, fill=vehicle.type)) + geom_boxplot(alpha=0.1) + stat_summary(fun.y=mean)
+```
+
+De les anteriors visualitzacions veiem clar que:
+
+- **frequency** depèn notablement de **fuelType**: els vehicles Eleèctrics son molt més usats que la resta, seguit dels de benzina i hibrids (independentment del nombre que n'hi ha de cada un)
+
+- **frequency** depèn notablement de **location.state**, havent-hi diferencies notables entres estats que apreciablement afecten l'ordre de magnitud de **frequency**
+
+- **frequency** depèn de **vehicle.make**
+
+- **frequency** depèn en menor mesura de **vehicle.type**. ALmenys es pot dir que pel tipus *van* la variable **frequency** pendrà amb seguretat valors molt més baixos que per a la resta.
+
+### Cal doncs buscar un model que pugui preveure **frequency** en funció de les variables categòriques observades
+**Provem l'ús de *desicion tree* **
+
+En primer lloc, realitzem una barreja de les dades per si en alguna de les variables hi hagués cert ordre.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+set.seed(1)
+data_random <- ds[sample(nrow(ds)),]
+```
+
+Agafem com a **y** la vairable **frequency**, i les categoriques com a **X**.
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+set.seed(666)
+y <- data_random["frequency"] 
+X <- data_random[c("fuelType","location.state","vehicle.make","vehicle.type")] 
+```
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Triem un subconjunt per a l'entrenament del model i un subconjunt per a provar-lo
+# El subconjunt d'entenament tindra 2/3 de les observacions: per tant 3901
+# El subconjunt de prova tindra 1/3 de les observacion: per tant 1950
+trainX <- X[1:3901,]
+trainy <- y[1:3901,]
+testX  <- X[3902:5851,]
+testy  <- y[3902:5851,]
+```
+
+Creem el model, en visibilitzem la qualitat i n'extraiem les regles
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+trainy = as.factor(trainy)
+model <- C50::C5.0(trainX, trainy, rules=TRUE )
+summary(model)
+```
+El model resulta en un error bastant gran: un 72,4 % de les mostres es considera mal catalogades i amb més de 700 regles, no és pràctic.
+
+Com a següent pas decidim fer una discretització de la variable **frequency** per repetir el modelat a continuació. Discretitzem la variable en base als seus 4 quaartils.
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+summary(ds[,"frequency"])
+```
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+ds["frequency_segments"] <- cut(ds$frequency, breaks = c(0,1.4,10.92,13.71,151), labels = c("low", "medium-low", "medium-high", "high"))
+```
+
+Repetim el modelat
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+set.seed(1)
+data_random <- ds[sample(nrow(ds)),]
+
+# Agafem com a **y** la vairable **frequency_segments**, i les categoriques com a **X**.
+set.seed(666)
+y <- data_random["frequency_segments"] 
+X <- data_random[c("fuelType","location.state","vehicle.make","vehicle.type")] 
+
+# Triem un subconjunt per a l'entrenament del model i un subconjunt per a provar-lo
+# El subconjunt d'entenament tindra 2/3 de les observacions: per tant 3901
+# El subconjunt de prova tindra 1/3 de les observacion: per tant 1950
+trainX <- X[1:3901,]
+trainy <- y[1:3901,]
+testX  <- X[3902:5851,]
+testy  <- y[3902:5851,]
+
+# Creem el model, en visibilitzem la qualitat i n'extraiem les regles
+
+trainy = as.factor(trainy)
+model <- C50::C5.0(trainX, trainy, rules=TRUE )
+summary(model)
+```
+Trobem que s'ha creat un model que simplement simplifica que la classe típica de **frequency_segment** és medium-low i deixa un 51,6 % d'error, que s'explica pels casos que no pertanyen a la classe medium-low.
+
+
+
 
 ## Generar un model que pugui preveure **income**
 
