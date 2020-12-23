@@ -8,6 +8,9 @@ output:
     latex_engine: xelatex
     highlight: zenburn
     toc: yes
+    toc_depth: 3
+    number_sections: true
+    keep_tex: true
   word_document: default
   html_document:
     highlight: default
@@ -117,6 +120,7 @@ idealment, els apartats hauran d’estar signats per tots els integrants.
 
 Aquest document de l’entrega final de la Pràctica 2 s’ha de lliurar a l’espai de Lliurament i Registre d’AC de l’aula abans de les 23:59 del dia 5 de gener. No s’acceptaran lliuraments fora de termini.
 
+\newpage
 # Resolució
 
 Contribucions               | Firma
@@ -1010,6 +1014,43 @@ prop.test(x=sum(ds$vehicle.type == "van"  | ds$vehicle.type == "minivan"), n=n, 
 D'altra banda el *p-valor* és inferior al nivell de significació (*p-value < &alpha;*), per tant podem rebutjar la hipòtesi nul·la.  Això ens permet dir que la proporció de furgonetes és més petita que la d'utilitàris, amb un nivell de confiança del 95%.
 
 
+### ¿El preu diari del lloguer del vehicle és diferent en funció del tipus de vehicle?
+
+Per tal de donar resposta a aquesta pregunta, realitzarem un contrast de la igualtat de varianza mitjançant un test de *Bartlett* en 2 o más poblacions sense la necessitat de que mida dels grups que comparem sigui la mateixa. 
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+car <- ds[ds$vehicle.type == "car", "rate.daily"]
+minivan <- ds[ds$vehicle.type == "minivan", "rate.daily"]
+suv <- ds[ds$vehicle.type == "suv", "rate.daily"]
+truck <- ds[ds$vehicle.type == "truck", "rate.daily"]
+van <- ds[ds$vehicle.type == "van", "rate.daily"]
+
+bartlett.test(list(car, minivan, suv, truck, van))
+```
+El *p-valor* és inferior al nivell de significació (*p-value < &alpha;*), per tant podem rebutjar la hipòtesi nul·la.  Això ens permet dir que el preu diari del lloguer del vehicle depén del tipus de vehicle, amb un nivell de confiança del 95%.
+
+Podem veure que tenim cinc grups diferents (5 categories de vehicles) que volem comparar. A partir del test realitzat hi ha evidències de que la varianza no és la mateixa en tots el grups. Fet que ja podiem intuir al diagrama de caixes o boxplot on mostravem l'atribut 'rate.daily' envers 'vehicle.type'.
+
+### ¿El preu diari del lloguer del vehicle és diferent en funció del tipus de combustible?
+
+Per tal de donar resposta a aquesta pregunta, realitzarem un contrast de la igualtat de varianza mitjançant un test de *Bartlett* en 2 o más poblacions sense la necessitat de que mida dels grups que comparem sigui la mateixa. 
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+diesel <- ds[ds$vehicle.type == "car", "rate.daily"]
+electric <- ds[ds$vehicle.type == "minivan", "rate.daily"]
+gasoline <- ds[ds$vehicle.type == "suv", "rate.daily"]
+hybrid <- ds[ds$vehicle.type == "truck", "rate.daily"]
+
+bartlett.test(list(diesel, electric, gasoline, hybrid))
+```
+
+El *p-valor* és inferior al nivell de significació (*p-value < &alpha;*), per tant podem rebutjar la hipòtesi nul·la.  Això ens permet dir que el preu diari del lloguer del vehicle depén del tipus de combustible, amb un nivell de confiança del 95%.
+
+Podem veure que tenim quatre grups diferents (4 tipus de combustibles) que volem comparar. A partir del test realitzat hi ha evidències de que la varianza no és la mateixa en tots el grups. Fet que ja podiem intuir al diagrama de caixes o boxplot on mostravem l'atribut 'rate.daily' envers 'fuelType'.
+
+
+
+
 ## Model de regressió lineal múltiple per preveure el preu diari d'un vehicle
 
 A continuació ens proposem estimar per mínims quadrats ordinaris un model lineal que expliqui la variable *rate.daily* en funció de *age i renterTripsTaken*. En aquest cas farem servir només atributs numèrics. 
@@ -1197,209 +1238,6 @@ ggplot(data=ds, aes(x = rent)) + geom_bar(aes(y = (..count..)/sum(..count..))) +
 ```
 
 Les classificacions desequilibrades suposen un desafiament per a la generació de models de predicció, ja que la majoria dels algorismes utilitzats per a la classificació van ser dissenyats entorn l'assumpció d'un nombre igual d'observacions per a cada classe. Aixó produeix que els models obtinguts presentin un rendiment predictiu deficient, en concret per a la classe minoritària. A més aixó sol ser un problema perqué normalment, la classe minoritària és la més important i per tant el model és més sensible als errors de classificació de la classe minoritària que la classe majoritària.
-
-
-
-
-## Generar un model que pugui preveure la freqüencia amb que es lloga un automòbil de lloguer (**frequency**).
-
-
-### En primer lloc fem una visualització de les correlacions entre les variables númeriques.
-
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-ds.num <- ds[numeric_features_names]
-corr.res<-cor(ds.num)
-corrplot(corr.res, type="lower", number.cex=.7,tl.cex=.8)
-```
-
-S'observa clarament que **frequency** mostra correlació amb **income**, **reviewCount**, **renterTripsTaken** i en menor mesura amb **age**.
-
-Que hi hagi correlació amb **renterTripsTaken** i amb **age** no aporta novetat ja que la mateixa variable frequency ha estat creada en una operació entre aquestes dues. EL mateix passa amb la variable **income**, la qual és el resultat de multiplicar **frequency** per **rate.daily**. Realment l'única relació interessant d'aquest gràfic seria la que pot haver-hi entre **frequency** i **reviewCount**. No obstant es possible que la relació de causalitat lògica sigui que a més **frequency** s'esperi trobar més **reviewCount** com a conseqüencia de que el vehicle és usat per més usuaris, i no al revés.
-
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-# Relació entre frequency i reviewCount
-ggplot(ds, aes(x=frequency, y=reviewCount)) + geom_point()
-```
-
-Això ens mostra un gràfic interessantissim, en que es pot distingir grups d'observacions que es comporten diferent (vaja, clusters). On hi ha grups que individualment mostres una correlació quasi perfecte entre **frequency** i **reviewCount** i la diferencia entre els grups ve donada pel pendent de la relació.
-
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-plot(ds$frequency,ds$reviewCount, col=as.factor(ds$age))
-```
-
-Aclarim ràpidament que la diferencia de pendents ve explicada per la variable **age**, i doncs **frequency** es una variable ja normalitzada amb **age** mentre que **reviewCount** és el valor absolut del recompte de reviews i no depen de la finestrra temporal.
-
-
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-plot(ds$renterTripsTaken,ds$reviewCount)
-```
-
-Així si mirem l'scaterplot entre **renterTripsTaken** i **reviewCount** trobem una correlació molt bona.
-
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-# Creem un vector reviewRate que normalitza el reviewCOunt en funció de l'edat del vehicle.
-age_sense_0 <- ds$age
-age_sense_0[age_sense_0 == 0] = 1
-ds$reviewRate = ds$reviewCount/age_sense_0
-numeric_features_names <- c(numeric_features_names,"reviewRate")
-
-# Visualitzem la relació entre le freqüència d'us del vehicle i la freqüència de reviews.
-plot(ds$frequency,ds$reviewRate)
-```
-
-Si mirem l'scaterplot de les dues variables normalitzades amb l'edat del vehicles (per tant **frequency** i freqüència de reviews) trobem que hi pot haver una correlació encara més bona.
-
-
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-# Comprovem la relació entre frequecny i reviewRate (variables normalitzade sper age)
-model.lm4 <- lm(formula=frequency ~ reviewRate, data = ds)
-summary(model.lm4)
-# Comprovem la relació entre renterTripsTaken i reviewCount (variables sense normalitzar per age)
-model.lm5 <- lm(formula=renterTripsTaken ~ reviewCount, data = ds)
-summary(model.lm5)
-```
-
-Veiem que el nombre de viatges fets i el nombre de reviews normalitzades per **age** (**frequency** i **reviewRate**) ofereixen entre elles una correlació molt bona, amb R-quadrat del 0,9915, mentre que les variables equivalents sense normalitzar amb **age** (**renterTripsTaken** i **reviewCount**) ofereixen una correlació amb un R-quadrat lleugerament inferior, del 0,9884. 
-
-Tot i amb la interessant relació entre **frequency** i **reviewRate** trobada, no hem resolt el model que expliqui **frequency** encara. Llavors exoplorem la seva relació amb les variables categoriques.
-
-
-
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-# Relació entre la freqüència d'us del vehicle i el tipus de combustible
-ggplot(ds, aes(x=fuelType, y=frequency, fill=fuelType)) + geom_boxplot(alpha=0.1) + stat_summary(fun.y=mean)
-```
-
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-# Relació entre la freqüència d'us del vehicle  i l'estat on es localitza el vehicle
-ggplot(ds, aes(x=location.state, y=frequency, fill=location.state)) + geom_boxplot(alpha=0.1) + stat_summary(fun.y=mean) + theme(axis.text.x = element_text(angle = 90,vjust = 0.1,hjust = 0.1)) + theme(legend.position = "none")
-```
-
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-# Relació entre la freqüència d'us del vehicle  i la marca del vehicle
-ggplot(ds, aes(x=vehicle.make, y=frequency, fill=vehicle.make)) + geom_boxplot(alpha=0.1) + stat_summary(fun.y=mean) + theme(axis.text.x = element_text(angle = 90,vjust = 0.1,hjust = 0.1)) + theme(legend.position = "none")
-```
-
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-# Relació entre la freqüència d'us del vehicle i el tipus de vehicle
-ggplot(ds, aes(x=vehicle.type, y=frequency, fill=vehicle.type)) + geom_boxplot(alpha=0.1) + stat_summary(fun.y=mean)
-```
-
-De les anteriors visualitzacions veiem clar que:
-
-- **frequency** depèn notablement de **fuelType**: els vehicles Eleèctrics son molt més usats que la resta, seguit dels de benzina i hibrids (independentment del nombre que n'hi ha de cada un)
-
-- **frequency** depèn notablement de **location.state**, havent-hi diferencies notables entres estats que apreciablement afecten l'ordre de magnitud de **frequency**
-
-- **frequency** depèn de **vehicle.make**
-
-- **frequency** depèn en menor mesura de **vehicle.type**. Almenys es pot dir que pel tipus *van* la variable **frequency** pendrà amb seguretat valors molt més baixos que per a la resta.
-
-
-
-
-### Cal doncs buscar un model que pugui preveure **frequency** en funció de les variables categòriques observades
-
-
-
-##################################################
-############ INICI A REVISAR #####################
-##################################################
-
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-# Generem el model d'arbre
-model_cart_frequency <- rpart(frequency ~ fuelType + location.city + location.state + vehicle.make + vehicle.model + vehicle.type, method="anova", data=train)
-
-# Mostrem un resum de la generació de l'arbre
-summary(model_cart_frequency)
-
-printcp(model_cart_frequency)
-
-# Mostrem en un gràfic l'arbre obtingut
-rpart.plot(model_cart_frequency)
-```
-
-**Provem l'ús de *desicion tree* **
-
-En primer lloc, realitzem una barreja de les dades per si en alguna de les variables hi hagués cert ordre.
-
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-set.seed(1)
-data_random <- ds[sample(nrow(ds)),]
-```
-
-Agafem com a **y** la vairable **frequency**, i les categoriques com a **X**.
-
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-set.seed(666)
-y <- data_random["frequency"] 
-X <- data_random[c("fuelType","location.state","vehicle.make","vehicle.type")] 
-```
-
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-# Triem un subconjunt per a l'entrenament del model i un subconjunt per a provar-lo
-# El subconjunt d'entenament tindra 2/3 de les observacions: per tant 3901
-# El subconjunt de prova tindra 1/3 de les observacion: per tant 1950
-trainX <- X[1:3901,]
-trainy <- y[1:3901,]
-testX  <- X[3902:5851,]
-testy  <- y[3902:5851,]
-```
-
-Creem el model, en visualitzem la qualitat i n'extraiem les regles
-
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-trainy = as.factor(trainy)
-model <- C50::C5.0(trainX, trainy, rules=TRUE )
-summary(model)
-```
-
-El model resulta en un error bastant gran: un 72,4 % de les mostres es considera mal catalogades i amb més de 700 regles, no és pràctic.
-
-Com a següent pas decidim fer una discretització de la variable **frequency** per repetir el modelat a continuació. Discretitzem la variable en base als seus 4 quaartils.
-
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-summary(ds[,"frequency"])
-```
-
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-ds["frequency_segments"] <- cut(ds$frequency, breaks = c(0,1.4,10.92,13.71,151), labels = c("low", "medium-low", "medium-high", "high"))
-```
-
-Repetim el modelat
-
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-set.seed(1)
-data_random <- ds[sample(nrow(ds)),]
-
-# Agafem com a **y** la vairable **frequency_segments**, i les categoriques com a **X**.
-set.seed(666)
-y <- data_random["frequency_segments"] 
-X <- data_random[c("fuelType","location.state","vehicle.make","vehicle.type")] 
-
-# Triem un subconjunt per a l'entrenament del model i un subconjunt per a provar-lo
-# El subconjunt d'entenament tindra 2/3 de les observacions: per tant 3901
-# El subconjunt de prova tindra 1/3 de les observacion: per tant 1950
-trainX <- X[1:3901,]
-trainy <- y[1:3901,]
-testX  <- X[3902:5851,]
-testy  <- y[3902:5851,]
-
-# Creem el model, en visibilitzem la qualitat i n'extraiem les regles
-
-trainy = as.factor(trainy)
-model <- C50::C5.0(trainX, trainy, rules=TRUE )
-#summary(model)
-```
-
-Trobem que s'ha creat un model que simplement simplifica que la classe típica de **frequency_segment** és medium-low i deixa un 51,6 % d'error, que s'explica pels casos que no pertanyen a la classe medium-low.
-
-##################################################
-############ Fi A REVISAR    #####################
-##################################################
-
-
-## Generar un model que pugui preveure **income**
 
 
 
