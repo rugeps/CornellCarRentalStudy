@@ -35,15 +35,13 @@ Clonar el repositori, accedir al directori i executar l'script *"webscraping.py"
 
 ```python
 git clone git@github.com:rugeps/CornellCarRentalStudy.git
-cd cd CataloniaRuralHousingScraper/src/
-R 
+cd CornellCarRentalStudy/src/
 ```
-
-Aquest script està preparat per buscar i extreure dades de la web [_EscapadaRural_](https://www.escapadarural.com/) i generar un _dataset_. Una vegada finalitzi l'execució al directori *data* podrem trobar un *CSV* 'catalonia_rural_houses_*timestamp*.csv', amb totes les dades extretes.  
 
 ## Dataset
 
-El dataset generat es troba publicat a kaggle i es pot consultar vía:
+El dataset analitzat es troba publicat a kaggle i es pot consultar a la següent URL:
+
 https://www.kaggle.com/kushleshkumar/cornell-car-rental-dataset
 
 ## Llicencia: 
