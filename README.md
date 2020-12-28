@@ -18,32 +18,19 @@ Aquesta pràctica forma part de l'assignatura _Tipología i cicle de vida de les
 
 ## Començant
 
-### Prerequisits
-
-Per executar ............... són necesàries les següents dependències:
-
-
-Aquestes dependències es poden instal·lar amb les següents comandes
-
-```R
-
-```
-
 ### Instal·lació i ús
 
-Clonar el repositori, accedir al directori i executar l'script *"webscraping.py"*.
+Clonar el repositori, accedir al directori i executar l'script *"R"*.
 
 ```python
 git clone git@github.com:rugeps/CornellCarRentalStudy.git
-cd cd CataloniaRuralHousingScraper/src/
-R 
+cd CornellCarRentalStudy/src/
 ```
-
-Aquest script està preparat per buscar i extreure dades de la web [_EscapadaRural_](https://www.escapadarural.com/) i generar un _dataset_. Una vegada finalitzi l'execució al directori *data* podrem trobar un *CSV* 'catalonia_rural_houses_*timestamp*.csv', amb totes les dades extretes.  
 
 ## Dataset
 
-El dataset generat es troba publicat a kaggle i es pot consultar vía:
+El dataset analitzat es troba publicat a kaggle i es pot consultar a la següent URL:
+
 https://www.kaggle.com/kushleshkumar/cornell-car-rental-dataset
 
 ## Llicencia: 
