@@ -63,15 +63,15 @@
 "62","GASOLINE",4.92,40,38,"Atlanta","US",33.640694,-84.444701,"GA","5878338",130,"Chevrolet","Camaro","car",2017,"Atlanta","Good",3,"Yes",1733.33333333333,13.3333333333333
 "63","GASOLINE",4.88,88,74,"Atlanta","US",33.757548,-84.349273,"GA","499566",150,"Land Rover","Range Rover Sport","suv",2014,"Atlanta","Good",6,"Yes",2200,14.6666666666667
 "64","GASOLINE",5,1,1,"Atlanta","US",33.850713,-84.36596,"GA","10872556",125,"Maserati","Quattroporte","car",2016,"Atlanta","Good",4,"Yes",31.25,0.25
-"65","GASOLINE",4.84,38,32,"Douglasville","US",33.7233,-84.703291,"GA","3983888",76,NA,"Q50","car",2018,"Atlanta","Good",2,"Yes",1444,19
+"65","GASOLINE",4.84,38,32,"Douglasville","US",33.7233,-84.703291,"GA","3983888",76,"Infinitti","Q50","car",2018,"Atlanta","Good",2,"Yes",1444,19
 "66","GASOLINE",4.92,76,71,"Atlanta","US",33.668327,-84.417836,"GA","10413163",147,"Chevrolet","Corvette","car",2015,"Atlanta","Good",5,"Yes",2234.4,15.2
 "67","GASOLINE",5,5,5,"Snellville","US",33.807278,-84.045917,"GA","11258220",160,"Porsche","Boxster","car",2014,"Atlanta","Good",6,"Yes",133.333333333333,0.833333333333333
 "68","ELECTRIC",4.85,35,27,"Decatur","US",33.709589,-84.266785,"GA","1661563",175,"Tesla","Model 3","car",2019,"Atlanta","Good",1,"Yes",6125,35
 "69","DIESEL",4.97,32,29,"East Point","US",33.653333,-84.492314,"GA","7868475",89,"Porsche","Cayenne","suv",2014,"Atlanta","Good",6,"Yes",474.666666666667,5.33333333333333
 "70","GASOLINE",4.98,72,59,"Atlanta","US",33.927666,-84.34306,"GA","511103",116,"Ford","Mustang","car",2019,"Atlanta","Good",1,"Yes",8352,72
 "71","GASOLINE",5,17,11,"Atlanta","US",33.782872,-84.384256,"GA","8752492",136,"Land Rover","Range Rover Sport","suv",2016,"Atlanta","Good",4,"Yes",578,4.25
-"72","GASOLINE",4.82,56,50,"Douglasville","US",33.723699,-84.702829,"GA","3983888",56,NA,"EX35","suv",2008,"Atlanta","Good",12,"Yes",261.333333333333,4.66666666666667
-"73","GASOLINE",4.93,22,15,"East Point","US",33.653788,-84.491291,"GA","7697843",64,NA,"Q50","car",2018,"Atlanta","Good",2,"Yes",704,11
+"72","GASOLINE",4.82,56,50,"Douglasville","US",33.723699,-84.702829,"GA","3983888",56,"Infiniti","EX35","suv",2008,"Atlanta","Good",12,"Yes",261.333333333333,4.66666666666667
+"73","GASOLINE",4.93,22,15,"East Point","US",33.653788,-84.491291,"GA","7697843",64,"Infinitti","Q50","car",2018,"Atlanta","Good",2,"Yes",704,11
 "74","GASOLINE",4.95,69,66,"East Point","US",33.653412,-84.492217,"GA","7868475",90,"Mercedes-Benz","E-Class","car",2016,"Atlanta","Good",4,"Yes",1552.5,17.25
 "75","GASOLINE",4.9,61,50,"East Point","US",33.652998,-84.490885,"GA","7697843",55,"Mazda","CX-5","suv",2018,"Atlanta","Good",2,"Yes",1677.5,30.5
 "76","GASOLINE",4.84,71,58,"East Point","US",33.652323,-84.491513,"GA","7697843",29,"smart","fortwo","car",2015,"Atlanta","Good",5,"Yes",411.8,14.2
@@ -79,7 +79,7 @@
 "78","GASOLINE",4.89,9,9,"Atlanta","US",33.926688,-84.343004,"GA","511103",102,"Chevrolet","Camaro","car",2018,"Atlanta","Good",2,"Yes",459,4.5
 "79","GASOLINE",4.93,19,15,"Atlanta","US",33.810233,-84.45316,"GA","2052844",85,"Land Rover","Range Rover Evoque","suv",2015,"Atlanta","Good",5,"Yes",323,3.8
 "80","GASOLINE",5,2,2,"Atlanta","US",33.852298,-84.367605,"GA","5513653",98,"BMW","X4","suv",2018,"Atlanta","Good",2,"Yes",98,1
-"81","GASOLINE",5,45,40,"East Point","US",33.653553,-84.492182,"GA","7868475",90,NA,"QX60","suv",2015,"Atlanta","Good",5,"Yes",810,9
+"81","GASOLINE",5,45,40,"East Point","US",33.653553,-84.492182,"GA","7868475",90,"Infiniti","QX60","suv",2015,"Atlanta","Good",5,"Yes",810,9
 "82","ELECTRIC",5,21,19,"Atlanta","US",33.765511,-84.387509,"GA","3991249",150,"Tesla","Model 3","car",2020,"Atlanta","Good",0,"Yes",3150,21
 "83","GASOLINE",4.98,54,44,"Atlanta","US",33.875355,-84.461555,"GA","499566",149,"BMW","6 Series Gran Coupe","car",2013,"Atlanta","Good",7,"Yes",1149.42857142857,7.71428571428571
 "84","GASOLINE",5,70,62,"Atlanta","US",33.764041,-84.334534,"GA","1077705",195,"BMW","M4","car",2015,"Atlanta","Good",5,"Yes",2730,14
@@ -341,7 +341,7 @@
 "340","GASOLINE",5,14,14,"Waco","US",31.536349,-97.204985,"TX","10135745",150,"Chevrolet","Suburban","suv",2017,"Austin","Good",3,"Yes",700,4.66666666666667
 "341","GASOLINE",5,22,15,"Cedar Park","US",30.491969,-97.846945,"TX","5128958",58,"Chevrolet","Suburban","suv",2012,"Austin","Good",8,"Yes",159.5,2.75
 "342","ELECTRIC",5,0,0,"Austin","US",30.254914,-97.865593,"TX","10486401",369,"Audi","E-Tron","suv",2019,"Austin","Good",1,"Not",0,0
-"343","GASOLINE",5,11,8,"Austin","US",30.202829,-97.771173,"TX","13078780",55,NA,"QX60","suv",2020,"Austin","Good",0,"Yes",605,11
+"343","GASOLINE",5,11,8,"Austin","US",30.202829,-97.771173,"TX","13078780",55,"Infiniti","QX60","suv",2020,"Austin","Good",0,"Yes",605,11
 "344","GASOLINE",5,4,3,"Cedar Park","US",30.471503,-97.825836,"TX","1351290",65,"Honda","Pilot","suv",2019,"Austin","Good",1,"Yes",260,4
 "345","GASOLINE",5,16,14,"Austin","US",30.13717,-97.794814,"TX","10373750",85,"GMC","Yukon","suv",2012,"Austin","Good",8,"Yes",170,2
 "346","GASOLINE",4.98,45,41,"Austin","US",30.418945,-97.739133,"TX","7107554",39,"Audi","A4","car",2016,"Austin","Good",4,"Yes",438.75,11.25
@@ -366,7 +366,7 @@
 "365","GASOLINE",4.88,27,24,"Austin","US",30.246411,-97.751444,"TX","11676918",34,"Subaru","Impreza","car",2012,"Austin","Good",8,"Yes",114.75,3.375
 "366","GASOLINE",5,26,22,"Austin","US",30.282543,-97.742769,"TX","526216",49,"Toyota","Camry","car",2020,"Austin","Good",0,"Yes",1274,26
 "367","GASOLINE",4.92,14,13,"Austin","US",30.28122,-97.741169,"TX","526216",44,"Toyota","Camry","car",2017,"Austin","Good",3,"Yes",205.333333333333,4.66666666666667
-"368","GASOLINE",5,15,9,"Austin","US",30.249553,-97.856495,"TX","4022601",65,NA,"QX60","suv",2020,"Austin","Good",0,"Yes",975,15
+"368","GASOLINE",5,15,9,"Austin","US",30.249553,-97.856495,"TX","4022601",65,"Infiniti","QX60","suv",2020,"Austin","Good",0,"Yes",975,15
 "369","GASOLINE",4.8,7,5,"Austin","US",30.249388,-97.856408,"TX","4022601",42,"Honda","Accord Sedan","car",2019,"Austin","Good",1,"Yes",294,7
 "370","GASOLINE",4.6,10,10,"Austin","US",30.202869,-97.77119,"TX","13078780",42,"Toyota","Camry","car",2020,"Austin","Good",0,"Yes",420,10
 "371","GASOLINE",4.98,99,85,"Austin","US",30.200141,-97.74275,"TX","3143655",44,"Honda","Civic Sedan","car",2019,"Austin","Good",1,"Yes",4356,99
@@ -382,7 +382,7 @@
 "381","GASOLINE",5,4,3,"Austin","US",30.422903,-97.784639,"TX","656440",49,"Toyota","Sienna","minivan",2012,"Austin","Good",8,"Yes",24.5,0.5
 "382","GASOLINE",5,27,25,"Austin","US",30.247572,-97.775373,"TX","1854243",49,"MINI","Hardtop 2 Door","car",2017,"Austin","Good",3,"Yes",441,9
 "383","GASOLINE",5,3,3,"Kyle","US",29.989504,-97.859886,"TX","4303241",52,"Hyundai","Elantra","car",2017,"Austin","Good",3,"Yes",52,1
-"384","GASOLINE",5,7,4,"Austin","US",30.249627,-97.8567,"TX","4022601",45,NA,"Q50","car",2019,"Austin","Good",1,"Yes",315,7
+"384","GASOLINE",5,7,4,"Austin","US",30.249627,-97.8567,"TX","4022601",45,"Infiniti","Q50","car",2019,"Austin","Good",1,"Yes",315,7
 "385","GASOLINE",5,3,2,"Austin","US",30.349875,-97.733228,"TX","2064076",38,"Lexus","RX 350","suv",2014,"Austin","Good",6,"Yes",19,0.5
 "386","GASOLINE",5,10,7,"Kyle","US",29.990309,-97.858799,"TX","4303241",52,"Nissan","Sentra","car",2015,"Austin","Good",5,"Yes",104,2
 "387","GASOLINE",4.84,35,32,"Cedar Park","US",30.49195,-97.847827,"TX","5128958",30,"Honda","HR-V","suv",2019,"Austin","Good",1,"Yes",1050,35
@@ -526,7 +526,7 @@
 "525","GASOLINE",5,3,3,"Nashville","US",36.15822,-86.863729,"TN","15671801",39,"Nissan","Altima","car",2016,"Nashville","Good",4,"Yes",29.25,0.75
 "526","GASOLINE",5,16,16,"La Vergne","US",36.026071,-86.583121,"TN","622296",35,"Nissan","Sentra","car",2019,"Nashville","Good",1,"Yes",560,16
 "527","GASOLINE",4.95,93,81,"Nashville","US",36.258973,-86.738503,"TN","7067155",52,"Nissan","Altima","car",2013,"Nashville","Good",7,"Yes",690.857142857143,13.2857142857143
-"528","GASOLINE",5,16,15,"Nashville","US",36.066476,-86.592047,"TN","986957",65,NA,"Q50","car",2014,"Nashville","Good",6,"Yes",173.333333333333,2.66666666666667
+"528","GASOLINE",5,16,15,"Nashville","US",36.066476,-86.592047,"TN","986957",65,"Infiniti","Q50","car",2014,"Nashville","Good",6,"Yes",173.333333333333,2.66666666666667
 "529","GASOLINE",5,1,1,"Mount Juliet","US",36.153175,-86.503695,"TN","10351283",204,"Polaris","Slingshot","car",2017,"Nashville","Good",3,"Yes",68,0.333333333333333
 "530","ELECTRIC",5,0,0,"Nashville","US",36.206111,-86.68997,"TN","4157605",60,"BMW","i3","car",2017,"Nashville","Good",3,"Not",0,0
 "531","GASOLINE",5,0,0,"Nolensville","US",35.952885,-86.698644,"TN","15794998",58,"Nissan","Maxima","car",2017,"Nashville","Good",3,"Not",0,0
@@ -648,8 +648,8 @@
 "647","ELECTRIC",5,18,13,"Signal Mountain","US",35.172472,-85.319686,"TN","10447199",150,"Tesla","Model 3","car",2019,"Chattanooga","Good",1,"Yes",2700,18
 "648","GASOLINE",5,39,30,"Chattanooga","US",35.024916,-85.155637,"TN","5252641",91,"Jeep","Wrangler","suv",2018,"Chattanooga","Good",2,"Yes",1774.5,19.5
 "649","GASOLINE",4.97,38,35,"Chattanooga","US",35.024917,-85.155737,"TN","5252641",95,"Jeep","Wrangler","suv",2016,"Chattanooga","Good",4,"Yes",902.5,9.5
-"650","GASOLINE",4.96,28,28,"Chattanooga","US",35.024367,-85.155498,"TN","5252641",65,NA,"G37","car",2009,"Chattanooga","Good",11,"Yes",165.454545454545,2.54545454545455
-"651","GASOLINE",5,26,20,"Chattanooga","US",35.023739,-85.155102,"TN","5252641",85,NA,"G Sedan","car",2013,"Chattanooga","Good",7,"Yes",315.714285714286,3.71428571428571
+"650","GASOLINE",4.96,28,28,"Chattanooga","US",35.024367,-85.155498,"TN","5252641",65,"Infiniti","G37","car",2009,"Chattanooga","Good",11,"Yes",165.454545454545,2.54545454545455
+"651","GASOLINE",5,26,20,"Chattanooga","US",35.023739,-85.155102,"TN","5252641",85,"Infiniti","G Sedan","car",2013,"Chattanooga","Good",7,"Yes",315.714285714286,3.71428571428571
 "652","GASOLINE",5,0,0,"LaFayette","US",34.761685,-85.265991,"GA","9149244",254,"Mercedes-Benz","G-Class","suv",2017,"Chattanooga","Good",3,"Not",0,0
 "653","GASOLINE",5,17,16,"Charleston","US",32.891212,-79.932738,"SC","960324",89,"Ford","Mustang","car",2018,"Charleston","Good",2,"Yes",756.5,8.5
 "654","ELECTRIC",5,11,10,"Charleston","US",32.792041,-79.994758,"SC","579281",55,"Chevrolet","Bolt EV","car",2017,"Charleston","Good",3,"Yes",201.666666666667,3.66666666666667
@@ -937,7 +937,7 @@
 "936","GASOLINE",5,4,3,"Plano","US",33.080743,-96.739564,"TX","2135384",79,"Porsche","Boxster","car",1980,"Dallas","Good",40,"Yes",7.9,0.1
 "937","GASOLINE",4.77,26,22,"Dallas","US",32.824741,-96.790031,"TX","5494464",79,"Jeep","Wrangler Unlimited","suv",2020,"Dallas","Good",0,"Yes",2054,26
 "938","GASOLINE",5,20,19,"Dallas","US",32.824396,-96.789414,"TX","5494464",79,"Jeep","Gladiator","truck",2020,"Dallas","Good",0,"Yes",1580,20
-"939","GASOLINE",5,4,4,"Dallas","US",32.824535,-96.790136,"TX","5494464",49,NA,"Q60 Coupe","car",2015,"Dallas","Good",5,"Yes",39.2,0.8
+"939","GASOLINE",5,4,4,"Dallas","US",32.824535,-96.790136,"TX","5494464",49,"Infiniti","Q60 Coupe","car",2015,"Dallas","Good",5,"Yes",39.2,0.8
 "940","GASOLINE",5,0,0,"Dallas","US",32.806222,-96.794152,"TX","792702",58,"Audi","A4","car",2018,"Dallas","Good",2,"Not",0,0
 "941","GASOLINE",4.93,15,14,"Dallas","US",32.823515,-96.791135,"TX","5494464",69,"Toyota","FJ Cruiser","suv",2012,"Dallas","Good",8,"Yes",129.375,1.875
 "942","GASOLINE",5,0,0,"Frisco","US",33.150364,-96.862211,"TX","1387898",199,"BMW","M6","car",2016,"Dallas","Good",4,"Not",0,0
@@ -1086,7 +1086,7 @@
 "1085","GASOLINE",4.6,12,10,"Thornton","US",39.961755,-104.961103,"CO","11641674",115,"Cadillac","Escalade","suv",2015,"Denver","Good",5,"Yes",276,2.4
 "1086","GASOLINE",4.64,136,107,"Lakewood","US",39.706289,-105.078946,"CO","2245310",45,"Toyota","4Runner","suv",2005,"Denver","Good",15,"Yes",408,9.06666666666667
 "1087","GASOLINE",4.82,20,17,"Commerce City","US",39.869707,-104.786952,"CO","2318184",50,"Toyota","RAV4","suv",2013,"Denver","Good",7,"Yes",142.857142857143,2.85714285714286
-"1088","GASOLINE",5,20,16,"Brighton","US",39.964791,-104.802403,"CO","10318818",89,NA,"QX60","suv",2018,"Denver","Good",2,"Yes",890,10
+"1088","GASOLINE",5,20,16,"Brighton","US",39.964791,-104.802403,"CO","10318818",89,"Infinitti","QX60","suv",2018,"Denver","Good",2,"Yes",890,10
 "1089","GASOLINE",4.77,125,84,"Lakewood","US",39.705395,-105.076183,"CO","2245310",48,"Toyota","Sienna","minivan",2011,"Denver","Good",9,"Yes",666.666666666667,13.8888888888889
 "1090","GASOLINE",4.6,62,47,"Lakewood","US",39.704967,-105.077319,"CO","2245310",50,"Toyota","4Runner","suv",2008,"Denver","Good",12,"Yes",258.333333333333,5.16666666666667
 "1091","GASOLINE",4.89,12,9,"Denver","US",39.80334,-104.779393,"CO","5765543",49,"Nissan","Xterra","suv",2010,"Denver","Good",10,"Yes",58.8,1.2
@@ -1240,16 +1240,16 @@
 "1239","GASOLINE",5,100,95,"Irving","US",32.920946,-96.969909,"TX","4874448",169,"Chevrolet","Corvette","car",2015,"Dallas-Fort Worth","Good",5,"Yes",3380,20
 "1240","GASOLINE",5,26,22,"Fort Worth","US",32.7107,-97.400422,"TX","7693589",122,"Porsche","Boxster","car",2016,"Dallas-Fort Worth","Good",4,"Yes",793,6.5
 "1241","GASOLINE",5,47,39,"Euless","US",32.807121,-97.086058,"TX","9009316",159,"Polaris","Slingshot","car",2017,"Dallas-Fort Worth","Good",3,"Yes",2491,15.6666666666667
-"1242","GASOLINE",5,18,18,"Fort Worth","US",32.869169,-97.320646,"TX","9946063",98,NA,"QX80","suv",2017,"Dallas-Fort Worth","Good",3,"Yes",588,6
+"1242","GASOLINE",5,18,18,"Fort Worth","US",32.869169,-97.320646,"TX","9946063",98,"Infinitti","QX80","suv",2017,"Dallas-Fort Worth","Good",3,"Yes",588,6
 "1243","ELECTRIC",5,7,6,"Flower Mound","US",33.044937,-97.065506,"TX","11039077",96,"Tesla","Model 3","car",2018,"Dallas-Fort Worth","Good",2,"Yes",336,3.5
 "1244","GASOLINE",5,16,13,"Coppell","US",32.960651,-97.004411,"TX","8804371",90,"GMC","Yukon XL","suv",2012,"Dallas-Fort Worth","Good",8,"Yes",180,2
 "1245","GASOLINE",5,1,1,"Arlington","US",32.644232,-97.1689,"TX","13543201",80,"Lexus","IS","car",2019,"Dallas-Fort Worth","Good",1,"Yes",80,1
 "1246","GASOLINE",4.98,54,51,"Coppell","US",32.965781,-96.972723,"TX","2682307",399,"Chevrolet","Corvette","car",1961,"Dallas-Fort Worth","Good",59,"Yes",365.186440677966,0.915254237288136
 "1247","GASOLINE",5,0,0,"DeSoto","US",32.584762,-96.890508,"TX","7599614",50,"Honda","Accord Sedan","car",2019,"Dallas-Fort Worth","Good",1,"Not",0,0
-"1248","GASOLINE",5,2,2,"Fort Worth","US",32.654946,-97.429845,"TX","15281768",108,NA,"Q60","car",2019,"Dallas-Fort Worth","Good",1,"Yes",216,2
+"1248","GASOLINE",5,2,2,"Fort Worth","US",32.654946,-97.429845,"TX","15281768",108,"Infiniti","Q60","car",2019,"Dallas-Fort Worth","Good",1,"Yes",216,2
 "1249","GASOLINE",5,1,1,"Arlington","US",32.612723,-97.086097,"TX","15040718",74,"Chevrolet","Silverado 1500","truck",2017,"Dallas-Fort Worth","Good",3,"Yes",24.6666666666667,0.333333333333333
 "1250","GASOLINE",4.94,20,16,"Southlake","US",32.949098,-97.152717,"TX","10579519",62,"Chrysler","Town and Country","minivan",2014,"Dallas-Fort Worth","Good",6,"Yes",206.666666666667,3.33333333333333
-"1251","GASOLINE",4.76,22,21,"The Colony","US",33.044995,-96.919791,"TX","1254248",84,NA,"QX","suv",2013,"Dallas-Fort Worth","Good",7,"Yes",264,3.14285714285714
+"1251","GASOLINE",4.76,22,21,"The Colony","US",33.044995,-96.919791,"TX","1254248",84,"Infiniti","QX","suv",2013,"Dallas-Fort Worth","Good",7,"Yes",264,3.14285714285714
 "1252","GASOLINE",5,3,3,"Frisco","US",33.14445,-96.888395,"TX","10999370",100,"BMW","7 Series","car",2014,"Dallas-Fort Worth","Good",6,"Yes",50,0.5
 "1253","GASOLINE",4.84,46,37,"Frisco","US",33.118227,-96.842208,"TX","3156071",30,"Chevrolet","Malibu","car",2015,"Dallas-Fort Worth","Good",5,"Yes",276,9.2
 "1254","GASOLINE",5,23,22,"Fort Worth","US",32.931007,-97.297193,"TX","644724",25,"Toyota","Camry","car",2014,"Dallas-Fort Worth","Good",6,"Yes",95.8333333333333,3.83333333333333
@@ -1285,7 +1285,7 @@
 "1284","ELECTRIC",5,59,53,"Clarkston","US",42.762493,-83.424309,"MI","3109747",143,"Tesla","Model S","car",2017,"Detroit","Good",3,"Yes",2812.33333333333,19.6666666666667
 "1285","GASOLINE",5,8,7,"Franklin","US",42.529212,-83.318589,"MI","10551755",79,"Toyota","4Runner","suv",2019,"Detroit","Good",1,"Yes",632,8
 "1286","GASOLINE",4.88,224,195,"Southfield","US",42.472476,-83.238684,"MI","1370302",99,"Dodge","Challenger","car",2017,"Detroit","Good",3,"Yes",7392,74.6666666666667
-"1287","GASOLINE",4.94,40,35,"Canton","US",42.290317,-83.434152,"MI","8854619",69,NA,"Q50","car",2015,"Detroit","Good",5,"Yes",552,8
+"1287","GASOLINE",4.94,40,35,"Canton","US",42.290317,-83.434152,"MI","8854619",69,"Infiniti","Q50","car",2015,"Detroit","Good",5,"Yes",552,8
 "1288","GASOLINE",4.98,75,60,"Macomb","US",42.633433,-82.92401,"MI","6761489",95,"Dodge","Ram 1500","truck",2019,"Detroit","Good",1,"Yes",7125,75
 "1289","ELECTRIC",4.83,26,23,"Troy","US",42.592869,-83.110456,"MI","1932769",199,"Tesla","Model 3","car",2018,"Detroit","Good",2,"Yes",2587,13
 "1290","GASOLINE",5,18,17,"Canton","US",42.290494,-83.434639,"MI","8854619",74,"Chevrolet","Traverse","suv",2020,"Detroit","Good",0,"Yes",1332,18
@@ -1468,7 +1468,7 @@
 "1467","GASOLINE",5,1,1,"Lincoln Park","US",40.922243,-74.3137,"NJ","15729829",65,"Jeep","Cherokee","suv",2017,"Newark","Good",3,"Yes",21.6666666666667,0.333333333333333
 "1468","GASOLINE",5,12,9,"Fair Lawn","US",40.928057,-74.116063,"NJ","1319433",299,"BMW","M-Series","car",2020,"Newark","Good",0,"Yes",3588,12
 "1469","GASOLINE",5,31,28,"Linden","US",40.644713,-74.235281,"NJ","3644270",83,"Toyota","Sienna","minivan",2015,"Newark","Good",5,"Yes",514.6,6.2
-"1470","GASOLINE",5,14,13,"Elizabeth","US",40.665779,-74.226902,"NJ","8497550",125,NA,"Q50","car",2015,"Newark","Good",5,"Yes",350,2.8
+"1470","GASOLINE",5,14,13,"Elizabeth","US",40.665779,-74.226902,"NJ","8497550",125,"Infiniti","Q50","car",2015,"Newark","Good",5,"Yes",350,2.8
 "1471","GASOLINE",5,0,0,"Jersey City","US",40.727596,-74.034103,"NJ","844760",158,"Jeep","Wrangler","suv",2015,"Newark","Good",5,"Not",0,0
 "1472","GASOLINE",4.93,15,14,"Jersey City","US",40.715132,-74.032675,"NJ","747774",86,"Dodge","Ram 1500","truck",2019,"Newark","Good",1,"Yes",1290,15
 "1473","GASOLINE",5,5,5,"Jersey City","US",40.738469,-74.058781,"NJ","3533385",160,"BMW","5-Series","car",2019,"Newark","Good",1,"Yes",800,5
@@ -1731,7 +1731,7 @@
 "1730","GASOLINE",5,4,4,"Herndon","US",38.947868,-77.419451,"VA","7686658",39,"Dodge","Charger","car",2015,"Washington","Good",5,"Yes",31.2,0.8
 "1731","HYBRID",4.93,79,70,"Sterling","US",39.004159,-77.40485,"VA","449378",53,"Chevrolet","Volt","car",2017,"Washington","Good",3,"Yes",1395.66666666667,26.3333333333333
 "1732","GASOLINE",5,4,4,"Herndon","US",38.920411,-77.419817,"VA","1978026",79,"Jeep","Gladiator","truck",2020,"Washington","Good",0,"Yes",316,4
-"1733","GASOLINE",5,1,1,"Ashburn","US",39.016959,-77.455915,"VA","12805246",90,NA,"QX60","suv",2014,"Washington","Good",6,"Yes",15,0.166666666666667
+"1733","GASOLINE",5,1,1,"Ashburn","US",39.016959,-77.455915,"VA","12805246",90,"Infiniti","QX60","suv",2014,"Washington","Good",6,"Yes",15,0.166666666666667
 "1734","GASOLINE",5,40,35,"Ashburn","US",39.049612,-77.512478,"VA","8635851",55,"Mazda","CX-9","suv",2019,"Washington","Good",1,"Yes",2200,40
 "1735","GASOLINE",5,11,10,"Herndon","US",38.947197,-77.418757,"VA","7686658",37,"Dodge","Grand Caravan","minivan",2014,"Washington","Good",6,"Yes",67.8333333333333,1.83333333333333
 "1736","GASOLINE",4.96,63,57,"Herndon","US",38.946946,-77.417943,"VA","7686658",26,"Kia","Forte","car",2010,"Washington","Good",10,"Yes",163.8,6.3
@@ -1798,7 +1798,7 @@
 "1797","GASOLINE",4.56,99,81,"Spring","US",30.081953,-95.51353,"TX","1509509",90,"Audi","A7","car",2014,"Houston","Good",6,"Yes",1485,16.5
 "1798","GASOLINE",5,6,6,"Houston","US",30.009574,-95.486252,"TX","11109982",199,"Lexus","LX","suv",2019,"Houston","Good",1,"Yes",1194,6
 "1799","GASOLINE",5,0,0,"Houston","US",29.938712,-95.50321,"TX","15674386",36,"Toyota","Sienna","minivan",2012,"Houston","Good",8,"Not",0,0
-"1800","GASOLINE",5,3,3,"Houston","US",29.765308,-95.625622,"TX","15590505",63,NA,"Q50","car",2014,"Houston","Good",6,"Yes",31.5,0.5
+"1800","GASOLINE",5,3,3,"Houston","US",29.765308,-95.625622,"TX","15590505",63,"Infiniti","Q50","car",2014,"Houston","Good",6,"Yes",31.5,0.5
 "1801","GASOLINE",4.89,60,55,"Houston","US",30.019431,-95.381066,"TX","5887443",45,"Jeep","Renegade","suv",2015,"Houston","Good",5,"Yes",540,12
 "1802","GASOLINE",5,0,0,"Houston","US",29.726611,-95.530274,"TX","15752022",38,"Hyundai","Elantra","car",2020,"Houston","Good",0,"Not",0,0
 "1803","GASOLINE",5,0,0,"Houston","US",29.966075,-95.431423,"TX","11372697",60,"Cadillac","XTS","car",2017,"Houston","Good",3,"Not",0,0
@@ -1810,7 +1810,7 @@
 "1809","GASOLINE",5,20,16,"Cypress","US",29.883712,-95.689757,"TX","6989230",44,"Honda","Odyssey","minivan",2013,"Houston","Good",7,"Yes",125.714285714286,2.85714285714286
 "1810","GASOLINE",4.84,76,64,"Houston","US",30.019797,-95.379648,"TX","5887443",39,"Toyota","RAV4","suv",2012,"Houston","Good",8,"Yes",370.5,9.5
 "1811","GASOLINE",5,6,5,"Conroe","US",30.246392,-95.411355,"TX","11032884",44,"Nissan","Versa Note","car",2015,"Houston","Good",5,"Yes",52.8,1.2
-"1812","GASOLINE",5,10,9,"Houston","US",29.797432,-95.550889,"TX","3219842",75,NA,"Q50","car",2018,"Houston","Good",2,"Yes",375,5
+"1812","GASOLINE",5,10,9,"Houston","US",29.797432,-95.550889,"TX","3219842",75,"Infinitti","Q50","car",2018,"Houston","Good",2,"Yes",375,5
 "1813","GASOLINE",4.87,46,39,"Houston","US",30.017949,-95.381122,"TX","5887443",42,"Chevrolet","Equinox","suv",2015,"Houston","Good",5,"Yes",386.4,9.2
 "1814","GASOLINE",4.86,95,87,"Houston","US",30.019478,-95.381222,"TX","5887443",29,"Scion","tC","car",2011,"Houston","Good",9,"Yes",306.111111111111,10.5555555555556
 "1815","GASOLINE",4.83,129,115,"Houston","US",30.018172,-95.381861,"TX","5887443",29,"Chevrolet","Cruze","car",2014,"Houston","Good",6,"Yes",623.5,21.5
@@ -1888,7 +1888,7 @@
 "1887","GASOLINE",5,0,0,"Indianapolis","US",39.821984,-86.142248,"IN","8659984",90,"Dodge","Charger","car",2019,"Indianapolis","Good",1,"Not",0,0
 "1888","GASOLINE",4.96,54,50,"Indianapolis","US",39.745745,-86.024926,"IN","9658409",38,"Ford","Escape","suv",2015,"Indianapolis","Good",5,"Yes",410.4,10.8
 "1889","GASOLINE",4.92,16,13,"Indianapolis","US",39.85099,-86.343984,"IN","2323318",39,"Chevrolet","Cruze","car",2015,"Indianapolis","Good",5,"Yes",124.8,3.2
-"1890","GASOLINE",5,8,7,"Fishers","US",39.941928,-85.977328,"IN","37775",36,NA,"G Sedan","car",2012,"Indianapolis","Good",8,"Yes",36,1
+"1890","GASOLINE",5,8,7,"Fishers","US",39.941928,-85.977328,"IN","37775",36,"Infiniti","G Sedan","car",2012,"Indianapolis","Good",8,"Yes",36,1
 "1891","GASOLINE",5,29,29,"Plainfield","US",39.705851,-86.367329,"IN","13001642",43,"Chevrolet","Equinox","suv",2019,"Indianapolis","Good",1,"Yes",1247,29
 "1892","GASOLINE",5,25,22,"Plainfield","US",39.707095,-86.366462,"IN","13001642",40,"Chevrolet","Trax","suv",2019,"Indianapolis","Good",1,"Yes",1000,25
 "1893","ELECTRIC",5,11,10,"Jacksonville","US",30.253989,-81.53693,"FL","8690885",125,"Tesla","Model 3","car",2018,"Jacksonville","Good",2,"Yes",687.5,5.5
@@ -2024,7 +2024,7 @@
 "2023","GASOLINE",4.94,37,34,"Las Vegas","US",36.294373,-115.284889,"NV","4305065",80,"BMW","4 Series","car",2016,"Las Vegas","Good",4,"Yes",740,9.25
 "2024","GASOLINE",5,147,127,"Las Vegas","US",36.0674,-115.17551,"NV","1670971",35,"Toyota","Corolla","car",2017,"Las Vegas","Good",3,"Yes",1715,49
 "2025","GASOLINE",4.57,8,7,"Las Vegas","US",36.102854,-115.230161,"NV","1270430",108,"BMW","7 Series","car",2013,"Las Vegas","Good",7,"Yes",123.428571428571,1.14285714285714
-"2026","GASOLINE",5,32,31,"Las Vegas","US",36.119725,-115.218727,"NV","1059858",89,NA,"QX50","suv",2019,"Las Vegas","Good",1,"Yes",2848,32
+"2026","GASOLINE",5,32,31,"Las Vegas","US",36.119725,-115.218727,"NV","1059858",89,"Infiniti","QX50","suv",2019,"Las Vegas","Good",1,"Yes",2848,32
 "2027","GASOLINE",5,9,5,"Las Vegas","US",36.216302,-115.26702,"NV","11481157",125,"Alfa Romeo","4C","car",2016,"Las Vegas","Good",4,"Yes",281.25,2.25
 "2028","ELECTRIC",5,6,5,"Las Vegas","US",36.129563,-115.157117,"NV","15524839",134,"Tesla","Model 3","car",2018,"Las Vegas","Good",2,"Yes",402,3
 "2029","HYBRID",5,55,47,"Las Vegas","US",36.093421,-115.296466,"NV","2434410",294,"BMW","i8","car",2016,"Las Vegas","Good",4,"Yes",4042.5,13.75
@@ -2146,7 +2146,7 @@
 "2145","GASOLINE",4.33,3,3,"Las Vegas","US",36.157411,-115.333377,"NV","5043236",499,"Audi","R8","car",2009,"Las Vegas","Bad",11,"Yes",136.090909090909,0.272727272727273
 "2146","GASOLINE",4.89,77,53,"Las Vegas","US",36.108616,-115.095191,"NV","3158270",78,"Mercedes-Benz","Metris","minivan",2016,"Las Vegas","Good",4,"Yes",1501.5,19.25
 "2147","GASOLINE",4.97,79,70,"Las Vegas","US",36.271684,-115.228024,"NV","6378517",75,"Mercedes-Benz","SLK-Class","car",2014,"Las Vegas","Good",6,"Yes",987.5,13.1666666666667
-"2148","GASOLINE",5,12,12,"Las Vegas","US",36.136774,-115.233119,"NV","12233184",69,NA,"QX60","suv",2018,"Las Vegas","Good",2,"Yes",414,6
+"2148","GASOLINE",5,12,12,"Las Vegas","US",36.136774,-115.233119,"NV","12233184",69,"Infinitti","QX60","suv",2018,"Las Vegas","Good",2,"Yes",414,6
 "2149","GASOLINE",4.95,174,153,"Las Vegas","US",36.041784,-115.165006,"NV","3238496",99,"Chevrolet","Corvette","car",2017,"Las Vegas","Good",3,"Yes",5742,58
 "2150","GASOLINE",4.57,8,7,"Henderson","US",36.077377,-115.080343,"NV","10942396",250,"Maserati","Ghibli","car",2016,"Las Vegas","Good",4,"Yes",500,2
 "2151","GASOLINE",5,0,0,"Las Vegas","US",36.013479,-115.158434,"NV","3882222",45,"Dodge","Avenger","car",2013,"Las Vegas","Good",7,"Not",0,0
@@ -2440,7 +2440,7 @@
 "2439","GASOLINE",5,31,27,"Orlando","US",28.497817,-81.322844,"FL","9482137",40,"Nissan","Rogue","suv",2018,"Orlando","Good",2,"Yes",620,15.5
 "2440","ELECTRIC",5,46,41,"Kissimmee","US",28.334663,-81.472404,"FL","11249833",110,"Tesla","Model 3","car",2019,"Orlando","Good",1,"Yes",5060,46
 "2441","GASOLINE",5,17,16,"Davenport","US",28.207784,-81.631091,"FL","9112918",74,"Mercedes-Benz","C-Class","car",2016,"Orlando","Good",4,"Yes",314.5,4.25
-"2442","GASOLINE",5,0,0,"Orlando","US",28.497629,-81.323425,"FL","9482137",70,NA,"QX60","suv",2019,"Orlando","Good",1,"Not",0,0
+"2442","GASOLINE",5,0,0,"Orlando","US",28.497629,-81.323425,"FL","9482137",70,"Infiniti","QX60","suv",2019,"Orlando","Good",1,"Not",0,0
 "2443","GASOLINE",5,23,20,"Orlando","US",28.432377,-81.308345,"FL","7342780",65,"Mercedes-Benz","GLK-Class","suv",2015,"Orlando","Good",5,"Yes",299,4.6
 "2444","GASOLINE",4.96,31,28,"Orlando","US",28.370554,-81.237552,"FL","8628052",69,"BMW","X5","suv",2012,"Orlando","Good",8,"Yes",267.375,3.875
 "2445","GASOLINE",5,44,42,"Orlando","US",28.371477,-81.240153,"FL","8628052",99,"Mercedes-Benz","C-Class","car",2014,"Orlando","Good",6,"Yes",726,7.33333333333333
@@ -2519,7 +2519,7 @@
 "2518","GASOLINE",4.87,80,69,"Chicago","US",41.776768,-87.753291,"IL","6380860",44,"Honda","Accord","car",2017,"Chicago","Good",3,"Yes",1173.33333333333,26.6666666666667
 "2519","GASOLINE",5,10,9,"Willowbrook","US",41.719273,-87.946732,"IL","2578132",62,"Volvo","V60","car",2016,"Chicago","Good",4,"Yes",155,2.5
 "2520","GASOLINE",4.85,31,26,"Willowbrook","US",41.718387,-87.945189,"IL","2578132",70,"Volvo","XC60","suv",2020,"Chicago","Good",0,"Yes",2170,31
-"2521","GASOLINE",5,3,3,"Countryside","US",41.785354,-87.867161,"IL","6528464",90,NA,"QX50","suv",2019,"Chicago","Good",1,"Yes",270,3
+"2521","GASOLINE",5,3,3,"Countryside","US",41.785354,-87.867161,"IL","6528464",90,"Infiniti","QX50","suv",2019,"Chicago","Good",1,"Yes",270,3
 "2522","GASOLINE",4.88,33,32,"Chicago","US",41.80821,-87.753048,"IL","2578132",80,"Jeep","Wrangler","suv",2018,"Chicago","Good",2,"Yes",1320,16.5
 "2523","ELECTRIC",4.95,21,20,"Oak Lawn","US",41.730493,-87.762827,"IL","7004728",135,"Tesla","Model 3","car",2018,"Chicago","Good",2,"Yes",1417.5,10.5
 "2524","GASOLINE",5,0,0,"Woodridge","US",41.734545,-88.060596,"IL","870099",75,"Ram","1500","truck",2014,"Chicago","Good",6,"Not",0,0
@@ -2542,7 +2542,7 @@
 "2541","GASOLINE",5,0,0,"Oak Lawn","US",41.718003,-87.739456,"IL","94780",180,"Audi","Q7","suv",2017,"Chicago","Good",3,"Not",0,0
 "2542","GASOLINE",4.5,18,16,"Willowbrook","US",41.718639,-87.945869,"IL","2578132",36,"Volkswagen","Passat","car",2014,"Chicago","Good",6,"Yes",108,3
 "2543","GASOLINE",4.75,18,16,"Hammond","US",41.630508,-87.507368,"IN","9003653",89,"Chevrolet","Traverse","suv",2018,"Chicago","Good",2,"Yes",801,9
-"2544","GASOLINE",5,44,35,"Chicago Ridge","US",41.700592,-87.779583,"IL","3242882",75,NA,"QX60","suv",2015,"Chicago","Good",5,"Yes",660,8.8
+"2544","GASOLINE",5,44,35,"Chicago Ridge","US",41.700592,-87.779583,"IL","3242882",75,"Infiniti","QX60","suv",2015,"Chicago","Good",5,"Yes",660,8.8
 "2545","GASOLINE",5,4,3,"Lansing","US",41.562848,-87.567249,"IL","3828976",45,"Nissan","Rogue","suv",2013,"Chicago","Good",7,"Yes",25.7142857142857,0.571428571428571
 "2546","GASOLINE",5,5,5,"Chicago","US",41.889128,-87.65171,"IL","3721124",89,"BMW","1 Series","car",2011,"Chicago","Good",9,"Yes",49.4444444444444,0.555555555555556
 "2547","GASOLINE",4.92,81,60,"Joliet","US",41.539211,-88.14883,"IL","203509",47,"Kia","Forte","car",2014,"Chicago","Good",6,"Yes",634.5,13.5
@@ -2558,7 +2558,7 @@
 "2557","GASOLINE",4.92,44,40,"Chicago","US",41.901489,-87.706982,"IL","2049133",38,"Hyundai","Accent","car",2017,"Chicago","Good",3,"Yes",557.333333333333,14.6666666666667
 "2558","GASOLINE",5,0,0,"Joliet","US",41.529394,-88.072457,"IL","2736515",70,"Mercedes-Benz","GLK-Class","suv",2014,"Chicago","Good",6,"Not",0,0
 "2559","GASOLINE",4.93,33,30,"Chicago","US",41.807765,-87.750686,"IL","2578132",35,"Chevrolet","Spark","car",2013,"Chicago","Good",7,"Yes",165,4.71428571428571
-"2560","GASOLINE",4.96,26,25,"Chicago","US",41.733567,-87.623147,"IL","1721129",61,NA,"JX","suv",2013,"Chicago","Good",7,"Yes",226.571428571429,3.71428571428571
+"2560","GASOLINE",4.96,26,25,"Chicago","US",41.733567,-87.623147,"IL","1721129",61,"Infiniti","JX","suv",2013,"Chicago","Good",7,"Yes",226.571428571429,3.71428571428571
 "2561","HYBRID",5,52,48,"Addison","US",41.912444,-87.991335,"IL","4886470",29,"Toyota","Prius","car",2006,"Chicago","Good",14,"Yes",107.714285714286,3.71428571428571
 "2562","GASOLINE",4.81,117,100,"Chicago","US",41.985804,-87.839193,"IL","1139985",62,"Mazda","CX-9","suv",2014,"Chicago","Good",6,"Yes",1209,19.5
 "2563","GASOLINE",5,9,8,"Chicago","US",41.733186,-87.62357,"IL","1721129",65,"Lexus","ES 350","car",2014,"Chicago","Good",6,"Yes",97.5,1.5
@@ -2709,7 +2709,7 @@
 "2708","GASOLINE",4.98,57,51,"Miami","US",25.829912,-80.205275,"FL","1199274",62,"BMW","3 Series","car",2016,"Miami","Good",4,"Yes",883.5,14.25
 "2709","GASOLINE",5,3,2,"Miami","US",25.79917,-80.260927,"FL","1506983",40,"Nissan","Versa","car",2020,"Miami","Good",0,"Yes",120,3
 "2710","GASOLINE",5,4,4,"Miami","US",25.693526,-80.307854,"FL","15491525",94,"Audi","A6","car",2016,"Miami","Good",4,"Yes",94,1
-"2711","GASOLINE",5,2,1,"Miami","US",25.771438,-80.193388,"FL","7932025",68,NA,"QX60","suv",2016,"Miami","Good",4,"Yes",34,0.5
+"2711","GASOLINE",5,2,1,"Miami","US",25.771438,-80.193388,"FL","7932025",68,"Infiniti","QX60","suv",2016,"Miami","Good",4,"Yes",34,0.5
 "2712","GASOLINE",5,43,39,"Miami","US",25.782873,-80.189905,"FL","7844220",105,"Maserati","Quattroporte","car",2015,"Miami","Good",5,"Yes",903,8.6
 "2713","GASOLINE",4.9,99,87,"Miami","US",25.75117,-80.215526,"FL","1539115",108,"Ford","Mustang","car",2018,"Miami","Good",2,"Yes",5346,49.5
 "2714","GASOLINE",5,2,1,"Miami","US",25.629158,-80.428331,"FL","12936970",82,"Nissan","Armada","suv",2017,"Miami","Good",3,"Yes",54.6666666666667,0.666666666666667
@@ -2785,7 +2785,7 @@
 "2784","ELECTRIC",4.9,35,30,"Saint Paul","US",44.909277,-93.089472,"MN","9651540",150,"Tesla","Model S","car",2015,"Minneapolis","Good",5,"Yes",1050,7
 "2785","GASOLINE",5,61,55,"Minneapolis","US",44.952128,-93.227287,"MN","1813178",50,"Toyota","RAV4","suv",2018,"Minneapolis","Good",2,"Yes",1525,30.5
 "2786","GASOLINE",5,9,7,"Apple Valley","US",44.739069,-93.200508,"MN","4990829",74,"Mercedes-Benz","C-Class","car",2016,"Minneapolis","Good",4,"Yes",166.5,2.25
-"2787","GASOLINE",5,0,0,"Minneapolis","US",44.963311,-93.275376,"MN","4154429",45,NA,"G35","car",2008,"Minneapolis","Good",12,"Not",0,0
+"2787","GASOLINE",5,0,0,"Minneapolis","US",44.963311,-93.275376,"MN","4154429",45,"Infiniti","G35","car",2008,"Minneapolis","Good",12,"Not",0,0
 "2788","GASOLINE",4.93,15,14,"Burnsville","US",44.743966,-93.268099,"MN","8935158",42,"Jeep","Patriot","suv",2014,"Minneapolis","Good",6,"Yes",105,2.5
 "2789","ELECTRIC",5,9,7,"Mahtomedi","US",45.056615,-92.959264,"MN","10630565",133,"Tesla","Model S","car",2015,"Minneapolis","Good",5,"Yes",239.4,1.8
 "2790","GASOLINE",5,17,16,"Saint Paul","US",44.918801,-93.189439,"MN","10906159",119,"Volkswagen","Atlas","suv",2018,"Minneapolis","Good",2,"Yes",1011.5,8.5
@@ -3109,7 +3109,7 @@
 "3108","GASOLINE",5,34,31,"El Monte","US",34.090838,-118.055012,"CA","6732603",300,"Alfa Romeo","4C","car",2015,"Ontario","Good",5,"Yes",2040,6.8
 "3109","ELECTRIC",5,20,20,"Corona","US",33.848022,-117.589211,"CA","9192056",99,"Tesla","Model 3","car",2018,"Ontario","Good",2,"Yes",990,10
 "3110","GASOLINE",4.9,76,72,"Azusa","US",34.127844,-117.891292,"CA","4229573",38,"Toyota","Camry","car",2018,"Ontario","Good",2,"Yes",1444,38
-"3111","GASOLINE",5,5,3,"West Covina","US",34.068899,-117.924696,"CA","11572934",88,NA,"QX80","suv",2016,"Ontario","Good",4,"Yes",110,1.25
+"3111","GASOLINE",5,5,3,"West Covina","US",34.068899,-117.924696,"CA","11572934",88,"Infiniti","QX80","suv",2016,"Ontario","Good",4,"Yes",110,1.25
 "3112","HYBRID",5,0,0,"Azusa","US",34.126514,-117.8936,"CA","4229573",42,"Toyota","Camry","car",2020,"Ontario","Good",0,"Not",0,0
 "3113","GASOLINE",5,6,5,"El Monte","US",34.063043,-118.019152,"CA","6348320",110,"Mercedes-Benz","C-Class","car",2019,"Ontario","Good",1,"Yes",660,6
 "3114","HYBRID",4.79,176,128,"Gardena","US",33.865125,-118.281533,"CA","3248814",239,"BMW","i8","car",2015,"Ontario","Good",5,"Yes",8412.8,35.2
@@ -3340,7 +3340,7 @@
 "3339","GASOLINE",4.96,29,24,"Margate","US",26.261756,-80.199521,"FL","2619030",35,"Ford","Focus","car",2016,"West Palm Beach","Good",4,"Yes",253.75,7.25
 "3340","GASOLINE",5,1,0,"Delray Beach","US",26.456594,-80.140233,"FL","1689194",122,"Jeep","Gladiator","truck",2020,"West Palm Beach","Good",0,"Yes",122,1
 "3341","GASOLINE",4.86,51,43,"Miramar","US",25.994661,-80.214707,"FL","3772816",79,"Land Rover","Range Rover Evoque","suv",2013,"West Palm Beach","Good",7,"Yes",575.571428571429,7.28571428571429
-"3342","GASOLINE",5,0,0,"Deerfield Beach","US",26.320183,-80.126889,"FL","5176222",60,NA,"QX60","suv",2014,"West Palm Beach","Good",6,"Not",0,0
+"3342","GASOLINE",5,0,0,"Deerfield Beach","US",26.320183,-80.126889,"FL","5176222",60,"Infiniti","QX60","suv",2014,"West Palm Beach","Good",6,"Not",0,0
 "3343","GASOLINE",4.96,64,55,"Miami Beach","US",25.817311,-80.121301,"FL","3237409",141,"Land Rover","Range Rover Sport","suv",2014,"West Palm Beach","Good",6,"Yes",1504,10.6666666666667
 "3344","GASOLINE",5,29,25,"Boca Raton","US",26.345833,-80.141303,"FL","9701822",55,"Ford","Mustang","car",2018,"West Palm Beach","Good",2,"Yes",797.5,14.5
 "3345","GASOLINE",4.93,39,30,"Boca Raton","US",26.344954,-80.14086,"FL","9701822",55,"Ford","Mustang","car",2018,"West Palm Beach","Good",2,"Yes",1072.5,19.5
@@ -3961,7 +3961,7 @@
 "3960","GASOLINE",5,58,54,"Mansfield","US",42.031725,-71.219047,"MA","793893",115,"BMW","4 Series","car",2016,"Providence","Good",4,"Yes",1667.5,14.5
 "3961","GASOLINE",5,40,36,"Boston","US",42.329235,-71.059363,"MA","255027",99,"Mercedes-Benz","GLC-Class","suv",2016,"Providence","Good",4,"Yes",990,10
 "3962","ELECTRIC",5,22,22,"Mansfield","US",42.029734,-71.219704,"MA","11338618",119,"Tesla","Model 3","car",2019,"Providence","Good",1,"Yes",2618,22
-"3963","GASOLINE",5,2,1,"East Providence","US",41.758401,-71.357164,"RI","8497550",93,NA,"Q50","car",2016,"Providence","Good",4,"Yes",46.5,0.5
+"3963","GASOLINE",5,2,1,"East Providence","US",41.758401,-71.357164,"RI","8497550",93,"Infiniti","Q50","car",2016,"Providence","Good",4,"Yes",46.5,0.5
 "3964","ELECTRIC",5,5,4,"Mansfield","US",42.032616,-71.217424,"MA","793893",135,"Tesla","Model 3","car",2020,"Providence","Good",0,"Yes",675,5
 "3965","ELECTRIC",5,28,26,"North Kingstown","US",41.628221,-71.444823,"RI","2136658",164,"Tesla","Model 3","car",2018,"Providence","Good",2,"Yes",2296,14
 "3966","ELECTRIC",5,19,12,"Medway","US",42.155492,-71.393811,"MA","10025021",100,"Tesla","Model 3","car",2018,"Providence","Good",2,"Yes",950,9.5
@@ -4075,8 +4075,8 @@
 "4074","GASOLINE",4.84,141,98,"Raleigh","US",35.789468,-78.658801,"NC","640470",26,"Buick","LaCrosse","car",2007,"Raleigh/Durham","Good",13,"Yes",282,10.8461538461538
 "4075","GASOLINE",5,20,12,"Raleigh","US",35.860465,-78.715964,"NC","5821612",43,"Jeep","Cherokee","suv",2015,"Raleigh/Durham","Good",5,"Yes",172,4
 "4076","GASOLINE",4.96,32,28,"Cary","US",35.78897,-78.830858,"NC","4229417",50,"Ford","F-150","truck",2013,"Raleigh/Durham","Good",7,"Yes",228.571428571429,4.57142857142857
-"4077","GASOLINE",5,9,9,"Raleigh","US",35.901236,-78.554284,"NC","8760328",52,NA,"JX","suv",2013,"Raleigh/Durham","Good",7,"Yes",66.8571428571429,1.28571428571429
-"4078","GASOLINE",4.6,11,10,"Rocky Mount","US",36.036803,-77.773805,"NC","1484412",75,NA,"QX50","suv",2019,"Raleigh/Durham","Good",1,"Yes",825,11
+"4077","GASOLINE",5,9,9,"Raleigh","US",35.901236,-78.554284,"NC","8760328",52,"Infiniti","JX","suv",2013,"Raleigh/Durham","Good",7,"Yes",66.8571428571429,1.28571428571429
+"4078","GASOLINE",4.6,11,10,"Rocky Mount","US",36.036803,-77.773805,"NC","1484412",75,"Infiniti","QX50","suv",2019,"Raleigh/Durham","Good",1,"Yes",825,11
 "4079","GASOLINE",4.91,38,32,"Morrisville","US",35.886816,-78.833277,"NC","12073494",39,"Honda","Accord","car",2013,"Raleigh/Durham","Good",7,"Yes",211.714285714286,5.42857142857143
 "4080","GASOLINE",5,16,12,"Morrisville","US",35.886738,-78.832284,"NC","12073494",69,"Audi","A3","car",2019,"Raleigh/Durham","Good",1,"Yes",1104,16
 "4081","GASOLINE",4.85,28,27,"Morrisville","US",35.888745,-78.831486,"NC","12073494",47,"Lexus","IS 250","car",2012,"Raleigh/Durham","Good",8,"Yes",164.5,3.5
@@ -4157,7 +4157,7 @@
 "4156","GASOLINE",5,10,10,"Reno","US",39.528678,-119.890753,"NV","10985569",100,"BMW","X3","suv",2015,"Reno","Good",5,"Yes",200,2
 "4157","GASOLINE",4.88,19,17,"Reno","US",39.470009,-119.780696,"NV","6449798",67,"Dodge","Durango","suv",2013,"Reno","Good",7,"Yes",181.857142857143,2.71428571428571
 "4158","GASOLINE",5,12,11,"Reno","US",39.50975,-119.80334,"NV","11995094",60,"Ford","Escape","suv",2011,"Reno","Good",9,"Yes",80,1.33333333333333
-"4159","HYBRID",5,7,6,"Reno","US",39.425132,-119.729935,"NV","7731521",75,NA,"Q50","car",2014,"Reno","Good",6,"Yes",87.5,1.16666666666667
+"4159","HYBRID",5,7,6,"Reno","US",39.425132,-119.729935,"NV","7731521",75,"Infiniti","Q50","car",2014,"Reno","Good",6,"Yes",87.5,1.16666666666667
 "4160","GASOLINE",4.85,21,13,"Stateline","US",38.962361,-119.941492,"NV","3659512",130,"Dodge","Grand Caravan","minivan",2014,"Reno","Good",6,"Yes",455,3.5
 "4161","GASOLINE",4.64,18,14,"Incline Village","US",39.239836,-119.94194,"NV","9552456",61,"Volkswagen","Jetta","car",2019,"Reno","Good",1,"Yes",1098,18
 "4162","GASOLINE",5,0,0,"Sparks","US",39.61609,-119.682032,"NV","786007",450,"Audi","SQ5","suv",2019,"Reno","Good",1,"Not",0,0
@@ -4798,7 +4798,7 @@
 "4797","GASOLINE",5,0,0,"San Francisco","US",37.748988,-122.389421,"CA","11584909",220,"Mercedes-Benz","S-Class","car",2018,"San Francisco","Good",2,"Not",0,0
 "4798","ELECTRIC",4.94,83,70,"San Mateo","US",37.541045,-122.30839,"CA","1682069",74,"Tesla","Model S","car",2015,"San Francisco","Good",5,"Yes",1228.4,16.6
 "4799","ELECTRIC",4.47,25,19,"San Francisco","US",37.762646,-122.398954,"CA","2132981",99,"Tesla","Model S","car",2013,"San Francisco","Bad",7,"Yes",353.571428571429,3.57142857142857
-"4800","GASOLINE",5,9,8,"San Mateo","US",37.521252,-122.330372,"CA","5318280",90,NA,"QX60","suv",2016,"San Francisco","Good",4,"Yes",202.5,2.25
+"4800","GASOLINE",5,9,8,"San Mateo","US",37.521252,-122.330372,"CA","5318280",90,"Infiniti","QX60","suv",2016,"San Francisco","Good",4,"Yes",202.5,2.25
 "4801","GASOLINE",4.92,44,39,"South San Francisco","US",37.64076,-122.403989,"CA","1122675",198,"Porsche","Macan","suv",2015,"San Francisco","Good",5,"Yes",1742.4,8.8
 "4802","GASOLINE",4.94,20,18,"Burlingame","US",37.591536,-122.338554,"CA","1421068",89,"Toyota","4Runner","suv",2019,"San Francisco","Good",1,"Yes",1780,20
 "4803","GASOLINE",5,90,77,"South San Francisco","US",37.641523,-122.404658,"CA","1122675",198,"Porsche","Macan","suv",2015,"San Francisco","Good",5,"Yes",3564,18
@@ -4839,7 +4839,7 @@
 "4838","ELECTRIC",4.97,36,34,"San Jose","US",37.236292,-121.796013,"CA","10927183",99,"Tesla","Model S","car",2017,"San Jose","Good",3,"Yes",1188,12
 "4839","GASOLINE",5,2,2,"San Jose","US",37.318992,-121.976264,"CA","1920261",30,"Honda","Odyssey","minivan",2008,"San Jose","Good",12,"Yes",5,0.166666666666667
 "4840","GASOLINE",5,5,5,"San Jose","US",37.406713,-121.940476,"CA","4631371",130,"Audi","S5","car",2018,"San Jose","Good",2,"Yes",325,2.5
-"4841","GASOLINE",5,28,27,"San Jose","US",37.402377,-121.86187,"CA","5669087",69,NA,"QX60","suv",2016,"San Jose","Good",4,"Yes",483,7
+"4841","GASOLINE",5,28,27,"San Jose","US",37.402377,-121.86187,"CA","5669087",69,"Infiniti","QX60","suv",2016,"San Jose","Good",4,"Yes",483,7
 "4842","GASOLINE",5,7,7,"Santa Clara","US",37.326,-121.971975,"CA","12716289",70,"Mazda","MX-5 Miata","car",2016,"San Jose","Good",4,"Yes",122.5,1.75
 "4843","ELECTRIC",5,12,12,"Cupertino","US",37.32693,-122.005416,"CA","12716289",70,"Tesla","Model 3","car",2017,"San Jose","Good",3,"Yes",280,4
 "4844","ELECTRIC",5,11,8,"San Jose","US",37.399094,-121.924493,"CA","7794282",89,"Tesla","Model S","car",2013,"San Jose","Good",7,"Yes",139.857142857143,1.57142857142857
@@ -4876,7 +4876,7 @@
 "4875","GASOLINE",5,14,12,"San Jose","US",37.330328,-121.887143,"CA","177704",55,"BMW","3 Series","car",2011,"San Jose","Good",9,"Yes",85.5555555555556,1.55555555555556
 "4876","GASOLINE",5,4,4,"San Jose","US",37.309761,-121.91739,"CA","10146724",240,"Porsche","718 Cayman","car",2018,"San Jose","Good",2,"Yes",480,2
 "4877","GASOLINE",4.4,8,5,"Palo Alto","US",37.417321,-122.131238,"CA","3163110",79,"Tesla","Model 3","car",2019,"San Jose","Bad",1,"Yes",632,8
-"4878","GASOLINE",4.75,64,53,"Sunnyvale","US",37.372723,-122.050297,"CA","2495397",49,NA,"Q50","car",2018,"San Jose","Good",2,"Yes",1568,32
+"4878","GASOLINE",4.75,64,53,"Sunnyvale","US",37.372723,-122.050297,"CA","2495397",49,"Infinitti","Q50","car",2018,"San Jose","Good",2,"Yes",1568,32
 "4879","GASOLINE",5,3,2,"San Jose","US",37.405288,-121.939558,"CA","4631371",62,"BMW","X3","suv",2014,"San Jose","Good",6,"Yes",31,0.5
 "4880","ELECTRIC",5,64,55,"Santa Clara","US",37.36353,-121.982078,"CA","313105",89,"Tesla","Model 3","car",2018,"San Jose","Good",2,"Yes",2848,32
 "4881","GASOLINE",5,37,31,"Fremont","US",37.503564,-121.961222,"CA","333431",139,"Chevrolet","Corvette Stingray","car",2014,"San Jose","Good",6,"Yes",857.166666666667,6.16666666666667
@@ -4963,7 +4963,7 @@
 "4962","GASOLINE",5,34,31,"Salt Lake City","US",40.713189,-111.834034,"UT","4425885",75,"Toyota","Tundra","truck",2018,"Salt Lake City","Good",2,"Yes",1275,17
 "4963","GASOLINE",5,42,42,"Bountiful","US",40.875469,-111.896235,"UT","1792640",49,"Toyota","Sienna","minivan",2008,"Salt Lake City","Good",12,"Yes",171.5,3.5
 "4964","GASOLINE",5,5,4,"Park City","US",40.685449,-111.549624,"UT","14903235",103,"Lexus","GX 460","suv",2017,"Salt Lake City","Good",3,"Yes",171.666666666667,1.66666666666667
-"4965","GASOLINE",5,22,18,"Riverton","US",40.512969,-111.96002,"UT","5575852",75,NA,"QX60","suv",2015,"Salt Lake City","Good",5,"Yes",330,4.4
+"4965","GASOLINE",5,22,18,"Riverton","US",40.512969,-111.96002,"UT","5575852",75,"Infiniti","QX60","suv",2015,"Salt Lake City","Good",5,"Yes",330,4.4
 "4966","GASOLINE",5,5,5,"South Jordan","US",40.551861,-111.983338,"UT","1985680",140,"Audi","RS 5","car",2013,"Salt Lake City","Good",7,"Yes",100,0.714285714285714
 "4967","GASOLINE",5,9,7,"Salt Lake City","US",40.767654,-111.904183,"UT","4325673",79,"Audi","Q7","suv",2015,"Salt Lake City","Good",5,"Yes",142.2,1.8
 "4968","GASOLINE",5,3,3,"Springville","US",40.157571,-111.594216,"UT","3084401",66,"Ford","F-150","truck",2016,"Salt Lake City","Good",4,"Yes",49.5,0.75
@@ -5018,7 +5018,7 @@
 "5017","GASOLINE",4.93,17,15,"American Fork","US",40.374573,-111.787698,"UT","4395586",42,"Ford","Escape","suv",2013,"Salt Lake City","Good",7,"Yes",102,2.42857142857143
 "5018","ELECTRIC",5,14,13,"North Salt Lake","US",40.858315,-111.900418,"UT","14678809",84,"Tesla","Model 3","car",2018,"Salt Lake City","Good",2,"Yes",588,7
 "5019","GASOLINE",5,2,1,"South Jordan","US",40.571284,-111.910224,"UT","9957045",49,"Subaru","Legacy","car",2017,"Salt Lake City","Good",3,"Yes",32.6666666666667,0.666666666666667
-"5020","GASOLINE",5,44,31,"Salt Lake City","US",40.656196,-111.978134,"UT","8826367",48,NA,"Q50","car",2014,"Salt Lake City","Good",6,"Yes",352,7.33333333333333
+"5020","GASOLINE",5,44,31,"Salt Lake City","US",40.656196,-111.978134,"UT","8826367",48,"Infiniti","Q50","car",2014,"Salt Lake City","Good",6,"Yes",352,7.33333333333333
 "5021","ELECTRIC",4.91,16,11,"Lehi","US",40.414032,-111.876963,"UT","1098231",129,"Tesla","Model X","suv",2016,"Salt Lake City","Good",4,"Yes",516,4
 "5022","GASOLINE",5,5,4,"Salt Lake City","US",40.76217,-111.874281,"UT","11290059",87,"Audi","A5 Sportback","car",2019,"Salt Lake City","Good",1,"Yes",435,5
 "5023","ELECTRIC",5,1,1,"Woods Cross","US",40.875408,-111.901487,"UT","15346688",174,"Tesla","Model 3","car",2020,"Salt Lake City","Good",0,"Yes",174,1
@@ -5205,7 +5205,7 @@
 "5204","GASOLINE",5,2,2,"Sacramento","US",38.546527,-121.356472,"CA","6435068",42,"Kia","Soul","suv",2020,"Sacramento","Good",0,"Yes",84,2
 "5205","HYBRID",5,22,18,"Mountain House","US",37.759566,-121.552589,"CA","7232780",359,"BMW","I8","car",2019,"Sacramento","Good",1,"Yes",7898,22
 "5206","GASOLINE",5,5,2,"Citrus Heights","US",38.685973,-121.295162,"CA","15409795",34,"Toyota","Corolla","car",2017,"Sacramento","Good",3,"Yes",56.6666666666667,1.66666666666667
-"5207","GASOLINE",4.77,70,64,"Loomis","US",38.823031,-121.183211,"CA","1371050",71,NA,"JX","suv",2013,"Sacramento","Good",7,"Yes",710,10
+"5207","GASOLINE",4.77,70,64,"Loomis","US",38.823031,-121.183211,"CA","1371050",71,"Infiniti","JX","suv",2013,"Sacramento","Good",7,"Yes",710,10
 "5208","HYBRID",5,10,10,"Sacramento","US",38.542482,-121.458469,"CA","14825111",80,"Toyota","Avalon","car",2019,"Sacramento","Good",1,"Yes",800,10
 "5209","HYBRID",5,0,0,"San Bruno","US",37.617658,-122.441869,"CA","10746421",39,"Toyota","Prius","car",2013,"Sacramento","Good",7,"Not",0,0
 "5210","GASOLINE",5,10,7,"Fair Oaks","US",38.661777,-121.299859,"CA","13708903",34,"Toyota","Camry","car",2019,"Sacramento","Good",1,"Yes",340,10
@@ -5268,7 +5268,7 @@
 "5267","GASOLINE",5,63,56,"Costa Mesa","US",33.63995,-117.932353,"CA","9683913",449,"Ferrari","458 Spider","car",2015,"Santa Ana","Good",5,"Yes",5657.4,12.6
 "5268","ELECTRIC",4.6,13,10,"Fountain Valley","US",33.704533,-117.973357,"CA","12309378",70,"Tesla","Model 3","car",2020,"Santa Ana","Good",0,"Yes",910,13
 "5269","GASOLINE",5,39,32,"Santa Ana","US",33.698738,-117.864644,"CA","8494618",48,"Mercedes-Benz","GL-Class","suv",2011,"Santa Ana","Good",9,"Yes",208,4.33333333333333
-"5270","GASOLINE",4.64,54,47,"Irvine","US",33.67253,-117.838707,"CA","1186913",59,NA,"QX60","suv",2015,"Santa Ana","Good",5,"Yes",637.2,10.8
+"5270","GASOLINE",4.64,54,47,"Irvine","US",33.67253,-117.838707,"CA","1186913",59,"Infiniti","QX60","suv",2015,"Santa Ana","Good",5,"Yes",637.2,10.8
 "5271","GASOLINE",4.8,29,25,"Santa Ana","US",33.704441,-117.852474,"CA","400559",35,"Dodge","Grand Caravan","minivan",2018,"Santa Ana","Good",2,"Yes",507.5,14.5
 "5272","GASOLINE",4.89,54,45,"Costa Mesa","US",33.640207,-117.932341,"CA","9683913",275,"Audi","R8","car",2014,"Santa Ana","Good",6,"Yes",2475,9
 "5273","GASOLINE",4.97,34,30,"Newport Beach","US",33.670424,-117.862358,"CA","9863897",74,"Dodge","Challenger","car",2019,"Santa Ana","Good",1,"Yes",2516,34
@@ -5359,7 +5359,7 @@
 "5358","GASOLINE",4.98,54,49,"Bradenton","US",27.462666,-82.609831,"FL","633650",55,"BMW","3 Series","car",2015,"Sarasota/Bradenton","Good",5,"Yes",594,10.8
 "5359","GASOLINE",5,0,0,"Cortez","US",27.47401,-82.68472,"FL","3818445",50,"Chevrolet","Equinox","suv",2012,"Sarasota/Bradenton","Good",8,"Not",0,0
 "5360","ELECTRIC",5,14,11,"Tampa","US",27.977821,-82.531071,"FL","379208",117,"Tesla","Model 3","car",2020,"Sarasota/Bradenton","Good",0,"Yes",1638,14
-"5361","GASOLINE",5,1,1,"Bradenton","US",27.432029,-82.456235,"FL","15635649",32,NA,"M35","car",2009,"Sarasota/Bradenton","Good",11,"Yes",2.90909090909091,0.0909090909090909
+"5361","GASOLINE",5,1,1,"Bradenton","US",27.432029,-82.456235,"FL","15635649",32,"Infiniti","M35","car",2009,"Sarasota/Bradenton","Good",11,"Yes",2.90909090909091,0.0909090909090909
 "5362","GASOLINE",4.86,98,84,"Bradenton","US",27.462863,-82.609209,"FL","633650",46,"Mercedes-Benz","C-Class","car",2009,"Sarasota/Bradenton","Good",11,"Yes",409.818181818182,8.90909090909091
 "5363","GASOLINE",4.98,56,52,"Gibsonton","US",27.836962,-82.349677,"FL","1809789",36,"FIAT","500","car",2012,"Sarasota/Bradenton","Good",8,"Yes",252,7
 "5364","GASOLINE",5,0,0,"Sarasota","US",27.333692,-82.542355,"FL","10514312",100,"Toyota","Tundra","truck",2020,"Sarasota/Bradenton","Good",0,"Not",0,0
@@ -5488,7 +5488,7 @@
 "5487","GASOLINE",4.92,17,13,"Tampa","US",28.066564,-82.626664,"FL","10090321",87,"Mercedes-Benz","GLE-Class","suv",2016,"Tampa","Good",4,"Yes",369.75,4.25
 "5488","GASOLINE",5,1,1,"Tampa","US",27.972146,-82.56581,"FL","5507864",89,"BMW","5 Series","car",2008,"Tampa","Good",12,"Yes",7.41666666666667,0.0833333333333333
 "5489","GASOLINE",5,20,14,"Seffner","US",27.978968,-82.285188,"FL","9422919",199,"Polaris","Slingshot","car",2019,"Tampa","Good",1,"Yes",3980,20
-"5490","GASOLINE",5,12,10,"Tampa","US",27.967222,-82.433894,"FL","10869870",62,NA,"Q50","car",2018,"Tampa","Good",2,"Yes",372,6
+"5490","GASOLINE",5,12,10,"Tampa","US",27.967222,-82.433894,"FL","10869870",62,"Infinitti","Q50","car",2018,"Tampa","Good",2,"Yes",372,6
 "5491","ELECTRIC",4.88,66,49,"Orlando","US",28.539957,-81.382751,"FL","603217",185,"Tesla","Model X","suv",2017,"Tampa","Good",3,"Yes",4070,22
 "5492","GASOLINE",5,0,0,"Tampa","US",27.959613,-82.521313,"FL","5248408",200,"Chevrolet","Tahoe","suv",2018,"Tampa","Good",2,"Not",0,0
 "5493","GASOLINE",4.67,6,3,"Tampa","US",28.065405,-82.499216,"FL","62028",47,"Mercedes-Benz","M-Class","suv",2008,"Tampa","Good",12,"Yes",23.5,0.5
@@ -5515,7 +5515,7 @@
 "5514","ELECTRIC",5,36,33,"Pinellas Park","US",27.846267,-82.676734,"FL","1270921",180,"Tesla","Model S","car",2013,"Tampa","Good",7,"Yes",925.714285714286,5.14285714285714
 "5515","GASOLINE",4.95,42,39,"Odessa","US",28.166303,-82.5815,"FL","451389",38,"Hyundai","Sonata","car",2019,"Tampa","Good",1,"Yes",1596,42
 "5516","GASOLINE",5,17,16,"Odessa","US",28.168599,-82.581181,"FL","451389",38,"Volkswagen","Jetta","car",2019,"Tampa","Good",1,"Yes",646,17
-"5517","GASOLINE",5,11,7,"St. Petersburg","US",27.821459,-82.703314,"FL","11456746",91,NA,"QX","suv",2012,"Tampa","Good",8,"Yes",125.125,1.375
+"5517","GASOLINE",5,11,7,"St. Petersburg","US",27.821459,-82.703314,"FL","11456746",91,"Infiniti","QX","suv",2012,"Tampa","Good",8,"Yes",125.125,1.375
 "5518","GASOLINE",4.6,5,5,"Palm Harbor","US",28.072047,-82.727031,"FL","1136678",41,"Mazda","6","car",2014,"Tampa","Good",6,"Yes",34.1666666666667,0.833333333333333
 "5519","GASOLINE",5,30,26,"Odessa","US",28.166193,-82.581129,"FL","451389",36,"Hyundai","Sonata","car",2013,"Tampa","Good",7,"Yes",154.285714285714,4.28571428571429
 "5520","GASOLINE",5,20,19,"Tampa","US",27.945334,-82.484562,"FL","1982775",129,"Chevrolet","Camaro","car",2016,"Tampa","Good",4,"Yes",645,5
@@ -5625,7 +5625,7 @@
 "5624","GASOLINE",5,15,12,"Anchorage","US",61.149356,-149.919898,"AK","9340707",47,"GMC","Terrain","suv",2017,"Anchorage","Good",3,"Yes",235,5
 "5625","GASOLINE",4.83,38,29,"Anchorage","US",61.189415,-149.897877,"AK","2928932",78,"Honda","Pilot","suv",2010,"Anchorage","Good",10,"Yes",296.4,3.8
 "5626","GASOLINE",5,4,4,"Anchorage","US",61.177825,-149.942131,"AK","14464264",67,"GMC","Yukon","suv",2012,"Anchorage","Good",8,"Yes",33.5,0.5
-"5627","GASOLINE",5,0,0,"Anchorage","US",61.196988,-149.955288,"AK","3598519",90,NA,"QX60","suv",2014,"Anchorage","Good",6,"Not",0,0
+"5627","GASOLINE",5,0,0,"Anchorage","US",61.196988,-149.955288,"AK","3598519",90,"Infiniti","QX60","suv",2014,"Anchorage","Good",6,"Not",0,0
 "5628","HYBRID",5,8,7,"Anchorage","US",61.121411,-149.893859,"AK","14802985",67,"Lexus","CT 200h","car",2016,"Anchorage","Good",4,"Yes",134,2
 "5629","GASOLINE",5,5,5,"Anchorage","US",61.324505,-149.581976,"AK","10220464",130,"Chevrolet","Camaro","car",2017,"Anchorage","Good",3,"Yes",216.666666666667,1.66666666666667
 "5630","DIESEL",5,3,2,"Anchorage","US",61.19886,-149.955214,"AK","11674028",85,"Audi","Q5","suv",2015,"Anchorage","Good",5,"Yes",51,0.6

@@ -4,14 +4,6 @@ subtitle: 'Pràctica 2 - Neteja i anàlisi de les dades'
 author: 'Autors: Roger Perís Serrano i Albert Cámara Viñals'
 date: '`r format(Sys.Date(), "Desembre, %Y")`'
 output:
-  pdf_document:
-    latex_engine: xelatex
-    highlight: zenburn
-    toc: yes
-    toc_depth: 3
-    number_sections: true
-    keep_tex: true
-  word_document: default
   html_document:
     highlight: default
     number_sections: yes
@@ -20,6 +12,16 @@ output:
     toc_depth: 3
     includes:
       in_header: header.html
+  word_document: default
+  pdf_document:
+    latex_engine: xelatex
+    highlight: zenburn
+    toc: yes
+    toc_depth: 3
+    number_sections: true
+    keep_tex: true
+    fig_width: 5
+    fig_height: 3 
 bibliography: bibliography_tcvd_pra_2.bib    
 ---
 
@@ -157,7 +159,11 @@ library(gridExtra)
 old <- theme_set(theme_minimal())
 ```
 
-
+```{r include = FALSE}
+library(knitr)
+library(formatR)
+opts_chunk$set(tidy.opts=list(width.cutoff=60),tidy=TRUE)
+```
 
 
 
@@ -252,8 +258,8 @@ Comencem visualitzant els principals descriptors estadístics de cadascuna de le
 summary(ds[, numeric_features_names])
 ```
 
-#### Anàlisi dels atributs numèrics 
-
+#### Anàlisi dels atributs numèrics
+\hfill\break
 Tot seguit visualitzem les distribucions dels valors de les variables numèriques.
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
@@ -319,37 +325,38 @@ n- boxplot.stats(ds$vehicle.year)$n
 
 A partir del resultats anteriors podem dir que la única variable que presenta valors extrems és les valoracions *'rating'*. En concret tenim 501 observacions que s'alluyen molt dels valors esperats per aquesta variable.  
 
-#### Anàlisi dels atributs categòrics 
-
+\newpage
+#### Anàlisi dels atributs categòrics
+\hfill\break
 Continuem visualitzant les distribucions dels valors de les variables categòriques
 
 **Revisem la variable fuelType**
 
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-ggplot(data=ds,aes(x=fuelType))+geom_bar() + ylab("nombre de vehicles")
+```{r echo=TRUE, message=FALSE, warning=FALSE, fig.width = 4, fig.height=2}
+ggplot(data=ds,aes(x=fuelType)) + geom_bar() + ylab("nombre de vehicles")
 ```
 
-Podem observar que la majoria de vehicles son **GASOLINE**, seguits de lluny pels **ELECTRIC** i després pels **HYBRID**. Finalment els **DIESEL** son residuals i queda un subgrup sense etiquetar que el tractarem tot seguit.
+Podem observar que per la majoria de vehicles el combustible és **GASOLINE**, seguits de lluny pels **ELECTRIC** i després pels **HYBRID**. Finalment els **DIESEL** son residuals i queda un subgrup sense etiquetar que el tractarem tot seguit.
 
 Fem un petit tractament de valors Nuls. Aquest el realitzem calculant quin és el valor més freqüent de combustible i substituint els valors nuls per aquest.
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Obtenim el valor més freqüent
 most_freq_fuelType <- names(which.max(table(ds$fuelType)))
 
 most_freq_fuelType
-```
 
-```{r echo=TRUE, message=FALSE, warning=FALSE}
 # Prenem el valor més freqüent per als valors buits
 ds$fuelType[ds$fuelType == ""] = most_freq_fuelType
 ```
 
 Grafiquem de nou **fuelType**
 
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-ggplot(data=ds,aes(x=fuelType))+geom_bar() + ylab("nombre de vehicles")
+```{r echo=TRUE, message=FALSE, warning=FALSE, fig.width = 4, fig.height=2}
+ggplot(data=ds,aes(x=fuelType)) + geom_bar() + ylab("nombre de vehicles")
 ```
 
+\newpage
 **Revisem la variable location.city**
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
@@ -367,10 +374,13 @@ par(las=2, cex=0.5, mar=c(8,4,4,2))
 barplot(location.city_ordered[0:30], main="Nombre de vehicles segons location.city", ylab="Nombre de vehicles") 
 ```
 
+\newpage
 **Revisem la variable location.state**
 
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-ggplot(data=ds,aes(x=location.state))+geom_bar()+theme(axis.text.x = element_text(angle = 90,vjust = 0.1,hjust = 0.1)) + ylab("nombre de vehicles")
+```{r echo=TRUE, message=FALSE, warning=FALSE, fig.width = 6, fig.height=3}
+ggplot(data=ds,aes(x=location.state)) + geom_bar() + 
+  theme(axis.text.x = element_text(angle = 90,vjust = 0.1,hjust = 0.1)) + 
+  ylab("Nombre de vehicles")
 ```
 
 Veiem que entre les categories destaquen **CA**, **FL** i **TX**.
@@ -378,7 +388,9 @@ Veiem que entre les categories destaquen **CA**, **FL** i **TX**.
 **Revisem la variable airportcity**
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
-ggplot(data=ds,aes(x=airportcity))+geom_bar() + theme(axis.text.x = element_text(angle = 90,vjust = 0.1,hjust = 0.1)) + ylab("nombre de vehicles")
+ggplot(data=ds,aes(x=airportcity)) + geom_bar() + 
+  theme(axis.text.x = element_text(angle = 90,vjust = 0.1,hjust = 0.1)) + 
+  ylab("Nombre de vehicles")
 ```
 
 Tornem a trobar-nos que hi ha massa categories per a fer una visualització cómode. Llavors optem per graficar només les 30 categories més comuns.
@@ -402,15 +414,20 @@ Aquí ens trobem al límit del que sería una visualització raonable, i veiem q
 Per tant realitzem una primera correcció de les categories per a continuació reproduir de nou la visualització.
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Correcció de les marques de vehicles, diferències tipogràfiques
 ds$vehicle.make[ds$vehicle.make == "Alfa-romeo"] = "Alfa Romeo"
-ds$vehicle.make[ds$vehicle.make == "Infiniti"] = "INFINITI"
 ds$vehicle.make[ds$vehicle.make == "Mercedes-benz"] = "Mercedes-Benz"
+ds$vehicle.make[ds$vehicle.make == "INFINITI"] = "Infinitti"
+
+ds$vehicle.make <- droplevels.factor(ds$vehicle.make)
+
 ggplot(data=ds,aes(x=vehicle.make))+geom_bar() + theme(axis.text.x = element_text(angle = 90,vjust = 0.1,hjust = 0.1)) + ylab("nombre de vehicles")
 ```
 
-A la vista de les dades es pot observar que **TESLA** i **TOYOTA** son les marques més freqüents, seguides de **BMW**, **CHEVROLET**, **FORD** i **Mercedes-Benz**.
+A la vista de les dades es pot observar que *TESLA* i *TOYOTA* son les marques més freqüents, seguides de *BMW*, *CHEVROLET*, *FORD* i *Mercedes-Benz*.
 
 **Revisem la variable vehicle.model**
+
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 ggplot(data=ds,aes(x=vehicle.model))+geom_bar() + theme(axis.text.x = element_text(angle = 90,vjust = 0.1,hjust = 0.1)) + ylab("nombre de vehicles")
 ```
@@ -434,6 +451,7 @@ ggplot(data=ds,aes(x=vehicle.type))+geom_bar() + theme(axis.text.x = element_tex
 
 S'observa que la categoria **car** seguida de lluny per **SUV** són les més comuns, sent la resta (**minivan**, **truck** i **van**) gairebé residuals.
 
+\newpage
 **Visualització multivariant de les dades categòriques**
 
 Usem el gràfic de mosaic per visualitzar la convinació entre **fuelType** i **vehicle.type**
@@ -447,15 +465,14 @@ Gràcies al gràfic de mosaic es pot observar que només hi ha la categoria **HY
 Alternativament visualitzem les mateixes dades amb un ballonplot
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
-# Pren els ajustos per defecte
-theme_set(theme_pubr())
 # Preparem les dades
-taula = as.data.frame(table(ds$fuelType,ds$vehicle.type))
+taula = as.data.frame(table(ds$fuelType, ds$vehicle.type))
+
 # Visualitza el Ballonplot
-ggballoonplot(taula, fill = "value")+
-  scale_fill_viridis_c(option = "C")
+ggballoonplot(taula, fill = "value") + scale_fill_viridis_c(option = "C")
 ```
 
+\newpage
 ### Zeros i atributs buits
 
 Ara farem el tractament dels valors buits i convertirem les variables discretes a factors.
@@ -541,17 +558,9 @@ ds['rating.discret'] <- discretize(ds$rating, method = "fixed", breaks = c(0, 4.
 ds$rating.discret = as.factor(ds$rating.discret)
 
 # Calculem gràfic de barres
-ggplot(data=ds, aes(x = rating.discret)) + geom_bar(aes(y = (..count..)/sum(..count..))) + geom_text(aes(y = ((..count..)/sum(..count..)), label = scales::percent((..count..)/sum(..count..))), stat = "count", vjust = -0.5) + scale_y_continuous(labels = scales::percent, limits = c(0,1)) + xlab('Rent') + ylab("Percentatge")
+ggplot(data=ds, aes(x = rating.discret)) + geom_bar(aes(y = (..count..)/sum(..count..))) + geom_text(aes(y = ((..count..)/sum(..count..)), label = scales::percent((..count..)/sum(..count..))), stat = "count", vjust = -0.5) + scale_y_continuous(labels = scales::percent, limits = c(0,1)) + xlab('Valoració') + ylab("Percentatge")
 ```
 
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-# Correcció de les marques de vehicles, diferències tipogràfiques
-ds$vehicle.make[ds$vehicle.make == "Alfa-romeo"] = "Alfa Romeo"
-ds$vehicle.make[ds$vehicle.make == "Mercedes-benz"] = "Mercedes-Benz"
-ds$vehicle.make[ds$vehicle.make == "INFINITI"] = "Infinitti"
-
-ds$vehicle.make <- droplevels.factor(ds$vehicle.make)
-```
 
 ### Creació de nous indicadors
 
@@ -604,16 +613,10 @@ edat[edat == 0] = 1
 ds['income'] <- ds$rate.daily * ds$renterTripsTaken / edat
 
 # Calculem gràfic de barres de la nova variable
-ggplot(data=ds, aes(x=ds$income)) + 
-  geom_histogram(breaks=seq(0, 1000, by=10), 
-                 alpha = 1) + 
-  labs(title="Histogram for Income", x="Income", y="Count") + 
-  xlim(c(0,1000)) + 
-  ylim(c(0,500))
+ggplot(data=ds, aes(x=ds$income)) + geom_histogram(breaks=seq(0, 1000, by=10), alpha = 1) + labs(title="Histogram for Income", x="Income", y="Count") + xlim(c(0,1000)) + ylim(c(0,500))
 
 ggplot(data=ds, aes(x=ds$income)) + 
-  geom_histogram(breaks=seq(0, 10000, by=100), 
-                 alpha = 1) + 
+  geom_histogram(breaks=seq(0, 10000, by=100), alpha = 1) + 
   labs(title="Histogram for Income", x="Income", y="Count") + 
   xlim(c(0,10000)) + 
   ylim(c(0,2000))
@@ -641,8 +644,7 @@ ggplot(data=ds, aes(x=ds$frequency)) +
   labs(title="Histogram for frequency", x="frequency", y="Count")
 
 ggplot(data=ds, aes(x=ds$frequency)) + 
-  geom_histogram(breaks=seq(0, 150, by=1.5), 
-                 alpha = 1) + 
+  geom_histogram(breaks=seq(0, 150, by=1.5), alpha = 1) + 
   labs(title="Histogram for frequency", x="frequency", y="Count") + 
   xlim(c(0,150)) + 
   ylim(c(0,200))
@@ -815,6 +817,7 @@ ds <- subset(ds, select=-c(rating_norm, renterTripsTaken_norm, reviewCount_norm,
 numeric_features_names = c('rating', 'renterTripsTaken', 'reviewCount', 'rate.daily', 'age', 'income', 'frequency')
 ```
 
+\newpage
 **Anàlisi multivariant** 
 
 Per analitzar un conjunt de dades necessitem tenir en compte més d'una variable alhora. L'anàlisi bivariant permet identificar les relacions entre dues variables, i fins quina manera una pot predir l'altra.
@@ -838,40 +841,54 @@ En el cas d'una variable categòrica com el tipus de combustible o la marca del 
 ggplot(ds, aes(x=fuelType, y=rate.daily, fill=fuelType)) + geom_boxplot(alpha=0.1) + stat_summary(fun.y=mean)
 ```
 
-```{r echo=TRUE, message=FALSE, warning=FALSE}
+A partir del gràfic anterior podem observar com el tipus de combustible sembla que influeix al preu diari de lloguer. Essent el lloguer més car pels vehicles elèctrics i el més econòmic el dels vehicles híbrids. Mentre que el preu dels vehicles diesel i gasolina és similar.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE, fig.width = 6}
 # Relació entre el preu diari del lloguer i l'estat on es localitza el vehicle
 ggplot(ds, aes(x=location.state, y=rate.daily, fill=location.state)) + geom_boxplot(alpha=0.1) + stat_summary(fun.y=mean) + theme(axis.text.x = element_text(angle = 90,vjust = 0.1,hjust = 0.1)) + theme(legend.position = "none")
 ```
 
-```{r echo=TRUE, message=FALSE, warning=FALSE}
+A partir del gràfic anterior podem observar com l'estat on es localitza el vehicle sembla que influeix al preu diari de lloguer. Essent el lloguer més car pels vehicles de l'estat d'NM.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE, fig.width = 6}
 # Relació entre el preu diari del lloguer i la marca del vehicle
 ggplot(ds, aes(x=vehicle.make, y=rate.daily, fill=vehicle.make)) + geom_boxplot(alpha=0.1) + stat_summary(fun.y=mean) + theme(axis.text.x = element_text(angle = 90,vjust = 0.1,hjust = 0.1)) + theme(legend.position = "none")
 ```
+
+A partir del gràfic anterior podem observar com la marca del vehicle sembla que influeix al preu diari de lloguer. Essent el lloguer més car pels vehicles d'alta gama, com ja podiem intuir, on destaca *Rolls Royce, Lamborgini, Aston Martin i Ferrari*.
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 # Relació entre el preu diari del lloguer i el tipus de vehicle
 ggplot(ds, aes(x=vehicle.type, y=rate.daily, fill=vehicle.type)) + geom_boxplot(alpha=0.1) + stat_summary(fun.y=mean)
 ```
 
+
+A partir del gràfic anterior podem observar com el tipus del vehicle sembla que influeix al preu diari de lloguer. Essent el lloguer més car per les furgonetes (*van*), i el més econòmic per les mini furgonetes (*minivan*). Mentre que per la resta de tipus de vehicles *car, suv i truck* no s'observa una gran diferència en el preu.
+
 Si volem visualitzar alhora les relacions creuades entre diverses variables, podem fer un pairplot.
 
 Examinem els atributs numèrics envers si el vehicle va se llogat o no.
 
-```{r echo=TRUE, message=FALSE, warning=FALSE}
+```{r echo=TRUE, message=FALSE, warning=FALSE, fig.width = 5, fig.height=5}
 ggpairs(ds, columns=numeric_features_names, mapping=aes(color=rent), upper = list(continuous = wrap('cor', size = 2)))
 ```
 
+A partir del pairplot anterior veiem que hi ha un solapament entre totes les funcions de densitat, en funció de si va ser llogat o no el vehicle, amb la qual cosa podem determinar que no hi ha cap atribut numèric que ens permeti identificar si el vehicle va ser llogat o no directament. D'altre banda podem destacar la relació lineal que s'observa entre l'atribut *renderTripsTaken* i *reviewCount*, on tal i com podriem pensar quans més cops es lloga un vehicle més valoracions rep. 
+
 Examinem els atributs numèrics envers la qualificació que va obtenir el vehicle.
 
-```{r echo=TRUE, message=FALSE, warning=FALSE}
+```{r echo=TRUE, message=FALSE, warning=FALSE, fig.width = 5, fig.height=5}
 ggpairs(ds, columns=numeric_features_names, mapping=aes(color=rating.discret), upper = list(continuous = wrap('cor', size = 2)))
 ```
+
+A partir del pairplot anterior veiem que hi ha un solapament entre totes les funcions de densitat, en funció de la qualificació obtinguda pel vehicle de lloguer, amb la qual cosa podem determinar que no hi ha cap atribut numèric que ens permeti identificar la puntuació del vehicle directament. D'altre banda també s'observa la relació lineal que hi ha entre l'atribut *renderTripsTaken* i *reviewCount*, on tal i com podriem pensar quans més cops es lloga un vehicle més valoracions rep. 
+
 
 Finalment, ens interessarà veure quins conjunts de variables estan relacionats entre si. Per això, farem servir tècniques estadístiques d'anàlisi multivariant.
 
 Una de les eines més útils és calcular la matriu de correlació entre les variables. Amb la funció qplot i la correlació de variables, calculada amb la funció cor, podem visualitzar de manera fàcil aquelles variables més correlacionades, que corresponen a una intensitat major de color.
 
-```{r echo=TRUE, message=FALSE, warning=FALSE}
+```{r echo=TRUE, message=FALSE, warning=FALSE, fig.width = 6, fig.height=4}
 heat <- ds[,numeric_features_names]
 qplot(x=Var1, y=Var2, data=melt(cor(heat, use="p")), fill=value, geom="tile") + theme(axis.text.x = element_text(angle = 90)) + coord_fixed()
 ```
@@ -1016,7 +1033,7 @@ D'altra banda el *p-valor* és inferior al nivell de significació (*p-value < &
 
 ### ¿El preu diari del lloguer del vehicle és diferent en funció del tipus de vehicle?
 
-Per tal de donar resposta a aquesta pregunta, realitzarem un contrast de la igualtat de varianza mitjançant un test de *Bartlett* en 2 o más poblacions sense la necessitat de que mida dels grups que comparem sigui la mateixa. 
+Per tal de donar resposta a aquesta pregunta, realitzarem un contrast de la igualtat de varianza mitjançant un test de *Bartlett* en dues o més poblacions sense la necessitat de que la mida dels grups que comparem sigui la mateixa. 
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 car <- ds[ds$vehicle.type == "car", "rate.daily"]
@@ -1027,13 +1044,14 @@ van <- ds[ds$vehicle.type == "van", "rate.daily"]
 
 bartlett.test(list(car, minivan, suv, truck, van))
 ```
+
 El *p-valor* és inferior al nivell de significació (*p-value < &alpha;*), per tant podem rebutjar la hipòtesi nul·la.  Això ens permet dir que el preu diari del lloguer del vehicle depén del tipus de vehicle, amb un nivell de confiança del 95%.
 
 Podem veure que tenim cinc grups diferents (5 categories de vehicles) que volem comparar. A partir del test realitzat hi ha evidències de que la varianza no és la mateixa en tots el grups. Fet que ja podiem intuir al diagrama de caixes o boxplot on mostravem l'atribut 'rate.daily' envers 'vehicle.type'.
 
 ### ¿El preu diari del lloguer del vehicle és diferent en funció del tipus de combustible?
 
-Per tal de donar resposta a aquesta pregunta, realitzarem un contrast de la igualtat de varianza mitjançant un test de *Bartlett* en 2 o más poblacions sense la necessitat de que mida dels grups que comparem sigui la mateixa. 
+Per tal de donar resposta a aquesta pregunta, realitzarem un contrast de la igualtat de varianza mitjançant un test de *Bartlett* en dues o més poblacions sense la necessitat de que la mida dels grups que comparem sigui la mateixa.
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 diesel <- ds[ds$vehicle.type == "car", "rate.daily"]
@@ -1137,7 +1155,7 @@ model_cart_rate <- rpart(rate.daily ~ fuelType + location.city + location.state 
 # Mostrem un resum de la generació de l'arbre
 #summary(model_cart)
 
-printcp(model_cart_rate)
+#printcp(model_cart_rate)
 
 # Mostrem en un gràfic l'arbre obtingut
 rpart.plot(model_cart_rate)
@@ -1195,7 +1213,7 @@ model_cart_rent <- rpart(rent ~ fuelType + location.city + location.state + vehi
 # Mostrem un resum de la generació de l'arbre
 #summary(model_cart)
 
-printcp(model_cart_rent)
+#printcp(model_cart_rent)
 
 # Mostrem en un gràfic l'arbre obtingut
 rpart.plot(model_cart_rent)
@@ -1234,7 +1252,7 @@ Durant tot l'estudi previ em deixat de banda un fet important que es va veure du
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 # Calculem histogrames de les variables de classe
-ggplot(data=ds, aes(x = rent)) + geom_bar(aes(y = (..count..)/sum(..count..))) + geom_text(aes(y = ((..count..)/sum(..count..)), label = scales::percent((..count..)/sum(..count..))), stat = "count", vjust = -0.5) + scale_y_continuous(labels = scales::percent, limits = c(0,1)) + xlab("Rent") + ylab("FreqÃ¼Ã¨ncia")
+ggplot(data=ds, aes(x = rent)) + geom_bar(aes(y = (..count..)/sum(..count..))) + geom_text(aes(y = ((..count..)/sum(..count..)), label = scales::percent((..count..)/sum(..count..))), stat = "count", vjust = -0.5) + scale_y_continuous(labels = scales::percent, limits = c(0,1)) + xlab("Rent") + ylab("Freqüència")
 ```
 
 Les classificacions desequilibrades suposen un desafiament per a la generació de models de predicció, ja que la majoria dels algorismes utilitzats per a la classificació van ser dissenyats entorn l'assumpció d'un nombre igual d'observacions per a cada classe. Aixó produeix que els models obtinguts presentin un rendiment predictiu deficient, en concret per a la classe minoritària. A més aixó sol ser un problema perqué normalment, la classe minoritària és la més important i per tant el model és més sensible als errors de classificació de la classe minoritària que la classe majoritària.
@@ -1246,5 +1264,5 @@ Les classificacions desequilibrades suposen un desafiament per a la generació d
 
 
 
-
+\newpage
 # Bibliografia
