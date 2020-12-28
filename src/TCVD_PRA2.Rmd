@@ -4,15 +4,6 @@ subtitle: 'Pràctica 2 - Neteja i anàlisi de les dades'
 author: 'Autors: Roger Perís Serrano i Albert Cámara Viñals'
 date: '`r format(Sys.Date(), "Desembre, %Y")`'
 output:
-  html_document:
-    highlight: default
-    number_sections: yes
-    theme: cosmo
-    toc: yes
-    toc_depth: 3
-    includes:
-      in_header: header.html
-  word_document: default
   pdf_document:
     latex_engine: xelatex
     highlight: zenburn
@@ -22,6 +13,15 @@ output:
     keep_tex: true
     fig_width: 5
     fig_height: 3 
+  word_document: default
+  html_document:
+    highlight: default
+    number_sections: yes
+    theme: cosmo
+    toc: yes
+    toc_depth: 3
+    includes:
+      in_header: header.html
 bibliography: bibliography_tcvd_pra_2.bib    
 ---
 
@@ -153,6 +153,9 @@ library(rpart.plot)
 library(gmodels)
 library(rattle)
 library(Metrics)
+library(caret)
+library(DMwR)
+library(ROSE)
 library(grid)
 library(gridExtra)
 
@@ -1257,11 +1260,93 @@ ggplot(data=ds, aes(x = rent)) + geom_bar(aes(y = (..count..)/sum(..count..))) +
 
 Les classificacions desequilibrades suposen un desafiament per a la generació de models de predicció, ja que la majoria dels algorismes utilitzats per a la classificació van ser dissenyats entorn l'assumpció d'un nombre igual d'observacions per a cada classe. Aixó produeix que els models obtinguts presentin un rendiment predictiu deficient, en concret per a la classe minoritària. A més aixó sol ser un problema perqué normalment, la classe minoritària és la més important i per tant el model és més sensible als errors de classificació de la classe minoritària que la classe majoritària.
 
+Per tal de reduir els efectes causats per aquest fet proposem aplicar diferents mètodes de submostreig abans de generar els models.
 
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+set.seed(2)
 
+# Escollim els atributs sobre els quals treballarem
+train.data <- train
+
+train.data[,"Class"] <- train['rent']
+
+test.data <- test
+
+test.data[,"Class"] <- test['rent']
+
+# Construïm diferents mostres a partir del conjunt de dades original
+
+# Down sampling
+down_train <- downSample(x = train.data[, -ncol(train.data)], y = train.data$Class)
+
+# Up Sampling
+up_train <- upSample(x = train.data[, -ncol(train.data)], y = train.data$Class)
+
+# Mix up/down sampling SMOTE
+smote_train <- SMOTE(Class ~ ., data = train.data)
+
+# Mostrem el nombre d'observacions pertanyents a cada una de les clases després de la generació de mostres
+# Conjunt original
+table(train.data$Class)
+
+# Down sampling
+table(down_train$Class)
+
+# Up sampling
+table(up_train$Class)
+
+# Smote sampling
+table(smote_train$Class)
+```
+
+Un cop obtingudes diferents mostres del conjunt de dades originals amb submostreig anem a realitzar l'entrenament d'un model d'arbre de decisió (CART) per cada un dels subconjunts.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Model training - CART
+set.seed(4)
+down_outside <- rpart(rent ~ fuelType + location.city + location.state + vehicle.make + vehicle.model + vehicle.type, method="class", data=down_train)
+
+set.seed(5)
+up_outside <- rpart(rent ~ fuelType + location.city + location.state + vehicle.make + vehicle.model + vehicle.type, method="class", data=up_train)
+
+set.seed(6)
+smote_outside <- rpart(rent ~ fuelType + location.city + location.state + vehicle.make + vehicle.model + vehicle.type, method="class", data=smote_train)
+
+```
+
+I per acabar realitzem les corresponents predicions en el conjunt de test
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+predicted_model_cart_rent <- predict(down_outside, test.data, type = "class")
+
+print(sprintf("La precisió de l'arbre amb downsampling és: %.4f %%", 100 * sum(predicted_model_cart_rent == test.data[,"Class"]) / length(predicted_model_cart_rent)))
+
+predicted_model_cart_rent <- predict(up_outside, test.data, type = "class")
+
+print(sprintf("La precisió de l'arbre amb upsampling és: %.4f %%", 100 * sum(predicted_model_cart_rent == test.data[,"Class"]) / length(predicted_model_cart_rent)))
+
+predicted_model_cart_rent <- predict(smote_outside, test.data, type = "class")
+
+print(sprintf("La precisió de l'arbre amb smote sampling és: %.4f %%", 100 * sum(predicted_model_cart_rent == test.data[,"Class"]) / length(predicted_model_cart_rent)))
+```
+Tot i que podem veure que la precisió ha disminuit, pels models obtinguts després de realitzar un submostreig per tractar el conjunt desequilibrat, podem veure com aquests nous models ofereixen una millor resposta a la classe minoritària, la que recull el no llogar.
 
 ## Conclusions
 
+A l'inici d'aquest estudi ens proposavem realitzar una anàlisi detallada dels atributs propis del sector del lloguer de vehicles per tal d’extreuren nou coneixement i que aquest pugui aportar valor.
+
+Per això hem començat el nostre estudi amb les tasques típiques d'un procés de mineria o anàlica de dades, incloent la neteja de dades, la imputació de valors nuls, el tractament de valors extrems, la transformació d'alguns atributs i la creació d'atributs nous. També hem realitzat una primera inspecció visual de les dades on ja s'han pogut determinar certes relacions entre variables. Com per exemple que el preu diari de lloguer depén de la marca i el tipus de vehicle, el combustible que utilitza o la seva ubicació.
+
+Tot seguit hem dut a terme diferents contrastos d’hipótesis que ens han permés identificar propietats interessants subjacents en les mostres que puguin ser inferides respecte a la població. Però primerament hem avaluat la normalitat dels principals atributs. A partir dels diferents resultats obtinguts podem concloure que:
+
+*  Que els cotxes électrics tenen un lloguer més elevat que els de benzina, amb un nivell de confiança del 95%.
+* Que la proporció de furgonetes de lloguer és més petita que la d’utilitàris, amb un nivell de confiança del 95%.
+* Que el preu diari del lloguer del vehicle depén del tipus de vehicle, amb un nivell de confiança del 95%.
+* Que el preu diari del lloguer del vehicle depén del tipus de combustible, amb un nivell de confiança del 95%.
+
+A continuació hem generat un model que permet preveure el preu per dia d’un automòbil de lloguer, a partir de les seves característiques. Tant mitjançant un model basat en regressió lineal múltiple com amb un arbre de regressió. Tot i que la capacitat predictiva obinguda per aquest dos models no ha sigut gaire bona, ens ha permés determinar que els atributs més influents en el preu diari de vehicles són el model i la marca del vehicle i la seva localització. 
+
+Finalment hem generat també un model que permet preveure, donades les característiques d’un vehicle de lloguer, si aquest serà llogat o no mitjançant un arbre de decisió per a classificació.
 
 
 \newpage
