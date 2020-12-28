@@ -18,20 +18,9 @@ Aquesta pràctica forma part de l'assignatura _Tipología i cicle de vida de les
 
 ## Començant
 
-### Prerequisits
-
-Per executar ............... són necesàries les següents dependències:
-
-
-Aquestes dependències es poden instal·lar amb les següents comandes
-
-```R
-
-```
-
 ### Instal·lació i ús
 
-Clonar el repositori, accedir al directori i executar l'script *"webscraping.py"*.
+Clonar el repositori, accedir al directori i executar l'script *"R"*.
 
 ```python
 git clone git@github.com:rugeps/CornellCarRentalStudy.git
