@@ -388,6 +388,39 @@ ggplot(data=ds,aes(x=location.state)) + geom_bar() +
 
 Veiem que entre les categories destaquen **CA**, **FL** i **TX**.
 
+Ens proposem afegir una cetegoria continua que en la qual usant la població dels estats, es pugui obviar l'abreviatura categorica dels estats
+Ens descarreguem les dades del cens dels estats unit des de: https://www.census.gov/data/datasets/time-series/demo/popest/2010s-state-total.html
+i simplifiquem la taula descarregada en un csv que carreguem a continuació
+
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Carreguem la taula de població per estat
+sp <- read.csv('../data/state-population.csv', stringsAsFactors = FALSE, header = TRUE, sep=',', strip.white = TRUE)
+
+# Creem una nova variable on hi introduim la població de l'estat on es troba el vehicle
+ds$population <- ds$location.state
+
+# Assignem la població segons l'estat en el que es troba
+for (i in sp$state){
+  ds$population[ds$population == i] = sp$Census[sp$state == i]
+} 
+
+# convertim la nova variable en numèrica
+ds$population <- as.numeric(ds$population)
+```
+
+Podem aprofitar per a calcular els diagrames d'aquesta nova variable numèrica
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Calculem diagrames de caixa i de punts de la nova variable numèrica
+ggplot(ds, aes(y=population)) + geom_boxplot()
+ggplot(data=ds, aes(x=population)) + geom_histogram(bins=15) + xlab('Population') + ylab('Frequency')
+```
+i finalment val la pena fer una discretització de la variable **population**.
+Aprofitem per tallar en base als quartils.
+
+`
+
 **Revisem la variable airportcity**
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
@@ -420,6 +453,7 @@ Per tant realitzem una primera correcció de les categories per a continuació r
 # Correcció de les marques de vehicles, diferències tipogràfiques
 ds$vehicle.make[ds$vehicle.make == "Alfa-romeo"] = "Alfa Romeo"
 ds$vehicle.make[ds$vehicle.make == "Mercedes-benz"] = "Mercedes-Benz"
+ds$vehicle.make[ds$vehicle.make == "Infiniti"] = "Infinitti"
 ds$vehicle.make[ds$vehicle.make == "INFINITI"] = "Infinitti"
 
 ds$vehicle.make <- droplevels.factor(ds$vehicle.make)
@@ -428,6 +462,44 @@ ggplot(data=ds,aes(x=vehicle.make))+geom_bar() + theme(axis.text.x = element_tex
 ```
 
 A la vista de les dades es pot observar que *TESLA* i *TOYOTA* son les marques més freqüents, seguides de *BMW*, *CHEVROLET*, *FORD* i *Mercedes-Benz*.
+
+Ens trobem que igualment hi ha un nombre molt elevat de categories per aquesta variable (51 concretament) quan de fet, tot el joc de dades amb prou feines arriba a les 6000 observacions.
+Llavors ens plantegem crear una nova variable **rang** agrupant les marques en 3 grups segons la gamma que majoritariament produeixin;  "average", "high" o "luxury":
+
+
+- average:
+'FIAT', 'Ford', 'Honda', 'Hyundai', 'Jeep', 'Kia', 'Land Rover', 'Mazda', 'Mitsubishi', 'Nissan', 'Polaris', 'Pontiac', 'Saturn', 'Scion', 'Suzuki', 'Toyota', 'Volkswagen', 'Volvo'
+
+- high:
+'Alfa Romeo', 'Audi', 'BMW', 'Chevrolet', 'Chrysler', 'Dodge', 'GMC', 'HUMMER', 'Mercedes-Benz', 'Tesla', 'MINI', 'Ram', 'Saab', 'smart', 'Subaru'
+
+- luxury:
+'Acura', 'Aston Martin', 'Bentley', 'Buick', 'Cadillac', 'Ferrari', 'Genesis', 'Infinitti', 'Jagguar', 'Lamborghini', 'Lexus', 'Lincoln', 'Lotus', 'Maserati', 'McLaren', 'Mercury', 'Porsche', 'Rolls Royce'
+
+
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Creem vectors per cada categoria de la nova variables
+average = c('FIAT', 'Ford', 'Honda', 'Hyundai', 'Jeep', 'Kia', 'Land Rover', 'Mazda', 'Mitsubishi', 'Nissan', 'Polaris', 'Pontiac', 'Saturn', 'Scion', 'Suzuki', 'Toyota', 'Volkswagen', 'Volvo')
+high = c('Alfa Romeo', 'Audi', 'BMW', 'Chevrolet', 'Chrysler', 'Dodge', 'GMC', 'HUMMER', 'Mercedes-Benz', 'Tesla', 'MINI', 'Ram', 'Saab', 'smart', 'Subaru')
+luxury = c('Acura', 'Aston Martin', 'Bentley', 'Buick', 'Cadillac', 'Ferrari', 'Genesis', 'Infinitti', 'Jaguar', 'Lamborghini', 'Lexus', 'Lincoln', 'Lotus', 'Maserati', 'McLaren', 'Mercury', 'Porsche', 'Rolls Royce')
+
+# Creem i assignem la nova variable; 
+ds$range[is.element(ds$vehicle.make,average)] = "average"
+ds$range[is.element(ds$vehicle.make,high)] = "high"
+ds$range[is.element(ds$vehicle.make,luxury)] = "luxury"
+
+# Indiquem a R que es tracta de una variable categorica
+ds$range <- droplevels.factor(ds$range)
+
+```
+
+
+Visualitzem la nova variable categorica
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+ggplot(data=ds,aes(x=range))+geom_bar() + theme(axis.text.x = element_text(angle = 90,vjust = 0.1,hjust = 0.1)) + ylab("nombre de vehicles")
+```
+
 
 **Revisem la variable vehicle.model**
 
@@ -459,8 +531,15 @@ S'observa que la categoria **car** seguida de lluny per **SUV** són les més co
 
 Usem el gràfic de mosaic per visualitzar la convinació entre **fuelType** i **vehicle.type**
 
+
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 mosaic(ds$fuelType ~ ds$vehicle.type, gp_labels = gpar(fontsize = 8), las = 2, cex.axis = 2, rot_labels=c(90,90,0,0), shade=TRUE)
+```
+
+Aprofitem per viisuallitzar la convinació de les variables anteriors i **range**
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+mosaic(ds$fuelType ~ ds$range + ds$vehicle.type, gp_labels = gpar(fontsize = 8), las = 2, cex.axis = 2, rot_labels=c(90,0,0,00), shade=TRUE)
 ```
 
 Gràcies al gràfic de mosaic es pot observar que només hi ha la categoria **HYBRID** en vehicles tipus **car** (en la resta és residual). Per altre banda DESTACA que no hi ha vehicles **ELECTRIC** per **van** ni **minivan** les quals son gairebé totalment **GASOLINE**.
@@ -474,6 +553,8 @@ taula = as.data.frame(table(ds$fuelType, ds$vehicle.type))
 # Visualitza el Ballonplot
 ggballoonplot(taula, fill = "value") + scale_fill_viridis_c(option = "C")
 ```
+
+
 
 \newpage
 ### Zeros i atributs buits
@@ -680,9 +761,9 @@ La gran majoria dels atributs presents en el conjunt de dades es corresponen amb
 ds <- subset(ds, select=-c(location.latitude,location.longitude,	
 location.country))
 
-categorical_features_names = c('fuelType', 'location.city', 'location.state', 'owner.id', 'vehicle.make', 'vehicle.model', 'vehicle.type', 'airportcity') 
+categorical_features_names = c('fuelType', 'location.city', 'location.state', 'owner.id', 'vehicle.make', 'vehicle.model', 'vehicle.type', 'airportcity', 'range') 
 
-numeric_features_names = c('rating', 'renterTripsTaken', 'reviewCount', 'rate.daily', 'age', 'income', 'frecuency')
+numeric_features_names = c('rating', 'renterTripsTaken', 'reviewCount', 'rate.daily', 'age', 'income', 'frequency', 'population')
 ```
 
 
@@ -817,7 +898,7 @@ Veiem que, tot i amb la conversió, no s'obté forma de distribució normal ja q
 # Eliminem location.country i les coordenades geogràfiques
 ds <- subset(ds, select=-c(rating_norm, renterTripsTaken_norm, reviewCount_norm, vehicle.year_norm, income_norm, frequency_norm))
 
-numeric_features_names = c('rating', 'renterTripsTaken', 'reviewCount', 'rate.daily', 'age', 'income', 'frequency')
+numeric_features_names = c('rating', 'renterTripsTaken', 'reviewCount', 'rate.daily', 'age', 'income', 'frequency', 'population')
 ```
 
 \newpage
@@ -871,7 +952,6 @@ A partir del gràfic anterior podem observar com el tipus del vehicle sembla que
 Si volem visualitzar alhora les relacions creuades entre diverses variables, podem fer un pairplot.
 
 Examinem els atributs numèrics envers si el vehicle va se llogat o no.
-
 ```{r echo=TRUE, message=FALSE, warning=FALSE, fig.width = 5, fig.height=5}
 ggpairs(ds, columns=numeric_features_names, mapping=aes(color=rent), upper = list(continuous = wrap('cor', size = 2)))
 ```
