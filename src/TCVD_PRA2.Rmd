@@ -381,8 +381,12 @@ barplot(location.city_ordered[0:30], main="Nombre de vehicles segons location.ci
 **Revisem la variable location.state**
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE, fig.width = 6, fig.height=3}
-ggplot(data=ds,aes(x=location.state)) + geom_bar() + 
-  theme(axis.text.x = element_text(angle = 90,vjust = 0.1,hjust = 0.1)) + 
+ggplot(data=ds,
+       aes(x=location.state)) + 
+  geom_bar() + 
+  theme(axis.text.x = element_text(angle = 90,
+                                   vjust = 0.1,
+                                   hjust = 0.1)) + 
   ylab("Nombre de vehicles")
 ```
 
@@ -416,16 +420,17 @@ Podem aprofitar per a calcular els diagrames d'aquesta nova variable numèrica
 ggplot(ds, aes(y=population)) + geom_boxplot()
 ggplot(data=ds, aes(x=population)) + geom_histogram(bins=15) + xlab('Population') + ylab('Frequency')
 ```
-i finalment val la pena fer una discretització de la variable **population**.
-Aprofitem per tallar en base als quartils.
 
-`
 
 **Revisem la variable airportcity**
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
-ggplot(data=ds,aes(x=airportcity)) + geom_bar() + 
-  theme(axis.text.x = element_text(angle = 90,vjust = 0.1,hjust = 0.1)) + 
+ggplot(data=ds,
+       aes(x=airportcity)) + 
+  geom_bar() +
+  theme(axis.text.x = element_text(angle = 90,
+                                   vjust = 0.1,
+                                   hjust = 0.1)) +
   ylab("Nombre de vehicles")
 ```
 
@@ -436,13 +441,19 @@ Tornem a trobar-nos que hi ha massa categories per a fer una visualització cóm
 airportcity_ordered <- sort(table(ds$airportcity),decreasing = TRUE)
 # Creem la visualització
 par(las=2, cex=0.5, mar=c(8,4,4,2))
-barplot(airportcity_ordered[0:30], main="Nombre de vehicles segons l'aeroport més proper", ylab="Nombre de vehicles") 
+barplot(airportcity_ordered[0:30], 
+        main="Nº de vehicles segons l'aeroport més proper", 
+        ylab="Nombre de vehicles") 
 ```
 
 **Revisem la variable vehicle.make**
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
-ggplot(data=ds,aes(x=vehicle.make))+geom_bar() + theme(axis.text.x = element_text(angle = 90,vjust = 0.1,hjust = 0.1)) + ylab("nombre de vehicles")
+ggplot(data=ds,
+       aes(x=vehicle.make)) +
+  geom_bar() + 
+  theme(axis.text.x = element_text(angle = 90,vjust = 0.1,hjust = 0.1)) + 
+  ylab("nombre de vehicles")
 ```
 
 Aquí ens trobem al límit del que sería una visualització raonable, i veiem que hi ha categories repetides ja que es troben en algún cas mal escrites (per falta de lletres majúscules principalment). 
@@ -458,7 +469,13 @@ ds$vehicle.make[ds$vehicle.make == "INFINITI"] = "Infinitti"
 
 ds$vehicle.make <- droplevels.factor(ds$vehicle.make)
 
-ggplot(data=ds,aes(x=vehicle.make))+geom_bar() + theme(axis.text.x = element_text(angle = 90,vjust = 0.1,hjust = 0.1)) + ylab("nombre de vehicles")
+ggplot(data=ds,
+       aes(x=vehicle.make)) +
+  geom_bar() + 
+  theme(axis.text.x = element_text(angle = 90,
+                                   vjust = 0.1,
+                                   hjust = 0.1)) + 
+  ylab("nombre de vehicles")
 ```
 
 A la vista de les dades es pot observar que *TESLA* i *TOYOTA* son les marques més freqüents, seguides de *BMW*, *CHEVROLET*, *FORD* i *Mercedes-Benz*.
@@ -491,20 +508,31 @@ ds$range[is.element(ds$vehicle.make,luxury)] = "luxury"
 
 # Indiquem a R que es tracta de una variable categorica
 ds$range <- droplevels.factor(ds$range)
-
 ```
 
 
 Visualitzem la nova variable categorica
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
-ggplot(data=ds,aes(x=range))+geom_bar() + theme(axis.text.x = element_text(angle = 90,vjust = 0.1,hjust = 0.1)) + ylab("nombre de vehicles")
+ggplot(data=ds,
+       aes(x=range))+
+  geom_bar() + 
+  theme(axis.text.x = element_text(angle = 90,
+                                   vjust = 0.1,
+                                   hjust = 0.1)) + 
+  ylab("nombre de vehicles")
 ```
 
 
 **Revisem la variable vehicle.model**
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
-ggplot(data=ds,aes(x=vehicle.model))+geom_bar() + theme(axis.text.x = element_text(angle = 90,vjust = 0.1,hjust = 0.1)) + ylab("nombre de vehicles")
+ggplot(data=ds,
+       aes(x=vehicle.model))+
+  geom_bar() + 
+  theme(axis.text.x = element_text(angle = 90,
+                                   vjust = 0.1,
+                                   hjust = 0.1)) + 
+  ylab("nombre de vehicles")
 ```
 
 Tornem a trobar-nos que hi ha massa categories per a fer una visualització cómode. Llavors optem per graficar només les 30 categories més comuns.
@@ -521,7 +549,13 @@ barplot(vehicle.model_ordered[0:30], main="Nombre de vehicles segons el model", 
 **Revisem la variable vehicle.type**
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
-ggplot(data=ds,aes(x=vehicle.type))+geom_bar() + theme(axis.text.x = element_text(angle = 90,vjust = 0.1,hjust = 0.1)) + ylab("nombre de vehicles")
+ggplot(data=ds,
+       aes(x=vehicle.type)) +
+  geom_bar() + 
+  theme(axis.text.x = element_text(angle = 90,
+                                   vjust = 0.1,
+                                   hjust = 0.1)) + 
+  ylab("nombre de vehicles")
 ```
 
 S'observa que la categoria **car** seguida de lluny per **SUV** són les més comuns, sent la resta (**minivan**, **truck** i **van**) gairebé residuals.
@@ -622,6 +656,8 @@ ds[,categorical_features_names] <- lapply(ds[,categorical_features_names] , fact
 str(ds)
 ```
 
+
+
 ### Transformació d'atributs
 
 A continuació realitzarem algunes transformacions sobre alguns atributs, amb la finalitat de generar diferents punts de vista de les dades.
@@ -642,9 +678,39 @@ ds['rating.discret'] <- discretize(ds$rating, method = "fixed", breaks = c(0, 4.
 ds$rating.discret = as.factor(ds$rating.discret)
 
 # Calculem gràfic de barres
-ggplot(data=ds, aes(x = rating.discret)) + geom_bar(aes(y = (..count..)/sum(..count..))) + geom_text(aes(y = ((..count..)/sum(..count..)), label = scales::percent((..count..)/sum(..count..))), stat = "count", vjust = -0.5) + scale_y_continuous(labels = scales::percent, limits = c(0,1)) + xlab('Valoració') + ylab("Percentatge")
+ggplot(data=ds, aes(x = rating.discret)) + 
+  geom_bar(aes(y = (..count..)/sum(..count..))) + 
+  geom_text(aes(y = ((..count..)/sum(..count..)), 
+                label = scales::percent((..count..)/sum(..count..))), 
+            stat = "count", 
+            vjust = -0.5) + 
+  scale_y_continuous(labels = scales::percent, 
+                     limits = c(0,1)) + 
+  xlab('Valoració') + 
+  ylab("Percentatge")
 ```
 
+La variable **population** per exemple, podria ser tallada amb els 4 quartils que té, per crear 4 categories diferenciant els vehicles ubicats en estats amb més o menys població. Així creem **population.discr**
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+summary(ds$population)
+```
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+ds['population.discr'] <- discretize(ds$population, method = "fixed",c(601722, 5029197, 9687653, 25145561, 37253957), labels = c("low populated", "medium-low populated", "medium-high populated", "highly populated"))
+
+# Calculem gràfic de barres
+ggplot(data=ds, aes(x = population.discr)) + 
+  geom_bar(aes(y = (..count..)/sum(..count..))) + 
+  geom_text(aes(y = ((..count..)/sum(..count..)), label = scales::percent((..count..)/sum(..count..))), stat = "count", vjust = -0.5) + scale_y_continuous(labels = scales::percent, limits = c(0,1)) + 
+  xlab('Població a l entorn') + 
+  ylab("Percentatge")
+```
+Veiem que les 4 categories tenen pràcticament assignat un tamany igual de mostra.
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Factoritzem la nova variable finalment
+
+ds$population.discr = as.factor(ds$population.discr)
+
+```
 
 ### Creació de nous indicadors
 
@@ -659,7 +725,11 @@ Creem un nou indicador o atribut on emmagatzemem l'antiguitat del vehicle.
 ds['age'] <- as.integer(format(Sys.Date(), "%Y")) - ds$vehicle.year
 
 # Calculem gràfic de barres de la nova variable
-ggplot(data=ds, aes(x = age)) + geom_bar(aes(y = (..count..)/sum(..count..))) + scale_x_continuous(breaks = round(seq(min(ds$age), max(ds$age), by = 5), 1)) + xlab('Age') + ylab("Percentatge")
+ggplot(data=ds, aes(x = age)) + 
+  geom_bar(aes(y = (..count..)/sum(..count..))) + 
+  scale_x_continuous(breaks = round(seq(min(ds$age), max(ds$age), by = 5), 1)) + 
+  xlab('Age') + 
+  ylab("Percentatge")
 ```
 
 **Indicador: rent**
@@ -761,7 +831,7 @@ La gran majoria dels atributs presents en el conjunt de dades es corresponen amb
 ds <- subset(ds, select=-c(location.latitude,location.longitude,	
 location.country))
 
-categorical_features_names = c('fuelType', 'location.city', 'location.state', 'owner.id', 'vehicle.make', 'vehicle.model', 'vehicle.type', 'airportcity', 'range') 
+categorical_features_names = c('fuelType', 'location.city', 'location.state', 'owner.id', 'vehicle.make', 'vehicle.model', 'vehicle.type', 'airportcity', 'range', 'population.discr') 
 
 numeric_features_names = c('rating', 'renterTripsTaken', 'reviewCount', 'rate.daily', 'age', 'income', 'frequency', 'population')
 ```
@@ -914,8 +984,18 @@ ggplot(ds, aes(x=renterTripsTaken, y=rate.daily)) + geom_point()
 ```
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
-# Relació entre el preu diari del lloguer i el nombre de vegades que s'ha llogat el vehicle
+# Relació entre el preu diari del lloguer i ela freqüencia amb que s'ha llogat un vehicle
+ggplot(ds, aes(x=frequency, y=rate.daily)) + geom_point()
+```
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Relació entre e l'edat i el nombre de vegades que s'ha llogat el vehicle
 ggplot(ds, aes(x=age, y=rate.daily)) + geom_point()
+```
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Relació entre ela població de l'estat i el nombre de vegades que s'ha llogat el vehicle
+ggplot(ds, aes(x=population, y=rate.daily)) + geom_point()
 ```
 
 En el cas d'una variable categòrica com el tipus de combustible o la marca del vehicle, podem visualitzar la relació amb un boxplot o diagrama de caixes.
@@ -935,11 +1015,39 @@ ggplot(ds, aes(x=location.state, y=rate.daily, fill=location.state)) + geom_boxp
 A partir del gràfic anterior podem observar com l'estat on es localitza el vehicle sembla que influeix al preu diari de lloguer. Essent el lloguer més car pels vehicles de l'estat d'NM.
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE, fig.width = 6}
+# Relació entre el preu diari del lloguer i la població que té l'estat on es troba el cotxe (discret)
+ggplot(ds, aes(x=population.discr, y=rate.daily, fill=population.discr)) + geom_boxplot(alpha=0.1) + stat_summary(fun.y=mean) + theme(axis.text.x = element_text(angle = 90,vjust = 0.1,hjust = 0.1)) + theme(legend.position = "none")
+```
+
+A partir del gràfic anterior podem observar com l'estat on es localitza el vehicle sembla no influeix en el preu diari del lloguer.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE, fig.width = 6}
+# Relació entre el renterTripstaken i la població que té l'estat on es troba el cotxe (discret)
+ggplot(ds, aes(x=population.discr, y=renterTripsTaken, fill=population.discr)) + geom_boxplot(alpha=0.1) + stat_summary(fun.y=mean) + theme(axis.text.x = element_text(angle = 90,vjust = 0.1,hjust = 0.1)) + theme(legend.position = "none")
+```
+
+
+```{r echo=TRUE, message=FALSE, warning=FALSE, fig.width = 6}
 # Relació entre el preu diari del lloguer i la marca del vehicle
 ggplot(ds, aes(x=vehicle.make, y=rate.daily, fill=vehicle.make)) + geom_boxplot(alpha=0.1) + stat_summary(fun.y=mean) + theme(axis.text.x = element_text(angle = 90,vjust = 0.1,hjust = 0.1)) + theme(legend.position = "none")
 ```
 
 A partir del gràfic anterior podem observar com la marca del vehicle sembla que influeix al preu diari de lloguer. Essent el lloguer més car pels vehicles d'alta gama, com ja podiem intuir, on destaca *Rolls Royce, Lamborgini, Aston Martin i Ferrari*.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE, fig.width = 6}
+# Relació entre el preu diari del lloguer i la gamma del vehicle
+ggplot(ds, aes(x=range, y=rate.daily, fill=range)) + geom_boxplot(alpha=0.1) + stat_summary(fun.y=mean) + theme(axis.text.x = element_text(angle = 90,vjust = 0.1,hjust = 0.1)) + theme(legend.position = "none")
+```
+
+```{r echo=TRUE, message=FALSE, warning=FALSE, fig.width = 6}
+# Relació entre la freqüencia del lloguer i la gamma del vehicle
+ggplot(ds, aes(x=range, y=frequency, fill=range)) + geom_boxplot(alpha=0.1) + stat_summary(fun.y=mean) + theme(axis.text.x = element_text(angle = 90,vjust = 0.1,hjust = 0.1)) + theme(legend.position = "none")
+```
+
+```{r echo=TRUE, message=FALSE, warning=FALSE, fig.width = 6}
+# Relació entre el preu diari del lloguer, la gamma del vehicle i el lcombustible
+ggplot(ds, aes(x=range, y=rate.daily, fill=fuelType)) + geom_boxplot(alpha=0.1) + stat_summary(fun.y=mean) + theme(axis.text.x = element_text(angle = 90,vjust = 0.1,hjust = 0.1)) + theme(legend.position = "none")
+```
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 # Relació entre el preu diari del lloguer i el tipus de vehicle
@@ -1007,7 +1115,7 @@ for (i in 1:(ncol(ds) - 1)) {
 print(corr_matrix)
 ```
 
-A partir del resultat obtingut podem identificar quines són les variables més correlacionades amb el preu diari de lloguer en funció de la seva proximitat amb els valors -1 i +1. Tenint en compte això, queda palès com la variable més rellevant en la fixació del preu és l'antigitat del vehicle (age) seguida de les valoracions.
+A partir del resultat obtingut podem identificar quines són les variables més correlacionades amb el preu diari de lloguer en funció de la seva proximitat amb els valors -1 i +1. Tenint en compte això, queda palès com la variable més rellevant en la fixació del preu és l'antigitat del vehicle (age) seguida de les valoracions. La variable **income** obté obviament una elevada correlació no obstant o entrem en valorar-la ja què està creada amb un calcul a partir de la mateixa **rate.daily**
 
 Nota. Per a cada coeficient de correlació es mostra també el seu *p-valor* associat, ja que aquest pot donar informació sobre el pes estadístic de la correlació obtinguda.
 
@@ -1182,7 +1290,17 @@ model.lm2 <- lm(formula=rate.daily ~ fuelType + vehicle.make + vehicle.type, dat
 summary(model.lm2)
 ```
 
-Si examinem ara el coeficient de determinació ajustat per aquest nou model és: R<sup>2</sup> = 0.5222. Això ens diu que el model de regressió múltiple obtingut explica el 52.22% de la variabilitat del preu del lloguer diari de vehicles. Com que és molt proper al 50%, en principi no és un model gaire bo, i per tant tindrà poc poder predictiu. Tot i així podem veure com hi ha un increment considerable sobre la variabilitat explicada respecte al primer model.
+Si examinem ara el coeficient de determinació ajustat per aquest nou model és: R<sup>2</sup> = 0.52. Això ens diu que el model de regressió múltiple obtingut explica el 52.22% de la variabilitat del preu del lloguer diari de vehicles. Com que és molt proper al 50%, en principi no és un model gaire bo, i per tant tindrà poc poder predictiu. Tot i així podem veure com hi ha un increment considerable sobre la variabilitat explicada respecte al primer model. A més, usant la variable **vehicle.make** que te 51 categories, sobre una mostra de menys de 6000 observacions, podem estar sobreajustant el model. En aquest sentit, fem a continuació la prova de crear una nova versió del mateix model amb la variable **range** (en lloc de **vehicle.make**).
+
+**Model de regressió lineal mùltiple x (Preu ~ age + renterTripsTaken + fuelType + range + vehicle.type)**
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+model.lm2_2 <- lm(formula=rate.daily ~ fuelType + range + vehicle.type, data = ds)
+
+summary(model.lm2_2)
+```
+En aquest cas el coeficient de determinació és de 0.295. És inferior al model anterior però també és un mòdel molt més senzill i per tant robust. No obstant encara ens trobem lluny de poder obtenir una predicció prou "bona" de **rate.daily**.
+
 
 **Model de regressió lineal mùltiple 3 (Preu ~ age + renterTripsTaken + fuelType + vehicle.make + vehicle.type)**
 
@@ -1194,7 +1312,16 @@ model.lm3 <- lm(formula=rate.daily ~ age + renterTripsTaken + fuelType + vehicle
 summary(model.lm3)
 ```
 
-Si examinem ara el coeficient de determinació ajustat per aquest nou model és: R<sup>2</sup> = 0.5356. Això ens diu que el model de regressió múltiple obtingut explica el 53.56% de la variabilitat del preu del lloguer diari de vehicles. Com que és molt proper al 50%, en principi no és un model gaire bo, i per tant tindrà poc poder predictiu. Tot i així podem veure com hi ha un increment considerable sobre la variabilitat explicada respecte al primer model, i un increment poc significatiu respecte el segon model. La qual cosa ens indica que a priori els atributs que millor expliquen el preu són les característiques del vehicle: el combustible, la marca i el tipus de vehicle.
+Si examinem ara el coeficient de determinació ajustat per aquest nou model és: R<sup>2</sup> = 0.5356. Això ens diu que el model de regressió múltiple obtingut explica el 53.56% de la variabilitat del preu del lloguer diari de vehicles. Com que és molt proper al 50%, en principi no és un model gaire bo, i per tant tindrà poc poder predictiu. Tot i així podem veure com hi ha un increment considerable sobre la variabilitat explicada respecte al primer model, i un increment poc significatiu respecte el segon model. La qual cosa ens indica que a priori els atributs que millor expliquen el preu en un model lineal són les característiques del vehicle: el combustible, la marca i el tipus de vehicle, però no el nombre de vegades que el vehicle ha estat usat.
+
+Ara probarem de fer un nou el model usant, com abans la variable **range** enlloc de **vehicle.make** i afegint la variable **population.discr**.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+model.lm4 <- lm(formula=rate.daily ~ age + renterTripsTaken + fuelType + range + vehicle.type + population.discr, data = ds)
+
+summary(model.lm4)
+```
+Podem observar que la millora obtinguda al afegir **population.discr** i **vehicle.type** és irrisoria i que per tant aquestes dues variables no afecten el resultat, almenys de forma lineal.
 
 ## Model d'arbre de regressió per preveure el preu diari d'un vehicle
 
@@ -1241,7 +1368,7 @@ model_cart_rate <- rpart(rate.daily ~ fuelType + location.city + location.state 
 #printcp(model_cart_rate)
 
 # Mostrem en un gràfic l'arbre obtingut
-rpart.plot(model_cart_rate)
+rpart.plot(model_cart_rate, cex=0.6)
 ```
 
 
@@ -1275,6 +1402,58 @@ model_cart_rate$variable.importance
 A partir del resultat obtingut podem veure que l'atribut que més influeix en el preu del lloguer dels vehicles és el model de cotxe.
 
 
+
+**Model d'Arbre de regressió amb variables més simples**
+
+A continuació ens proposem generar un model d'arbre de regressió que expliqui la variable *rate.daily* en funció de les característiques del vehicle. 
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Generem el model d'arbre
+model_cart_rate_2 <- rpart(rate.daily ~ fuelType + range + population.discr + vehicle.type, method="anova", data=train)
+
+# Mostrem un resum de la generació de l'arbre
+#summary(model_cart)
+
+#printcp(model_cart_rate)
+
+# Mostrem en un gràfic l'arbre obtingut
+rpart.plot(model_cart_rate_2, cex=0.8)
+```
+
+
+Un cop generat el model, podem comprovar la seva qualitat predint la classe per a les dades de prova que hem reservat al principi.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+predicted_model_cart_rate_2 <- predict(model_cart_rate_2, test, type = "vector")
+
+# test RMSE
+rmse_cart_rate_2 <- rmse(predicted_model_cart_rate_2, testY)
+
+# test MAE
+mae_cart_rate_2 <- mae(predicted_model_cart_rate_2, testY)
+
+print(sprintf("RMSE: %.4f", rmse_cart_rate_2))
+
+print(sprintf("MAE: %.4f", rmse_cart_rate_2))
+```
+Examinem els valors predits envers els valors reals.
+
+```{r}
+plot(predicted_model_cart_rate_2, testY, xlab = "Predicted", ylab = "Actual")
+abline(0, 1)
+```
+
+Examinem la importància de cada una dels atributs predictors en el model.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+model_cart_rate_2$variable.importance
+```
+A partir del resultat obtingut podem veure que l'atribut que més influeix en el preu del lloguer dels vehicles és la gamma del cotxe **range**.
+
+
+
+
+
 ## Model d'arbre de classificació per preveure si un vehicle serà llogat
 
 A continuació ens proposem generar un model d'arbre de classificació que expliqui la variable *rent* en funció de les característiques del vehicle. És a dir que ens permeti donades les característiques d'un vehicle predir si aquest serà llogat o no.
@@ -1299,7 +1478,7 @@ model_cart_rent <- rpart(rent ~ fuelType + location.city + location.state + vehi
 #printcp(model_cart_rent)
 
 # Mostrem en un gràfic l'arbre obtingut
-rpart.plot(model_cart_rent)
+rpart.plot(model_cart_rent, cex=0.6)
 ```
 
 Un cop generat el model, podem comprovar la seva qualitat predint la classe per a les dades de prova que hem reservat al principi.
@@ -1335,7 +1514,15 @@ Durant tot l'estudi previ em deixat de banda un fet important que es va veure du
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 # Calculem histogrames de les variables de classe
-ggplot(data=ds, aes(x = rent)) + geom_bar(aes(y = (..count..)/sum(..count..))) + geom_text(aes(y = ((..count..)/sum(..count..)), label = scales::percent((..count..)/sum(..count..))), stat = "count", vjust = -0.5) + scale_y_continuous(labels = scales::percent, limits = c(0,1)) + xlab("Rent") + ylab("Freqüència")
+ggplot(data=ds, aes(x = rent)) + 
+  geom_bar(aes(y = (..count..)/sum(..count..))) + 
+  geom_text(aes(y = ((..count..)/sum(..count..)), 
+                label = scales::percent((..count..)/sum(..count..))), 
+            stat = "count", 
+            vjust = -0.5) + 
+  scale_y_continuous(labels = scales::percent, limits = c(0,1)) + 
+  xlab("Rent") + 
+  ylab("Freqüència")
 ```
 
 Les classificacions desequilibrades suposen un desafiament per a la generació de models de predicció, ja que la majoria dels algorismes utilitzats per a la classificació van ser dissenyats entorn l'assumpció d'un nombre igual d'observacions per a cada classe. Aixó produeix que els models obtinguts presentin un rendiment predictiu deficient, en concret per a la classe minoritària. A més aixó sol ser un problema perqué normalment, la classe minoritària és la més important i per tant el model és més sensible als errors de classificació de la classe minoritària que la classe majoritària.
@@ -1399,17 +1586,173 @@ I per acabar realitzem les corresponents predicions en el conjunt de test
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 predicted_model_cart_rent <- predict(down_outside, test.data, type = "class")
 
-print(sprintf("La precisió de l'arbre amb downsampling és: %.4f %%", 100 * sum(predicted_model_cart_rent == test.data[,"Class"]) / length(predicted_model_cart_rent)))
+divisor = length(predicted_model_cart_rent)
+print(sprintf("La precisió de l'arbre amb downsampling és: %.4f %%",
+              100 * sum(predicted_model_cart_rent == test.data[,"Class"]) / divisor))
 
 predicted_model_cart_rent <- predict(up_outside, test.data, type = "class")
 
-print(sprintf("La precisió de l'arbre amb upsampling és: %.4f %%", 100 * sum(predicted_model_cart_rent == test.data[,"Class"]) / length(predicted_model_cart_rent)))
+divisor = length(predicted_model_cart_rent)
+print(sprintf("La precisió de l'arbre amb upsampling és: %.4f %%",
+              100 * sum(predicted_model_cart_rent == test.data[,"Class"]) / divisor))
 
 predicted_model_cart_rent <- predict(smote_outside, test.data, type = "class")
 
-print(sprintf("La precisió de l'arbre amb smote sampling és: %.4f %%", 100 * sum(predicted_model_cart_rent == test.data[,"Class"]) / length(predicted_model_cart_rent)))
+divisor = length(predicted_model_cart_rent)
+print(sprintf("La precisió de l'arbre amb smote sampling és: %.4f %%",
+              100 * sum(predicted_model_cart_rent == test.data[,"Class"]) / divisor))
 ```
 Tot i que podem veure que la precisió ha disminuit, pels models obtinguts després de realitzar un submostreig per tractar el conjunt desequilibrat, podem veure com aquests nous models ofereixen una millor resposta a la classe minoritària, la que recull el no llogar.
+
+
+**Model d'Arbre de classificació simplificat**
+
+Obtenim la classe objectiu
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Obtenim l'atribut de classe de la resta 
+trainY <- train[,c('rent')]
+testY <- test[,c('rent')]
+```
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Generem el model d'arbre
+model_cart_rent_2 <- rpart(rent ~ fuelType + population.discr + range + vehicle.type, method="class", data=train)
+
+# Mostrem un resum de la generació de l'arbre
+#summary(model_cart)
+
+#printcp(model_cart_rent)
+
+# Mostrem en un gràfic l'arbre obtingut
+rpart.plot(model_cart_rent_2)
+```
+
+Un cop generat el model, podem comprovar la seva qualitat predint la classe per a les dades de prova que hem reservat al principi.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+predicted_model_cart_rent_2 <- predict(model_cart_rent_2, test, type = "class")
+
+print(sprintf("La precisió de l'arbre és: %.4f %%",
+              100 * sum(predicted_model_cart_rent_2 == testY) / length(predicted_model_cart_rent_2)))
+```
+
+Quan hi ha poques classes, la qualitat de la predicció també es pot analitzar mitjançant una matriu de confusió que identifica els tipus d'errors comesos.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+mat_conf_cart_rent_2 <- table(testY, Predicted=predicted_model_cart_rent_2)
+
+mat_conf_cart_rent_2
+```
+
+Una altra manera de calcular el percentatge de registres correctament classificats és utilitzant la matriu de confusió:
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+porcentaje_correct_2 <- 100 * sum(diag(mat_conf_cart_rent_2)) / sum(mat_conf_cart_rent_2)
+print(sprintf("El %% de registres correctament classificats és: %.4f %%", porcentaje_correct_2))
+```
+
+A més, tenim a la nostra disposició el paquet gmodels per a obtenir informació més completa
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+CrossTable(testY, predicted_model_cart_rent_2, prop.chisq  = FALSE, prop.c = FALSE, prop.r =FALSE, dnn = c('Reality', 'Prediction'))
+```
+
+Durant tot l'estudi previ em deixat de banda un fet important que es va veure durant la fase d'anàlisis del joc de dades. Si recordem el nombre d'observacions pertanyents a una classe respecte a l'altre és força diferent per a l'atribut objectiu 'rent'.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Calculem histogrames de les variables de classe
+ggplot(data=ds, aes(x = rent)) + 
+  geom_bar(aes(y = (..count..)/sum(..count..))) + 
+  geom_text(aes(y = ((..count..)/sum(..count..)), 
+                label = scales::percent((..count..)/sum(..count..))), 
+            stat = "count", 
+            vjust = -0.5) + 
+  scale_y_continuous(labels = scales::percent, limits = c(0,1)) + 
+  xlab("Rent") + 
+  ylab("Freqüència")
+```
+
+Les classificacions desequilibrades suposen un desafiament per a la generació de models de predicció, ja que la majoria dels algorismes utilitzats per a la classificació van ser dissenyats entorn l'assumpció d'un nombre igual d'observacions per a cada classe. Aixó produeix que els models obtinguts presentin un rendiment predictiu deficient, en concret per a la classe minoritària. A més aixó sol ser un problema perqué normalment, la classe minoritària és la més important i per tant el model és més sensible als errors de classificació de la classe minoritària que la classe majoritària.
+
+Per tal de reduir els efectes causats per aquest fet proposem aplicar diferents mètodes de submostreig abans de generar els models.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+set.seed(2)
+
+# Escollim els atributs sobre els quals treballarem
+train.data <- train
+
+train.data[,"Class"] <- train['rent']
+
+test.data <- test
+
+test.data[,"Class"] <- test['rent']
+
+# Construïm diferents mostres a partir del conjunt de dades original
+
+# Down sampling
+down_train <- downSample(x = train.data[, -ncol(train.data)], y = train.data$Class)
+
+# Up Sampling
+up_train <- upSample(x = train.data[, -ncol(train.data)], y = train.data$Class)
+
+# Mix up/down sampling SMOTE
+smote_train <- SMOTE(Class ~ ., data = train.data)
+
+# Mostrem el nombre d'observacions pertanyents a cada una de les clases després de la generació de mostres
+# Conjunt original
+table(train.data$Class)
+
+# Down sampling
+table(down_train$Class)
+
+# Up sampling
+table(up_train$Class)
+
+# Smote sampling
+table(smote_train$Class)
+```
+
+Un cop obtingudes diferents mostres del conjunt de dades originals amb submostreig anem a realitzar l'entrenament d'un model d'arbre de decisió (CART) per cada un dels subconjunts.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Model training - CART
+set.seed(4)
+down_outside <- rpart(rent ~ fuelType + population.discr + range + vehicle.type, method="class", data=down_train)
+
+set.seed(5)
+up_outside <- rpart(rent ~ fuelType + population.discr + range + vehicle.type, method="class", data=up_train)
+
+set.seed(6)
+smote_outside <- rpart(rent ~ fuelType + population.discr + range  + vehicle.type, method="class", data=smote_train)
+
+```
+
+I per acabar realitzem les corresponents predicions en el conjunt de test
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+predicted_model_cart_rent_2 <- predict(down_outside, test.data, type = "class")
+
+divisor = length(predicted_model_cart_rent_2)
+print(sprintf("La precisió de l'arbre amb downsampling és: %.4f %%", 
+              100 * sum(predicted_model_cart_rent_2 == test.data[,"Class"]) / divisor))
+
+predicted_model_cart_rent_2 <- predict(up_outside, test.data, type = "class")
+
+divisor = length(predicted_model_cart_rent_2)
+print(sprintf("La precisió de l'arbre amb upsampling és: %.4f %%", 
+              100 * sum(predicted_model_cart_rent_2 == test.data[,"Class"]) / divisor))
+
+predicted_model_cart_rent_2 <- predict(smote_outside, test.data, type = "class")
+
+divisor = length(predicted_model_cart_rent_2)
+print(sprintf("La precisió de l'arbre amb smote sampling és: %.4f %%", 
+              100 * sum(predicted_model_cart_rent_2 == test.data[,"Class"]) / divisor))
+```
+Tot i que podem veure que la precisió ha disminuit, pels models obtinguts després de realitzar un submostreig per tractar el conjunt desequilibrat, podem veure com aquests nous models ofereixen una millor resposta a la classe minoritària, la que recull el no llogar.
+
+
 
 ## Conclusions
 
@@ -1424,7 +1767,7 @@ Tot seguit hem dut a terme diferents contrastos d’hipótesis que ens han perm�
 * Que el preu diari del lloguer del vehicle depén del tipus de vehicle, amb un nivell de confiança del 95%.
 * Que el preu diari del lloguer del vehicle depén del tipus de combustible, amb un nivell de confiança del 95%.
 
-A continuació hem generat un model que permet preveure el preu per dia d’un automòbil de lloguer, a partir de les seves característiques. Tant mitjançant un model basat en regressió lineal múltiple com amb un arbre de regressió. Tot i que la capacitat predictiva obinguda per aquest dos models no ha sigut gaire bona, ens ha permés determinar que els atributs més influents en el preu diari de vehicles són el model i la marca del vehicle i la seva localització. 
+A continuació hem generat un model per intentar preveure el preu per dia d’un automòbil de lloguer, a partir de les seves característiques. Tant mitjançant un model basat en regressió lineal múltiple com amb un arbre de regressió. Usant aquest dos tipus de models no s'ha pogut obtenir una predicció que poguem calificar com a bona. No obstant s'ha pogut determinar els atributs més influents en el preu diari del lloguer dels vehicles. Aquests són el model, la marca del vehicle i la seva localització. 
 
 Finalment hem generat també un model que permet preveure, donades les característiques d’un vehicle de lloguer, si aquest serà llogat o no mitjançant un arbre de decisió per a classificació.
 
