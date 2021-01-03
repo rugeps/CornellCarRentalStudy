@@ -13,7 +13,6 @@ output:
     keep_tex: true
     fig_width: 5
     fig_height: 3 
-  word_document: default
   html_document:
     highlight: default
     number_sections: yes
@@ -381,20 +380,13 @@ barplot(location.city_ordered[0:30], main="Nombre de vehicles segons location.ci
 **Revisem la variable location.state**
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE, fig.width = 6, fig.height=3}
-ggplot(data=ds,
-       aes(x=location.state)) + 
-  geom_bar() + 
-  theme(axis.text.x = element_text(angle = 90,
-                                   vjust = 0.1,
-                                   hjust = 0.1)) + 
-  ylab("Nombre de vehicles")
+ggplot(data=ds, aes(x=location.state)) + geom_bar() + theme(axis.text.x = element_text(angle = 90, vjust = 0.1, hjust = 0.1)) + ylab("Nombre de vehicles")
 ```
 
 Veiem que entre les categories destaquen **CA**, **FL** i **TX**.
 
-Ens proposem afegir una cetegoria continua que en la qual usant la població dels estats, es pugui obviar l'abreviatura categorica dels estats
-Ens descarreguem les dades del cens dels estats unit des de: https://www.census.gov/data/datasets/time-series/demo/popest/2010s-state-total.html
-i simplifiquem la taula descarregada en un csv que carreguem a continuació
+Ens proposem afegir un atribut continu, al qual mitjançant la població dels estats, es pugui obviar l'abreviatura categorica dels estats. Ens descarreguem les dades del cens dels estats unit des de: https://www.census.gov/data/datasets/time-series/demo/popest/2010s-state-total.html
+i simplifiquem la taula descarregada en un csv que carreguem a continuació.
 
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
@@ -413,7 +405,7 @@ for (i in sp$state){
 ds$population <- as.numeric(ds$population)
 ```
 
-Podem aprofitar per a calcular els diagrames d'aquesta nova variable numèrica
+Podem aprofitar per a calcular els diagrames d'aquesta nova variable numèrica.
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 # Calculem diagrames de caixa i de punts de la nova variable numèrica
@@ -421,7 +413,7 @@ ggplot(ds, aes(y=population)) + geom_boxplot()
 ggplot(data=ds, aes(x=population)) + geom_histogram(bins=15) + xlab('Population') + ylab('Frequency')
 ```
 
-
+\newpage
 **Revisem la variable airportcity**
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
@@ -480,20 +472,13 @@ ggplot(data=ds,
 
 A la vista de les dades es pot observar que *TESLA* i *TOYOTA* son les marques més freqüents, seguides de *BMW*, *CHEVROLET*, *FORD* i *Mercedes-Benz*.
 
-Ens trobem que igualment hi ha un nombre molt elevat de categories per aquesta variable (51 concretament) quan de fet, tot el joc de dades amb prou feines arriba a les 6000 observacions.
-Llavors ens plantegem crear una nova variable **rang** agrupant les marques en 3 grups segons la gamma que majoritariament produeixin;  "average", "high" o "luxury":
+Ens trobem que igualment hi ha un nombre molt elevat de categories per aquesta variable (51 concretament) quan de fet, tot el joc de dades amb prou feines arriba a les 6000 observacions. Llavors ens plantegem crear una nova variable **rang** agrupant les marques en 3 grups segons la gamma ("average", "high" o "luxury"):
 
+* average: 'FIAT', 'Ford', 'Honda', 'Hyundai', 'Jeep', 'Kia', 'Land Rover', 'Mazda', 'Mitsubishi', 'Nissan', 'Polaris', 'Pontiac', 'Saturn', 'Scion', 'Suzuki', 'Toyota', 'Volkswagen', 'Volvo'.
 
-- average:
-'FIAT', 'Ford', 'Honda', 'Hyundai', 'Jeep', 'Kia', 'Land Rover', 'Mazda', 'Mitsubishi', 'Nissan', 'Polaris', 'Pontiac', 'Saturn', 'Scion', 'Suzuki', 'Toyota', 'Volkswagen', 'Volvo'
+* high: 'Alfa Romeo', 'Audi', 'BMW', 'Chevrolet', 'Chrysler', 'Dodge', 'GMC', 'HUMMER', 'Mercedes-Benz', 'Tesla', 'MINI', 'Ram', 'Saab', 'smart', 'Subaru'.
 
-- high:
-'Alfa Romeo', 'Audi', 'BMW', 'Chevrolet', 'Chrysler', 'Dodge', 'GMC', 'HUMMER', 'Mercedes-Benz', 'Tesla', 'MINI', 'Ram', 'Saab', 'smart', 'Subaru'
-
-- luxury:
-'Acura', 'Aston Martin', 'Bentley', 'Buick', 'Cadillac', 'Ferrari', 'Genesis', 'Infinitti', 'Jagguar', 'Lamborghini', 'Lexus', 'Lincoln', 'Lotus', 'Maserati', 'McLaren', 'Mercury', 'Porsche', 'Rolls Royce'
-
-
+* luxury: 'Acura', 'Aston Martin', 'Bentley', 'Buick', 'Cadillac', 'Ferrari', 'Genesis', 'Infinitti', 'Jagguar', 'Lamborghini', 'Lexus', 'Lincoln', 'Lotus', 'Maserati', 'McLaren', 'Mercury', 'Porsche', 'Rolls Royce'.
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 # Creem vectors per cada categoria de la nova variables
@@ -506,20 +491,14 @@ ds$range[is.element(ds$vehicle.make,average)] = "average"
 ds$range[is.element(ds$vehicle.make,high)] = "high"
 ds$range[is.element(ds$vehicle.make,luxury)] = "luxury"
 
-# Indiquem a R que es tracta de una variable categorica
+# Indiquem a R que es tracta de una variable categòrica
 ds$range <- droplevels.factor(ds$range)
 ```
 
+Visualitzem la nova variable categòrica
 
-Visualitzem la nova variable categorica
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
-ggplot(data=ds,
-       aes(x=range))+
-  geom_bar() + 
-  theme(axis.text.x = element_text(angle = 90,
-                                   vjust = 0.1,
-                                   hjust = 0.1)) + 
-  ylab("nombre de vehicles")
+ggplot(data=ds, aes(x=range)) + geom_bar() + theme(axis.text.x = element_text(angle = 90, vjust = 0.1, hjust = 0.1)) + ylab("nombre de vehicles")
 ```
 
 
@@ -678,19 +657,11 @@ ds['rating.discret'] <- discretize(ds$rating, method = "fixed", breaks = c(0, 4.
 ds$rating.discret = as.factor(ds$rating.discret)
 
 # Calculem gràfic de barres
-ggplot(data=ds, aes(x = rating.discret)) + 
-  geom_bar(aes(y = (..count..)/sum(..count..))) + 
-  geom_text(aes(y = ((..count..)/sum(..count..)), 
-                label = scales::percent((..count..)/sum(..count..))), 
-            stat = "count", 
-            vjust = -0.5) + 
-  scale_y_continuous(labels = scales::percent, 
-                     limits = c(0,1)) + 
-  xlab('Valoració') + 
-  ylab("Percentatge")
+ggplot(data=ds, aes(x = rating.discret)) + geom_bar(aes(y = (..count..)/sum(..count..))) + geom_text(aes(y = ((..count..)/sum(..count..)), label = scales::percent((..count..)/sum(..count..))), stat = "count", vjust = -0.5) + scale_y_continuous(labels = scales::percent, limits = c(0,1)) + xlab('Valoració') + ylab("Percentatge")
 ```
 
 La variable **population** per exemple, podria ser tallada amb els 4 quartils que té, per crear 4 categories diferenciant els vehicles ubicats en estats amb més o menys població. Així creem **population.discr**
+
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 summary(ds$population)
 ```
@@ -705,6 +676,7 @@ ggplot(data=ds, aes(x = population.discr)) +
   ylab("Percentatge")
 ```
 Veiem que les 4 categories tenen pràcticament assignat un tamany igual de mostra.
+
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 # Factoritzem la nova variable finalment
 
@@ -828,8 +800,7 @@ La gran majoria dels atributs presents en el conjunt de dades es corresponen amb
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 # Eliminem location.country i les coordenades geogràfiques
-ds <- subset(ds, select=-c(location.latitude,location.longitude,	
-location.country))
+ds <- subset(ds, select=-c(location.latitude,location.longitude, location.country))
 
 categorical_features_names = c('fuelType', 'location.city', 'location.state', 'owner.id', 'vehicle.make', 'vehicle.model', 'vehicle.type', 'airportcity', 'range', 'population.discr') 
 
@@ -994,7 +965,7 @@ ggplot(ds, aes(x=age, y=rate.daily)) + geom_point()
 ```
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
-# Relació entre ela població de l'estat i el nombre de vegades que s'ha llogat el vehicle
+# Relació entre la població de l'estat i el nombre de vegades que s'ha llogat el vehicle
 ggplot(ds, aes(x=population, y=rate.daily)) + geom_point()
 ```
 
@@ -1774,3 +1745,4 @@ Finalment hem generat també un model que permet preveure, donades les caracter�
 
 \newpage
 # Bibliografia
+[@danielliviano; @edwin; @josepgibergans2; @pawel]

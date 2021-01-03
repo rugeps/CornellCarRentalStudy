@@ -1,6 +1,8 @@
 .src/TCVD_PRA2_files/**
 src/TCVD_PRA2_files/figure-latex/**
 src/TCVD_PRA2_files/figure-html/**
+docs/TCVD_PRA2_files/figure-latex/**
+docs/TCVD_PRA2_files/figure-html/**
 *.log
 *.toc
 *.tex
